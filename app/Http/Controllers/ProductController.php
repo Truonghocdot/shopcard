@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\CardCondition;
+use App\Constants\CardGrading;
+use App\Constants\CardLanguage;
+use App\Constants\CardType;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
@@ -16,11 +20,18 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $filters = [
-            'category' => $request->category,
+            'category'  => $request->category,
             'min_price' => $request->min_price,
             'max_price' => $request->max_price,
-            'sort' => $request->get('sort', 'newest'),
-            'per_page' => 12
+            'sort'      => $request->get('sort', 'newest'),
+            'search'    => $request->search,
+            'condition' => $request->condition,
+            'language'  => $request->language,
+            'set'       => $request->set,
+            'rarity'    => $request->rarity,
+            'grading'   => $request->grading,
+            'card_type' => $request->card_type,
+            'per_page'  => 12,
         ];
 
         $productsResult = $this->productService->getProducts($filters);
@@ -35,7 +46,13 @@ class ProductController extends Controller
         $categoriesResult = $this->categoryService->getAllCategoriesWithChildren();
         $categories = $categoriesResult->isSuccess() ? $categoriesResult->getData() : collect();
 
-        return view('products.index', compact('products', 'categories'));
+        $conditionOptions = CardCondition::options();
+        $languageOptions  = CardLanguage::options();
+        $gradingOptions   = CardGrading::options();
+        $cardTypeOptions  = CardType::options();
+
+        return view('products.index', compact('products', 'categories',
+            'conditionOptions', 'languageOptions', 'gradingOptions', 'cardTypeOptions'));
     }
 
     public function show($slug)

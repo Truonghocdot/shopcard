@@ -34,24 +34,88 @@
                 </h2>
 
                 <form method="GET" action="{{ route('products.index') }}">
+                    <!-- Search -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('search') }}</label>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="{{ __('search') }}..."
+                            class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary placeholder-text-muted outline-hidden transition-all">
+                    </div>
+
                     <!-- Category Filter -->
                     <div class="mb-6">
                         <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('category') }}</label>
                         <select name="category" class="w-full bg-bg-dark/50 border border-border focus:border-primary focus:ring-primary/20 rounded-xl px-4 py-3 text-text-secondary outline-hidden transition-all">
                             <option value="" class="bg-neutral-950">{{ __('all_categories') }}</option>
                             @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }} class="bg-neutral-950">
-                                {{ $cat->title }}
-                            </option>
+                            <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }} class="bg-neutral-950">{{ $cat->title }}</option>
                             @if($cat->children->count() > 0)
                             @foreach($cat->children as $child)
-                            <option value="{{ $child->id }}" {{ request('category') == $child->id ? 'selected' : '' }} class="bg-neutral-950">
-                                &nbsp;&nbsp;&nbsp;↳ {{ $child->title }}
-                            </option>
+                            <option value="{{ $child->id }}" {{ request('category') == $child->id ? 'selected' : '' }} class="bg-neutral-950">&nbsp;&nbsp;↳ {{ $child->title }}</option>
                             @endforeach
                             @endif
                             @endforeach
                         </select>
+                    </div>
+
+                    <!-- Card Type -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('filament.card_type') }}</label>
+                        <select name="card_type" class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary outline-hidden transition-all">
+                            <option value="" class="bg-neutral-950">{{ __('all_categories') }}</option>
+                            @foreach($cardTypeOptions as $val => $label)
+                            <option value="{{ $val }}" {{ request('card_type') == $val ? 'selected' : '' }} class="bg-neutral-950">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Condition -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('card_condition') }}</label>
+                        <select name="condition" class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary outline-hidden transition-all">
+                            <option value="" class="bg-neutral-950">— Any —</option>
+                            @foreach($conditionOptions as $val => $label)
+                            <option value="{{ $val }}" {{ request('condition') == $val ? 'selected' : '' }} class="bg-neutral-950">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Language -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('card_language') }}</label>
+                        <select name="language" class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary outline-hidden transition-all">
+                            <option value="" class="bg-neutral-950">— Any —</option>
+                            @foreach($languageOptions as $val => $label)
+                            <option value="{{ $val }}" {{ request('language') == $val ? 'selected' : '' }} class="bg-neutral-950">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Grading -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('filament.card_grading') }}</label>
+                        <select name="grading" class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary outline-hidden transition-all">
+                            <option value="" class="bg-neutral-950">— Any —</option>
+                            @foreach($gradingOptions as $val => $label)
+                            <option value="{{ $val }}" {{ request('grading') == $val ? 'selected' : '' }} class="bg-neutral-950">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Set / Expansion -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('card_set_expansion') }}</label>
+                        <input type="text" name="set" value="{{ request('set') }}"
+                            placeholder="e.g. Base Set, Scarlet & Violet..."
+                            class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary placeholder-text-muted outline-hidden transition-all">
+                    </div>
+
+                    <!-- Rarity -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black mb-3 text-text-muted uppercase tracking-[0.2em]">{{ __('card_rarity') }}</label>
+                        <input type="text" name="rarity" value="{{ request('rarity') }}"
+                            placeholder="e.g. Ultra Rare, Secret Rare..."
+                            class="w-full bg-bg-dark/50 border border-border focus:border-primary rounded-xl px-4 py-3 text-text-secondary placeholder-text-muted outline-hidden transition-all">
                     </div>
 
                     <!-- Price Range -->

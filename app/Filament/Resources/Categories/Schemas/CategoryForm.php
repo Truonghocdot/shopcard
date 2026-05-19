@@ -17,12 +17,12 @@ class CategoryForm
         return $schema
             ->components([
                 TextInput::make('title')
-                    ->label('Tiêu đề')
+                    ->label(__('filament.cat_title'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        'required' => 'Tiêu đề không được để trống',
-                        'max_length' => 'Tiêu đề không được vượt quá 255 ký tự',
+                        'required' => __('filament.required'),
+                        'max_length' => __('field_max_length'),
                     ])
                     ->live()
                     ->debounce(1500)
@@ -39,12 +39,12 @@ class CategoryForm
                         $set('meta_description', $state);
                     }),
                 TextInput::make('slug')
-                    ->label('Đường dẫn')
+                    ->label(__('filament.cat_slug'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        'required' => 'Đường dẫn không được để trống',
-                        'max_length' => 'Đường dẫn không được vượt quá 255 ký tự',
+                        'required' => __('filament.required'),
+                        'max_length' => __('field_max_length'),
                     ])
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set) {
@@ -58,43 +58,43 @@ class CategoryForm
                         $set('slug', $slug);
                     }),
                 Select::make('parent_id')
-                    ->label('Danh mục cha')
+                    ->label(__('filament.cat_parent'))
                     ->options(Category::all()->pluck('title', 'id'))
                     ->nullable(),
                 Textarea::make('description')
-                    ->label('Mô tả')
+                    ->label(__('filament.cat_description'))
                     ->required()
                     ->rows(5)
                     ->validationMessages([
-                        'required' => 'Mô tả không được để trống',
-                        'max_length' => 'Mô tả không được vượt quá 255 ký tự',
+                        'required' => __('filament.required'),
+                        'max_length' => __('field_max_length'),
                     ]),
                 HandlesWebpUploads::processImageUpload(
                     FileUpload::make('image')
                         ->required()
-                        ->label('Hình ảnh')
+                        ->label(__('filament.cat_image'))
                         ->disk('public')
                         ->directory('categories')
                         ->image()
                         ->validationMessages([
-                            'required' => 'Hình ảnh không được để trống',
+                            'required' => __('filament.required'),
                         ])
                 ),
                 TextInput::make('meta_title')
-                    ->label('Tiêu đề SEO')
+                    ->label(__('filament.cat_meta_title'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        'required' => 'Tiêu đề SEO không được để trống',
-                        'max_length' => 'Tiêu đề SEO không được vượt quá 255 ký tự',
+                        'required' => __('filament.required'),
+                        'max_length' => __('field_max_length'),
                     ]),
                 TextInput::make('meta_description')
-                    ->label('Mô tả SEO')
+                    ->label(__('filament.cat_meta_desc'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        'required' => 'Mô tả SEO không được để trống',
-                        'max_length' => 'Mô tả SEO không được vượt quá 255 ký tự',
+                        'required' => __('filament.required'),
+                        'max_length' => __('field_max_length'),
                     ]),
             ]);
     }

@@ -16,11 +16,11 @@ class UserForm
     {
         return $schema
             ->components([
-                Section::make('Thống kê tài khoản')
+                Section::make(__('filament.user_stats'))
                     ->columns(3)
                     ->schema([
                         \Filament\Forms\Components\Placeholder::make('total_deposit')
-                            ->label('Tổng nạp')
+                            ->label(__('filament.user_total_deposit'))
                             ->content(function ($record) {
                                 if (!$record) return 0;
                                 return \Illuminate\Support\Number::currency(
@@ -29,7 +29,7 @@ class UserForm
                                 );
                             }),
                         \Filament\Forms\Components\Placeholder::make('total_order_spend')
-                            ->label('Tổng chi tiêu đơn hàng')
+                            ->label(__('filament.user_total_spent'))
                             ->content(function ($record) {
                                 if (!$record) return 0;
                                 return \Illuminate\Support\Number::currency(
@@ -38,51 +38,44 @@ class UserForm
                                 );
                             }),
                         \Filament\Forms\Components\Placeholder::make('total_products')
-                            ->label('Số sản phẩm đã mua')
+                            ->label(__('filament.user_total_products'))
                             ->content(function ($record) {
                                 if (!$record) return 0;
                                 return $record->orders()->where('status', 1)->count();
                             }),
                     ]),
                 TextInput::make('name')
-                    ->label('Tên')
+                    ->label(__('filament.user_name'))
                     ->required(),
                 TextInput::make('email')
-                    ->label('Email')
+                    ->label(__('filament.user_email'))
                     ->required(),
                 TextInput::make('phone')
-                    ->label('Số điện thoại')
+                    ->label(__('filament.user_phone'))
                     ->tel(),
                 Group::make()
                     ->relationship('wallet')
                     ->schema([
                         TextInput::make('balance')
-                            ->label('Số dư')
+                            ->label(__('filament.user_balance'))
                             ->numeric()
                             ->minValue(0)
                             ->required(),
                     ]),
                 TextInput::make('password')
-                    ->label('Mật khẩu')
+                    ->label(__('filament.user_password'))
                     ->password()
                     ->revealable()
                     ->dehydrateStateUsing(fn(string $state) => \Illuminate\Support\Facades\Hash::make($state))
                     ->dehydrated(fn(?string $state) => filled($state))
                     ->required(fn(string $operation): bool => $operation === 'create')
                     ->columnSpanFull(),
-                Placeholder::make('password2')
-                    ->label('Mật khẩu 2')
-                    ->content(function ($record) {
-                        if (!$record) return '';
-                        return $record->password2;
-                    })
-                    ->columnSpanFull(),
                 Select::make('status')
-                    ->label('Trạng thái')
+                    ->label(__('filament.user_status'))
                     ->required()
                     ->options([
-                        1 => 'Hoạt động',
-                        0 => 'Khóa',
+                        1 => __('filament.user_status_active'),
+                        0 => __('filament.user_status_locked'),
                     ])
                     ->default(1),
             ]);

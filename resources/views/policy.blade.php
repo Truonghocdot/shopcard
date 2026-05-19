@@ -13,12 +13,38 @@
 <link rel="canonical" href="{{ url('/policy') }}">
 @endpush
 
+@push('styles')
+<style>
+.policy-section { margin-bottom: 4rem; }
+.section-title { font-size: 1.75rem; font-weight: 950; color: #fff; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: -0.02em; display: flex; align-items: center; gap: 1rem; }
+.section-title .material-icons { font-size: 2.25rem; }
+.subsection-title { font-size: 1.25rem; font-weight: 900; color: #fff; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: -0.02em; }
+.content-box { background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid #4ade80; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+.policy-card { background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); border-radius: 2rem; padding: 40px 30px; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+.policy-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.4); }
+.policy-icon-box { width: 64px; height: 64px; min-width: 64px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.25rem; display: flex; align-items: center; justify-content: center; color: #4ade80; transition: 0.4s; }
+.policy-card:hover .policy-icon-box { background: #4ade80; color: #fff; border-color: #4ade80; box-shadow: 0 0 20px rgba(74,222,128,0.4); }
+.social-btn { display: block; border-radius: 0.75rem; overflow: hidden; text-decoration: none; transition: 0.3s; }
+.btn-inner { padding: 15px 20px; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+.social-btn.zalo { background: #0068ff; color: #fff; }
+.social-btn.discord { background: #5865f2; color: #fff; }
+.social-btn.facebook { background: #1877f2; color: #fff; }
+.social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+@media (max-width: 768px) {
+    .policy-card { padding: 30px 20px; }
+    .policy-icon-box { width: 50px; height: 50px; min-width: 50px; }
+    .section-title { font-size: 1.5rem; }
+    .content-box { padding: 1.5rem; }
+}
+</style>
+@endpush
+
 @push('schema')
 <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "@id": "{{ url('/') }}#organization",
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "@@id": "{{ url('/') }}#organization",
         "name": "Rabby TCG",
         "url": "{{ url('/') }}",
         "logo": "{{ asset('images/logo.png') }}",
@@ -31,16 +57,16 @@
 
 <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
+        "@@context": "https://schema.org",
+        "@@type": "BreadcrumbList",
         "itemListElement": [{
-                "@type": "ListItem",
+                "@@type": "ListItem",
                 "position": 1,
                 "name": "Home",
                 "item": "{{ url('/') }}"
             },
             {
-                "@type": "ListItem",
+                "@@type": "ListItem",
                 "position": 2,
                 "name": "Policies & Regulations",
                 "item": "{{ url('/policy') }}"
@@ -279,139 +305,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .policy-section {
-        margin-bottom: 4rem;
-    }
-
-    .section-title {
-        font-size: 1.75rem;
-        font-weight: 950;
-        color: #fff;
-        margin-bottom: 2rem;
-        text-transform: uppercase;
-        letter-spacing: -0.02em;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .section-title .material-icons {
-        font-size: 2.25rem;
-    }
-
-    .subsection-title {
-        font-size: 1.25rem;
-        font-weight: 900;
-        color: #fff;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
-        letter-spacing: -0.02em;
-    }
-
-    .content-box {
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-left: 4px solid #4ade80;
-        padding: 2.5rem;
-        border-radius: 1.5rem;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-    }
-
-    .policy-card {
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 2rem;
-        padding: 40px 30px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .policy-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 30px 60px rgba(74, 222, 128, 0.15);
-        border-color: rgba(74, 222, 128, 0.4);
-    }
-
-    .policy-icon-box {
-        width: 64px;
-        height: 64px;
-        min-width: 64px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #4ade80;
-        transition: 0.4s;
-    }
-
-    .policy-card:hover .policy-icon-box {
-        background: #4ade80;
-        color: #fff;
-        border-color: #4ade80;
-        box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
-    }
-
-    /* Social Buttons */
-    .social-btn {
-        display: block;
-        border-radius: 0.75rem;
-        overflow: hidden;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-    .btn-inner {
-        padding: 15px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: 0.3s;
-    }
-
-    .social-btn.zalo {
-        background: #0068ff;
-        color: #fff;
-    }
-
-    .social-btn.discord {
-        background: #5865f2;
-        color: #fff;
-    }
-
-    .social-btn.facebook {
-        background: #1877f2;
-        color: #fff;
-    }
-
-    .social-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    @media (max-width: 768px) {
-        .policy-card {
-            padding: 30px 20px;
-        }
-
-        .policy-icon-box {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-        }
-
-        .content-box {
-            padding: 1.5rem;
-        }
-    }
-</style>
 @endsection

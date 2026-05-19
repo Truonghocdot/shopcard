@@ -31,42 +31,42 @@ class StatsOverview extends BaseWidget
         $couponSpend = \App\Models\Order::where('status', \App\Models\Order::STATUS_COMPLETED)->sum('discount_amount');
 
         return [
-            Stat::make('Tổng doanh thu', Number::currency($revenue, 'VND'))
-                ->description('Tổng tiền giao dịch thành công')
+            Stat::make(__('filament.widget_total_revenue'), Number::currency($revenue, 'VND'))
+                ->description(__('filament.widget_total_revenue_desc'))
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success'),
-            Stat::make('Thu nhập tháng này', Number::currency($monthlyRevenue, 'VND'))
-                ->description('Doanh thu trong tháng ' . now()->month)
+            Stat::make(__('filament.widget_monthly_revenue'), Number::currency($monthlyRevenue, 'VND'))
+                ->description(__('filament.widget_monthly_revenue_desc') . ' ' . now()->month)
                 ->descriptionIcon('heroicon-m-calendar')
                 ->color('success'),
-            Stat::make('Tổng người dùng', $totalUsers)
-                ->description('Tổng số khách hàng hệ thống')
+            Stat::make(__('filament.widget_total_users'), $totalUsers)
+                ->description(__('filament.widget_total_users_desc'))
                 ->descriptionIcon('heroicon-m-users')
                 ->color('info'),
-            Stat::make('Người dùng mới (Tháng này)', $newUsers)
-                ->description('Khách hàng mới đăng ký')
+            Stat::make(__('filament.widget_new_users'), $newUsers)
+                ->description(__('filament.widget_new_users_desc'))
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('info'),
-            Stat::make('Giao dịch chờ', $pendingTransactions)
-                ->description('Cần xử lý ngay')
+            Stat::make(__('filament.widget_pending_transactions'), $pendingTransactions)
+                ->description(__('filament.widget_pending_transactions_desc'))
                 ->descriptionIcon('heroicon-m-arrow-path')
                 ->color($pendingTransactions > 0 ? 'warning' : 'gray'),
-            Stat::make('Sản phẩm đã bán', $soldProducts)
-                ->description('Tổng số acc đã bán ra')
+            Stat::make(__('filament.widget_sold_products'), $soldProducts)
+                ->description(__('filament.widget_sold_products_desc'))
                 ->descriptionIcon('heroicon-m-shopping-cart')
                 ->color('primary'),
 
             // New Stats Widgets
-            Stat::make('Sản phẩm tồn kho', $stockCount)
-                ->description('Tổng số acc chưa bán')
+            Stat::make(__('filament.widget_stock'), $stockCount)
+                ->description(__('filament.widget_stock_desc'))
                 ->descriptionIcon('heroicon-m-archive-box')
                 ->color('warning'),
-            Stat::make('Giá trị tồn kho', Number::currency($stockValue, 'VND'))
-                ->description('Tổng giá trị acc chưa bán')
+            Stat::make(__('filament.widget_stock_value'), Number::currency($stockValue, 'VND'))
+                ->description(__('filament.widget_stock_value_desc'))
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('warning'),
-            Stat::make('Tiền chi Coupon', Number::currency($couponSpend, 'VND'))
-                ->description('Tổng tiền giảm giá từ coupon')
+            Stat::make(__('filament.widget_coupon_spend'), Number::currency($couponSpend, 'VND'))
+                ->description(__('filament.widget_coupon_spend_desc'))
                 ->descriptionIcon('heroicon-m-ticket')
                 ->color('danger'),
         ];

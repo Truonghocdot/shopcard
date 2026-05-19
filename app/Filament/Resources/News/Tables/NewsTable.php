@@ -15,28 +15,28 @@ class NewsTable
         return $table
             ->columns([
                 TextColumn::make("title")
-                    ->label("Tiêu đề")
+                    ->label(__('filament.news_title'))
                     ->searchable(),
                 TextColumn::make("slug")
-                    ->label("Đường dẫn")
+                    ->label(__('filament.news_slug'))
                     ->searchable(),
                 TextColumn::make("description")
-                    ->label("Mô tả")
+                    ->label(__('filament.news_description'))
                     ->searchable(),
                 TextColumn::make("content")
-                    ->label("Nội dung")
+                    ->label(__('filament.news_content'))
                     ->searchable(),
                 TextColumn::make("meta_title")
-                    ->label("Tiêu đề SEO")
+                    ->label(__('filament.news_meta_title'))
                     ->searchable(),
                 TextColumn::make("meta_description")
-                    ->label("Mô tả SEO")
+                    ->label(__('filament.news_meta_description'))
                     ->searchable(),
                 TextColumn::make("published")
-                    ->label("Ngày đăng")
+                    ->label(__('filament.news_published'))
                     ->searchable(),
                 TextColumn::make("view_count")
-                    ->label("Lượt xem")
+                    ->label(__('filament.news_view_count'))
                     ->searchable(),
             ])
             ->recordActions([

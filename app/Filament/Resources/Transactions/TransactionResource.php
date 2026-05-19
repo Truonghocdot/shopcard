@@ -22,17 +22,17 @@ class TransactionResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Quản lý giao dịch';
+        return __('filament.nav_transactions');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Giao dịch';
+        return __('filament.model_transaction');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Giao dịch';
+        return __('filament.model_transactions');
     }
 
     public static function table(Table $table): Table

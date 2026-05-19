@@ -13,31 +13,33 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make("id")
-                    ->label("ID")
+                TextColumn::make('id')
+                    ->label(__('filament.field_id'))
                     ->searchable(),
                 TextColumn::make('name')
-                    ->label('Tên')
+                    ->label(__('filament.user_name'))
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email')
+                    ->label(__('filament.user_email'))
                     ->searchable(),
                 TextColumn::make('phone')
-                    ->label('Số điện thoại')
+                    ->label(__('filament.user_phone'))
                     ->searchable(),
                 TextColumn::make('role')
-                    ->label('Vai trò')
-                    ->formatStateUsing(fn($state) => UserRole::getRoleName($state))
+                    ->label(__('filament.user_role'))
+                    ->formatStateUsing(fn ($state) => UserRole::getRoleName($state))
                     ->badge()
                     ->sortable(),
                 TextColumn::make('status')
-                    ->label('Trạng thái')
-                    ->formatStateUsing(fn($state) => $state == 1 ? 'Hoạt động' : 'Khóa')
+                    ->label(__('filament.user_status'))
+                    ->formatStateUsing(fn ($state) => $state == 1
+                        ? __('filament.user_status_active')
+                        : __('filament.user_status_locked'))
                     ->badge()
-                    ->color(fn($state) => $state ? 'danger' : 'success')
+                    ->color(fn ($state) => $state == 1 ? 'success' : 'danger')
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label('Ngày tạo')
+                    ->label(__('filament.user_created_at'))
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('updated_at')
@@ -48,6 +50,6 @@ class UsersTable
             ->recordActions([
                 EditAction::make(),
             ])
-            ->defaultSort('created_at', 'desc') ;
+            ->defaultSort('created_at', 'desc');
     }
 }

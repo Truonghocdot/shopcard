@@ -24,23 +24,23 @@ class Login extends BaseLogin
     {
         return $schema->components([
             TextInput::make('email')
-                ->label('Email')
+                ->label(__('filament.login_email'))
                 ->string()
                 ->required()
                 ->autocomplete('email')
                 ->extraInputAttributes(['tabindex' => 1])
                 ->validationMessages([
-                    'required' => 'Không được để trống',
+                    'required' => __('filament.login_required'),
                 ]),
             TextInput::make('password')
-                ->label('Mật khẩu')
+                ->label(__('filament.login_password'))
                 ->password()
                 ->revealable()
                 ->autocomplete('current-password')
                 ->required()
                 ->extraInputAttributes(['tabindex' => 2])
                 ->validationMessages([
-                    'required' => 'Không được để trống',
+                    'required' => __('filament.login_required'),
                 ]),
         ]);
     }
@@ -80,7 +80,7 @@ class Login extends BaseLogin
         }
 
         Notification::make()
-            ->title('Đăng nhập thất bại')
+            ->title(__('filament.login_failed'))
             ->body($result->getMessage())
             ->danger()
             ->send();

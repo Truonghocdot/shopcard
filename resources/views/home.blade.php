@@ -4,523 +4,322 @@
 @section('description', __('home_desc'))
 
 @push('styles')
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <style>
-        .fullscreen-banner-section {
-            width: 100vw;
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
-        }
-        
-        .hero-swiper-fullscreen {
-            height: 400px;
-            width: 100%;
-        }
-        
-        @media (min-width: 768px) {
-            .hero-swiper-fullscreen {
-                height: 550px;
-            }
-        }
-
-        .categories-swiper {
-            padding: 20px 0 !important;
-        }
-
-        .categories-swiper .swiper-button-next,
-        .categories-swiper .swiper-button-prev {
-            width: 40px !important;
-            height: 40px !important;
-            background: rgba(255, 255, 255, 0.1) !important;
-            backdrop-filter: blur(8px) !important;
-            border: 1px border border-white/10 !important;
-            border-radius: 50% !important;
-            color: #fff !important;
-            transition: all 0.3s ease !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-        }
-
-        .categories-swiper .swiper-button-next:after,
-        .categories-swiper .swiper-button-prev:after {
-            font-size: 18px !important;
-            font-weight: 900 !important;
-        }
-
-        .categories-swiper .swiper-button-next:hover,
-        .categories-swiper .swiper-button-prev:hover {
-            background: var(--color-primary) !important;
-            border-color: var(--color-primary) !important;
-            box-shadow: 0 0 20px rgba(230, 46, 107, 0.5) !important;
-            color: #fff !important;
-        }
-
-        .categories-swiper .swiper-button-prev {
-            left: -20px !important;
-        }
-
-        .categories-swiper .swiper-button-next {
-            right: -20px !important;
-        }
-
-        /* TCG Graded Card Slab Styling */
-        .slab-graded {
-            position: relative;
-            background: rgba(13, 17, 24, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .slab-graded::after {
-            content: "";
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: linear-gradient(125deg, transparent 30%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 60%, transparent 70%);
-            background-size: 200% 200%;
-            background-position: -100% 0;
-            transition: background-position 0.6s ease;
-            pointer-events: none;
-        }
-
-        .slab-graded:hover::after {
-            background-position: 100% 0;
-        }
-
-        .slab-graded:hover {
-            transform: translateY(-8px);
-            border-color: rgba(230, 46, 107, 0.5);
-            box-shadow: 0 15px 35px rgba(230, 46, 107, 0.25);
-            background: rgba(20, 26, 38, 0.85);
-        }
-
-        /* Holographic Card Glow Overlay */
-        .holo-card-glow {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            mix-blend-mode: color-dodge;
-            background: linear-gradient(105deg, 
-                transparent 30%, 
-                rgba(230, 46, 107, 0.25) 40%, 
-                rgba(124, 58, 237, 0.25) 50%, 
-                rgba(34, 197, 94, 0.25) 60%, 
-                transparent 70%);
-            background-size: 200% 200%;
-            transition: all 0.5s ease;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .slab-graded:hover .holo-card-glow {
-            opacity: 1;
-            background-position: 100% 100%;
-        }
-
-        .hero-swiper-fullscreen .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.4) !important;
-            opacity: 1 !important;
-        }
-
-        .hero-swiper-fullscreen .swiper-pagination-bullet-active {
-            background: var(--color-primary) !important;
-            width: 24px !important;
-            border-radius: 4px !important;
-        }
-    </style>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<style>
+.fullscreen-banner-section {
+    width: 100vw; position: relative;
+    left: 50%; right: 50%;
+    margin-left: -50vw; margin-right: -50vw;
+}
+.hero-swiper-fullscreen { height: 320px; width: 100%; }
+@media (min-width: 768px) { .hero-swiper-fullscreen { height: 520px; } }
+.hero-swiper-fullscreen .swiper-pagination-bullet { background: rgba(255,255,255,0.4) !important; opacity: 1 !important; }
+.hero-swiper-fullscreen .swiper-pagination-bullet-active { background: var(--color-primary) !important; width: 24px !important; border-radius: 4px !important; }
+.slab-graded {
+    position: relative; background: rgba(13,17,24,0.75); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.slab-graded::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(125deg, transparent 30%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 60%, transparent 70%);
+    background-size: 200% 200%; background-position: -100% 0;
+    transition: background-position 0.6s ease; pointer-events: none;
+}
+.slab-graded:hover::after { background-position: 100% 0; }
+.slab-graded:hover { transform: translateY(-8px); border-color: rgba(230,46,107,0.5); box-shadow: 0 15px 35px rgba(230,46,107,0.25); }
+.holo-card-glow {
+    position: absolute; inset: 0; opacity: 0; mix-blend-mode: color-dodge;
+    background: linear-gradient(105deg, transparent 30%, rgba(230,46,107,0.25) 40%, rgba(124,58,237,0.25) 50%, rgba(34,197,94,0.25) 60%, transparent 70%);
+    background-size: 200% 200%; transition: all 0.5s ease; pointer-events: none; z-index: 5;
+}
+.slab-graded:hover .holo-card-glow { opacity: 1; background-position: 100% 100%; }
+</style>
 @endpush
 
 @section('content')
-    <!-- 1. Fullscreen Banner Section -->
-    <section class="fullscreen-banner-section mb-12">
-        <div class="swiper hero-swiper-fullscreen overflow-hidden shadow-2xl relative">
-            <div class="swiper-wrapper">
-                @forelse($banners as $banner)
-                    <div class="swiper-slide relative overflow-hidden group bg-neutral-950">
-                        <img src="{{ url('storage/' . $banner->image) }}" alt="{{ $banner->title ?? 'Promo' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/95 via-transparent to-transparent flex flex-col justify-end p-8 md:p-16">
-                            @if($banner->title)
-                                <h2 class="font-black text-3xl md:text-6xl text-white mb-2 uppercase tracking-tight leading-none drop-shadow-md">{{ $banner->title }}</h2>
-                            @endif
-                            @if($banner->description)
-                                <p class="text-neutral-300 text-sm md:text-lg max-w-2xl mb-6 font-medium">{{ $banner->description }}</p>
-                            @endif
-                        </div>
-                    </div>
-                @empty
-                    <!-- Stunning Fallback Slideshow Banners -->
-                    <div class="swiper-slide relative overflow-hidden group bg-gradient-to-br from-[#0B0E14] via-[#1E1B4B] to-[#581C87] flex flex-col justify-end p-8 md:p-16">
-                        <div class="absolute top-10 right-10 md:top-16 md:right-16 shrink-0 animate-bounce">
-                            <span class="text-6xl md:text-9xl drop-shadow-[0_0_20px_rgba(230,46,107,0.5)]">🃏</span>
-                        </div>
-                        <div class="relative z-10 space-y-4 max-w-2xl">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-primary/20 text-primary border border-primary/30 shadow-[0_0_15px_rgba(230,46,107,0.25)]">AUTHENTIC GRADED SLABS</span>
-                            <h2 class="font-black text-3xl md:text-6xl text-white uppercase tracking-tighter leading-none">PREMIUM PSA TCG CARDS</h2>
-                            <p class="text-neutral-300 text-sm md:text-base font-medium">Elevate your collection with verified high-grade cards. Authentic trading cards from Pokemon, One Piece & Magic: The Gathering.</p>
-                            <div class="pt-2">
-                                <a href="{{ route('products.index') }}" class="btn-esport text-xs px-6 py-2.5">EXPLORE SLABS</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="swiper-slide relative overflow-hidden group bg-gradient-to-br from-[#0B0E14] via-[#831843] to-[#4C0519] flex flex-col justify-end p-8 md:p-16">
-                        <div class="absolute top-10 right-10 md:top-16 md:right-16 shrink-0 animate-pulse">
-                            <span class="text-6xl md:text-9xl drop-shadow-[0_0_20px_rgba(124,58,237,0.5)]">📦</span>
-                        </div>
-                        <div class="relative z-10 space-y-4 max-w-2xl">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-secondary/20 text-secondary border border-secondary/30 shadow-[0_0_15px_rgba(124,58,237,0.25)]">GUARANTEE YOUR BOXES</span>
-                            <h2 class="font-black text-3xl md:text-6xl text-white uppercase tracking-tighter leading-none">NEW RELEASE PRE-ORDERS</h2>
-                            <p class="text-neutral-300 text-sm md:text-base font-medium">Secure your Booster boxes, Elite Trainer Boxes, and sealed collectible sets ahead of global releases.</p>
-                            <div class="pt-2">
-                                <a href="{{ route('products.index', ['sort' => 'newest']) }}" class="btn-esport text-xs px-6 py-2.5">SECURE PRE-ORDER</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforelse
+
+{{-- ① TRUST BAR --}}
+<div class="w-full bg-neutral-950/80 border-b border-white/5 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-center justify-center md:justify-between overflow-x-auto no-scrollbar">
+            <div class="flex items-center gap-2 px-5 py-3 shrink-0 border-r border-white/5">
+                <span class="material-icons text-primary text-base">local_shipping</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_free_shipping') }}</span>
             </div>
-            <div class="swiper-pagination"></div>
+            <div class="flex items-center gap-2 px-5 py-3 shrink-0 border-r border-white/5">
+                <span class="material-icons text-primary text-base">stars</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_reward_points') }}</span>
+            </div>
+            <div class="flex items-center gap-2 px-5 py-3 shrink-0 border-r border-white/5">
+                <span class="material-icons text-primary text-base">verified</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_authentic') }}</span>
+            </div>
+            <div class="flex items-center gap-2 px-5 py-3 shrink-0">
+                <span class="material-icons text-primary text-base">support_agent</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_support_247') }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ② HERO BANNER --}}
+<section class="fullscreen-banner-section">
+    <div class="swiper hero-swiper-fullscreen overflow-hidden shadow-2xl relative">
+        <div class="swiper-wrapper">
+            @forelse($banners as $banner)
+                <div class="swiper-slide relative overflow-hidden bg-neutral-950">
+                    <img src="{{ url('storage/'.$banner->image) }}" alt="Banner" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/60 to-transparent"></div>
+                </div>
+            @empty
+                <div class="swiper-slide bg-neutral-950 flex items-center justify-center">
+                    <p class="text-neutral-700 font-black uppercase tracking-widest text-sm">{{ __('premium_tcg_shop') }}</p>
+                </div>
+            @endforelse
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+{{-- ③–⑦ MAIN CONTENT --}}
+<div class="max-w-7xl mx-auto px-4 py-10 space-y-16">
+
+    {{-- ③ TCG COLLECTIONS --}}
+    <section class="space-y-6">
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wider">
+                <span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                {{ __('featured_categories') }}
+            </h2>
+            <a href="{{ route('products.index') }}" class="text-neutral-400 hover:text-primary font-black uppercase tracking-widest text-[10px] flex items-center gap-1 transition-colors">
+                {{ __('view_all') }} <span class="material-icons text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+        {{-- Desktop: mosaic grid — first item 2×2, rest 1×1 --}}
+        <div class="hidden md:grid grid-cols-4 auto-rows-[180px] gap-4">
+            @foreach($categories->take(9) as $i => $category)
+                <a href="{{ route('categories.show', $category->slug) }}"
+                    class="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-primary/50 shadow-xl transition-all duration-500 {{ $i === 0 ? 'col-span-2 row-span-2' : '' }}">
+                    <img src="{{ url('storage/'.$category->image) }}" alt="{{ $category->title }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/90 via-[#080A0F]/20 to-transparent flex flex-col justify-end p-4">
+                        <h3 class="font-black {{ $i === 0 ? 'text-xl' : 'text-xs' }} text-white uppercase tracking-widest group-hover:text-primary transition-colors leading-tight">
+                            {{ $category->title }}
+                        </h3>
+                        @if($i === 0 && $category->description)
+                            <p class="text-neutral-400 text-[10px] mt-1 line-clamp-2">{!! strip_tags($category->description) !!}</p>
+                        @endif
+                    </div>
+                </a>
+            @endforeach
+        </div>
+
+        {{-- Mobile: 2-col grid --}}
+        <div class="md:hidden grid grid-cols-2 gap-3">
+            @foreach($categories->take(8) as $category)
+                <a href="{{ route('categories.show', $category->slug) }}"
+                    class="group relative rounded-xl overflow-hidden border border-white/8 aspect-video">
+                    <img src="{{ url('storage/'.$category->image) }}" alt="{{ $category->title }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/90 to-transparent flex items-end p-3">
+                        <h3 class="font-black text-[10px] text-white uppercase tracking-widest line-clamp-1">{{ $category->title }}</h3>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+
+        @if($categories->count() > 9)
+            <div class="text-center">
+                <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 text-neutral-300 hover:text-white font-black uppercase tracking-widest text-xs transition-all">
+                    <span class="material-icons text-sm">expand_more</span>
+                    {{ __('home_show_more_categories') }}
+                </a>
+            </div>
+        @endif
+    </section>
+
+    {{-- ④ FLASH SALE / PRE-ORDERS --}}
+    <section class="space-y-6">
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wider">
+                <span class="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
+                {{ __('flash_sale') }}
+            </h2>
+            <a href="{{ route('products.index', ['sort' => 'discount']) }}" class="text-neutral-400 hover:text-primary font-black uppercase tracking-widest text-[10px] flex items-center gap-1 transition-colors">
+                {{ __('view_all') }} <span class="material-icons text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            @forelse($flashSaleProducts->take(8) as $product)
+                <div class="slab-graded group flex flex-col">
+                    <div class="holo-card-glow"></div>
+                    <div class="bg-neutral-900/80 border-b border-white/5 px-3 py-2 flex items-center justify-between text-[9px] font-black uppercase tracking-wider">
+                        <span class="text-neutral-500">{{ $product->category->title ?? 'TCG' }}</span>
+                        @if($product->getDiscountPercent())
+                            <span class="text-pink-400">-{{ number_format($product->getDiscountPercent()) }}% OFF</span>
+                        @else
+                            <span class="text-indigo-400 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse"></span>HOT</span>
+                        @endif
+                    </div>
+                    <div class="relative overflow-hidden aspect-square border-b border-white/5 bg-neutral-950 flex items-center justify-center p-2">
+                        <img alt="{{ $product->title }}"
+                            class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
+                            src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
+                            loading="lazy" decoding="async">
+                    </div>
+                    <div class="p-4 space-y-3 flex-1 flex flex-col">
+                        <h4 class="font-bold text-xs md:text-sm line-clamp-2 text-white group-hover:text-primary transition-colors tracking-tight leading-tight flex-1">
+                            {{ $product->title }}
+                        </h4>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-base font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }}đ</span>
+                            @if($product->sell_price && $product->sell_price > $product->getFinalPrice())
+                                <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
+                            @endif
+                        </div>
+                        <a href="{{ route('products.show', $product->slug) }}"
+                            class="flex items-center justify-center gap-2 w-full btn-esport py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
+                            <span class="material-icons text-sm">visibility</span>{{ __('view_details') }}
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-4 glass rounded-xl p-12 text-center border border-white/5">
+                    <p class="text-neutral-500 text-xs uppercase font-black tracking-widest">{{ __('no_flash_sale') }}</p>
+                </div>
+            @endforelse
         </div>
     </section>
 
-    <div class="container mx-auto px-4 space-y-12 md:space-y-16">
+    {{-- ⑤ NEW ARRIVALS --}}
+    <section class="space-y-6">
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wider">
+                <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                {{ __('new_releases') }}
+            </h2>
+            <a href="{{ route('products.index', ['sort' => 'newest']) }}" class="text-neutral-400 hover:text-primary font-black uppercase tracking-widest text-[10px] flex items-center gap-1 transition-colors">
+                {{ __('view_all') }} <span class="material-icons text-sm">arrow_forward</span>
+            </a>
+        </div>
 
-        <!-- 2. List of Categories (Categories Swiper Carousel) -->
-        <section class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wide">
-                    <span class="w-2.5 h-6 bg-primary rounded-full"></span>
-                    {{ __('featured_categories') }}
-                </h2>
-            </div>
-
-            <!-- Desktop Swiper Carousel -->
-            <div class="hidden lg:block relative">
-                <div class="swiper categories-swiper overflow-hidden">
-                    <div class="swiper-wrapper">
-                        @forelse($categories as $category)
-                            <div class="swiper-slide h-auto">
-                                <a href="{{ route('categories.show', $category->slug) }}"
-                                    class="group slab-graded p-4 flex flex-col items-center text-center transition-all h-full">
-                                    <div class="holo-card-glow"></div>
-                                    <div class="w-full h-40 mb-4 overflow-hidden rounded-xl relative border border-white/5 bg-neutral-950">
-                                        <img alt="{{ $category->title }}"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            src="{{ url('storage/' . $category->image) ?? 'https://via.placeholder.com/400x300' }}"
-                                            loading="lazy" decoding="async">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/80 to-transparent"></div>
-                                    </div>
-                                    <h3
-                                        class="font-black text-sm mb-2 text-white group-hover:text-primary transition-colors uppercase tracking-widest flex items-center justify-center gap-2">
-                                        {{ $category->title }}
-                                    </h3>
-                                    <p class="text-white/50 text-xs line-clamp-2 leading-relaxed">{!! strip_tags($category->description) !!}</p>
-                                </a>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            @forelse($flashSaleProducts->shuffle()->take(8) as $product)
+                <div class="slab-graded group flex flex-col">
+                    <div class="holo-card-glow"></div>
+                    <div class="bg-neutral-900/80 border-b border-white/5 px-3 py-2 flex items-center justify-between text-[9px] font-black uppercase tracking-wider">
+                        <span class="text-neutral-500">{{ $product->category->title ?? 'TCG' }}</span>
+                        <span class="text-emerald-400">IN STOCK</span>
+                    </div>
+                    <div class="relative overflow-hidden aspect-square border-b border-white/5 bg-neutral-950 flex items-center justify-center p-2">
+                        <img alt="{{ $product->title }}"
+                            class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
+                            src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
+                            loading="lazy" decoding="async">
+                        @if($product->getDiscountPercent())
+                            <div class="absolute top-2 right-2 bg-pink-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                                -{{ number_format($product->getDiscountPercent()) }}%
                             </div>
-                        @empty
-                        @endforelse
+                        @endif
+                        <div class="absolute bottom-2 left-2 bg-[#080A0F]/90 px-2 py-0.5 rounded text-[8px] text-neutral-500 font-bold border border-white/5">
+                            #{{ $product->id }}
+                        </div>
+                    </div>
+                    <div class="p-4 space-y-3 flex-1 flex flex-col">
+                        <h4 class="font-bold text-xs md:text-sm line-clamp-2 text-white group-hover:text-primary transition-colors tracking-tight leading-tight flex-1">
+                            {{ $product->title }}
+                        </h4>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-base font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }}đ</span>
+                            @if($product->sell_price && $product->sell_price > $product->getFinalPrice())
+                                <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
+                            @endif
+                        </div>
+                        <a href="{{ route('products.show', $product->slug) }}"
+                            class="flex items-center justify-center gap-2 w-full btn-esport py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
+                            <span class="material-icons text-sm">shopping_cart</span>{{ __('add_to_cart') }}
+                        </a>
                     </div>
                 </div>
-                <!-- Navigation Buttons -->
-                <div class="swiper-button-next categories-next"></div>
-                <div class="swiper-button-prev categories-prev"></div>
-            </div>
+            @empty
+                <div class="col-span-4 glass rounded-xl p-12 text-center border border-white/5">
+                    <p class="text-neutral-500 text-xs uppercase font-black tracking-widest">{{ __('no_flash_sale') }}</p>
+                </div>
+            @endforelse
+        </div>
+    </section>
 
-            <!-- Mobile Slider Grid View -->
-            <div class="lg:hidden grid grid-cols-2 gap-4">
-                @forelse($categories as $category)
-                    <a href="{{ route('categories.show', $category->slug) }}"
-                        class="group slab-graded p-3 flex flex-col items-center text-center transition-all active:scale-[0.98]">
-                        <div class="holo-card-glow"></div>
-                        <div class="w-full h-28 mb-3 overflow-hidden rounded-lg relative border border-white/5 bg-neutral-950">
-                            <img alt="{{ $category->title }}" class="w-full h-full object-cover"
-                                src="{{ url('storage/' . $category->image) ?? 'https://via.placeholder.com/96' }}" loading="lazy"
-                                decoding="async">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/80 to-transparent"></div>
+    {{-- ⑥ LATEST NEWS --}}
+    @if($latestNews->count())
+    <section class="space-y-6">
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wider">
+                <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
+                {{ __('latest_news') }}
+            </h2>
+            <a href="{{ route('news.index') }}" class="text-neutral-400 hover:text-primary font-black uppercase tracking-widest text-[10px] flex items-center gap-1 transition-colors">
+                {{ __('view_all') }} <span class="material-icons text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            @foreach($latestNews->take(4) as $news)
+                <a href="{{ route('news.show', $news->slug) }}" class="group glass rounded-2xl border border-white/8 hover:border-primary/40 overflow-hidden transition-all duration-300 flex flex-col">
+                    @if($news->thumbnail)
+                        <div class="aspect-video overflow-hidden bg-neutral-950">
+                            <img src="{{ url('storage/'.$news->thumbnail) }}" alt="{{ $news->title }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         </div>
-                        <h3
-                            class="font-black text-xs mb-1 text-white group-hover:text-primary transition-colors uppercase tracking-widest flex items-center justify-center gap-1.5 line-clamp-1 px-1">
-                            {{ $category->title }}
+                    @endif
+                    <div class="p-4 flex flex-col flex-1 space-y-2">
+                        <p class="text-[9px] text-neutral-500 font-black uppercase tracking-widest">{{ $news->created_at->format('M d, Y') }}</p>
+                        <h3 class="font-black text-sm text-white group-hover:text-primary transition-colors line-clamp-2 leading-tight flex-1">
+                            {{ $news->title }}
                         </h3>
-                        <p class="text-white/50 text-[10px] line-clamp-1">{!! strip_tags($category->description) !!}</p>
-                    </a>
-                @empty
-                    <div class="col-span-2 text-center text-neutral-600 p-8 glass rounded-xl border border-white/5 text-sm">
-                        {{ __('no_categories') }}</div>
-                @endforelse
-            </div>
-        </section>
-
-        <!-- 3. List Category Image Grid -->
-        <section class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wide">
-                    <span class="w-2.5 h-6 bg-primary rounded-full"></span>
-                    {{ __('card_category') }}
-                </h2>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse($categories as $category)
-                    <a href="{{ route('categories.show', $category->slug) }}" class="group relative rounded-2xl overflow-hidden aspect-video border border-white/10 hover:border-primary/50 shadow-2xl transition-all duration-500">
-                        <img src="{{ url('storage/' . $category->image) }}" alt="{{ $category->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/90 via-[#080A0F]/45 to-transparent flex flex-col justify-end p-6 space-y-2">
-                            <h3 class="font-black text-lg md:text-xl text-white uppercase tracking-widest group-hover:text-primary transition-colors">{{ $category->title }}</h3>
-                            <p class="text-neutral-300 text-xs line-clamp-2 leading-relaxed">{!! strip_tags($category->description) !!}</p>
-                        </div>
-                    </a>
-                @empty
-                @endforelse
-            </div>
-        </section>
-
-        <!-- 4. List Product Pre-Order -->
-        <section class="space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 relative">
-                <h2 class="text-xl md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wide">
-                    <span class="w-2.5 h-6 bg-primary rounded-full"></span>
-                    {{ __('pre_orders') }}
-                </h2>
-                <a href="{{ route('products.index', ['sort' => 'newest']) }}"
-                    class="text-neutral-400 hover:text-primary font-black uppercase tracking-widest text-[10px] md:text-xs flex items-center gap-1 transition-colors">
-                    {{ __('view_all') }} <span class="material-icons text-sm">arrow_forward</span>
+                        <span class="text-primary text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                            {{ __('read_more') }} <span class="material-icons text-xs">arrow_forward</span>
+                        </span>
+                    </div>
                 </a>
-            </div>
+            @endforeach
+        </div>
+    </section>
+    @endif
 
-            <!-- Product Grid -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 relative">
-                @forelse($flashSaleProducts as $product)
-                    <div class="slab-graded group transition-all relative">
-                        <div class="holo-card-glow"></div>
-                        <!-- Card Certification Slab Header -->
-                        <div class="bg-neutral-900 border-b border-white/5 px-3 py-2 flex items-center justify-between text-[9px] font-black uppercase tracking-wider text-neutral-400">
-                            <span>CERTIFIED TCG</span>
-                            <span class="text-emerald-400">PRE-ORDER</span>
-                        </div>
+    {{-- ⑦ TRUST FOOTER BAR --}}
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        @foreach([
+            ['icon' => 'local_shipping',  'title' => __('fast_shipping_title'),         'desc' => __('fast_shipping_desc')],
+            ['icon' => 'verified_user',   'title' => __('pre_order_guarantee_title'),   'desc' => __('pre_order_guarantee_desc')],
+            ['icon' => 'lock',            'title' => __('secure_payments_title'),       'desc' => __('secure_payments_desc')],
+            ['icon' => 'price_check',     'title' => __('price_match_title'),           'desc' => __('price_match_desc')],
+        ] as $item)
+        <div class="glass rounded-2xl border border-white/8 p-5 flex flex-col items-center text-center gap-3">
+            <span class="material-icons text-primary text-3xl">{{ $item['icon'] }}</span>
+            <h4 class="font-black text-xs text-white uppercase tracking-widest">{{ $item['title'] }}</h4>
+            <p class="text-neutral-500 text-[10px] leading-relaxed">{{ $item['desc'] }}</p>
+        </div>
+        @endforeach
+    </section>
 
-                        <!-- Card Media -->
-                        <div class="relative overflow-hidden aspect-square border-b border-white/5 bg-neutral-950 flex items-center justify-center p-2">
-                            <img alt="{{ $product->title }}"
-                                class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
-                                src="{{ url('storage/' . $product->images[0]) ?? 'https://via.placeholder.com/400x225' }}"
-                                loading="lazy" decoding="async">
-                            @if($product->getDiscountPercent())
-                                <div
-                                    class="absolute top-2 right-2 bg-pink-500 text-white text-[9px] md:text-xs font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,114,182,0.5)]">
-                                    -{{ number_format($product->getDiscountPercent()) }}%
-                                </div>
-                            @endif
-                            <div
-                                class="absolute bottom-2 left-2 bg-bg-dark/90 backdrop-blur-sm px-2 py-0.5 rounded text-[8px] text-text-muted font-bold border border-white/5">
-                                ID: {{ $product->id }}
-                            </div>
-                        </div>
+</div>{{-- end max-w-7xl --}}
 
-                        <!-- Card Specifications & Pricing -->
-                        <div class="p-4 space-y-3">
-                            <div class="space-y-1">
-                                <span class="text-[9px] text-neutral-500 font-bold uppercase tracking-widest block">{{ $product->category->title ?? 'TCG COLLECTIBLES' }}</span>
-                                <h4 class="font-bold text-xs md:text-sm line-clamp-2 h-10 text-white group-hover:text-primary transition-colors tracking-tight leading-tight">
-                                    {{ $product->title }}
-                                </h4>
-                            </div>
-
-                            <div class="flex items-baseline gap-2 pt-1">
-                                <span class="text-base md:text-lg font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">
-                                    {{ number_format($product->getFinalPrice()) }}đ
-                                </span>
-                                @if($product->sell_price)
-                                    <span class="text-[10px] text-text-muted line-through font-bold">
-                                        {{ number_format($product->sell_price) }}đ
-                                    </span>
-                                @endif
-                            </div>
-
-                            <a href="{{ route('products.show', $product->slug) }}"
-                                class="block w-full btn-esport justify-center items-center py-2.5 rounded-xl text-center text-[10px] md:text-xs transition-all relative overflow-hidden">
-                                <span class="material-icons text-sm">shopping_cart</span>
-                                {{ __('buy_now') }}
-                            </a>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-4 glass rounded-xl p-12 text-center border border-white/5">
-                        <p class="text-neutral-500 text-xs uppercase font-black tracking-widest">{{ __('no_flash_sale') }}</p>
-                    </div>
-                @endforelse
-            </div>
-        </section>
-
-        <!-- 5. New Arrivals & Best Sellers! -->
-        <section class="space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 relative">
-                <h2 class="text-xl md:text-2xl font-black text-white uppercase flex items-center gap-3 tracking-wide">
-                    <span class="w-2.5 h-6 bg-primary rounded-full"></span>
-                    NEW ARRIVALS & BEST SELLERS!
-                </h2>
-                <a href="{{ route('products.index', ['sort' => 'newest']) }}"
-                    class="text-neutral-400 hover:text-primary font-black uppercase tracking-widest text-[10px] md:text-xs flex items-center gap-1 transition-colors">
-                    {{ __('view_all') }} <span class="material-icons text-sm">arrow_forward</span>
-                </a>
-            </div>
-
-            <!-- Product Grid -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 relative">
-                @forelse($flashSaleProducts->shuffle() as $product)
-                    <div class="slab-graded group transition-all relative">
-                        <div class="holo-card-glow"></div>
-                        <!-- Card Certification Slab Header -->
-                        <div class="bg-neutral-900 border-b border-white/5 px-3 py-2 flex items-center justify-between text-[9px] font-black uppercase tracking-wider text-neutral-400">
-                            <span>BEST SELLER</span>
-                            <span class="text-primary">PSA 10 GEM MT</span>
-                        </div>
-
-                        <!-- Card Media -->
-                        <div class="relative overflow-hidden aspect-square border-b border-white/5 bg-neutral-950 flex items-center justify-center p-2">
-                            <img alt="{{ $product->title }}"
-                                class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
-                                src="{{ url('storage/' . $product->images[0]) ?? 'https://via.placeholder.com/400x225' }}"
-                                loading="lazy" decoding="async">
-                            @if($product->getDiscountPercent())
-                                <div
-                                    class="absolute top-2 right-2 bg-pink-500 text-white text-[9px] md:text-xs font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,114,182,0.5)]">
-                                    -{{ number_format($product->getDiscountPercent()) }}%
-                                </div>
-                            @endif
-                            <div
-                                class="absolute bottom-2 left-2 bg-bg-dark/90 backdrop-blur-sm px-2 py-0.5 rounded text-[8px] text-text-muted font-bold border border-white/5">
-                                ID: {{ $product->id }}
-                            </div>
-                        </div>
-
-                        <!-- Card Specifications & Pricing -->
-                        <div class="p-4 space-y-3">
-                            <div class="space-y-1">
-                                <span class="text-[9px] text-neutral-500 font-bold uppercase tracking-widest block">{{ $product->category->title ?? 'TCG COLLECTIBLES' }}</span>
-                                <h4 class="font-bold text-xs md:text-sm line-clamp-2 h-10 text-white group-hover:text-primary transition-colors tracking-tight leading-tight">
-                                    {{ $product->title }}
-                                </h4>
-                            </div>
-
-                            <div class="flex items-baseline gap-2 pt-1">
-                                <span class="text-base md:text-lg font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">
-                                    {{ number_format($product->getFinalPrice()) }}đ
-                                </span>
-                                @if($product->sell_price)
-                                    <span class="text-[10px] text-text-muted line-through font-bold">
-                                        {{ number_format($product->sell_price) }}đ
-                                    </span>
-                                @endif
-                            </div>
-
-                            <a href="{{ route('products.show', $product->slug) }}"
-                                class="block w-full btn-esport justify-center items-center py-2.5 rounded-xl text-center text-[10px] md:text-xs transition-all relative overflow-hidden">
-                                <span class="material-icons text-sm">shopping_cart</span>
-                                {{ __('buy_now') }}
-                            </a>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-4 glass rounded-xl p-12 text-center border border-white/5">
-                        <p class="text-neutral-500 text-xs uppercase font-black tracking-widest">{{ __('no_flash_sale') }}</p>
-                    </div>
-                @endforelse
-            </div>
-        </section>
-
-    </div>  <!-- Đóng container mx-auto -->
-
-    {{-- Schema JSON-LD --}}
-    @push('schema')
-        @php
-            $websiteSchema = [
-                "@@context" => "https://schema.org",
-                "@@type" => "WebSite",
-                "name" => "Rabby TCG - Graded Cards & Premium Collectibles",
-                "url" => route('home'),
-                "potentialAction" => [
-                    "@@type" => "SearchAction",
-                    "target" => route('home') . "?q={search_term_string}",
-                    "query-input" => "required name=search_term_string"
-                ]
-            ];
-
-            $orgSchema = [
-                "@@context" => "https://schema.org",
-                "@@type" => "Organization",
-                "name" => "Rabby TCG",
-                "url" => route('home'),
-                "logo" => asset('images/logo.png'),
-                "contactPoint" => [
-                    "@@type" => "ContactPoint",
-                    "telephone" => "0986526036",
-                    "contactType" => "customer service"
-                ],
-                "sameAs" => [
-                    "https://www.facebook.com/le.vietanh.939173"
-                ]
-            ];
-        @endphp
-
-        <script type="application/ld+json">
-            @json($websiteSchema)
-        </script>
-        <script type="application/ld+json">
-            @json($orgSchema)
-        </script>
-    @endpush
-
-    {{-- Swiper JS --}}
-    @push('scripts')
-        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Initialize Category swiper
-                var categoriesSwiper = new Swiper('.categories-swiper', {
-                    slidesPerView: 4,
-                    spaceBetween: 16,
-                    loop: true,
-                    autoplay: {
-                        delay: 3500,
-                        disableOnInteraction: false,
-                        pauseOnMouseEnter: true
-                    },
-                    navigation: {
-                        nextEl: '.categories-next',
-                        prevEl: '.categories-prev',
-                    },
-                    breakpoints: {
-                        768: { slidesPerView: 3, spaceBetween: 20 },
-                        1024: { slidesPerView: 4, spaceBetween: 24 }
-                    }
-                });
-
-                // Initialize Fullscreen Hero Banner swiper
-                var heroSwiper = new Swiper('.hero-swiper-fullscreen', {
-                    slidesPerView: 1,
-                    spaceBetween: 0,
-                    loop: true,
-                    effect: 'fade',
-                    fadeEffect: {
-                        crossFade: true
-                    },
-                    autoplay: {
-                        delay: 4500,
-                        disableOnInteraction: false,
-                    },
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true
-                    }
-                });
-            });
-        </script>
-    @endpush
+@push('scripts')
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    new Swiper('.hero-swiper-fullscreen', {
+        slidesPerView: 1, loop: true,
+        effect: 'fade', fadeEffect: { crossFade: true },
+        autoplay: { delay: 4500, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true }
+    });
+});
+</script>
+@endpush
 
 @endsection

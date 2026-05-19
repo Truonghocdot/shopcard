@@ -20,7 +20,12 @@ class Setting extends Page implements HasForms
     use InteractsWithForms;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Squares2x2;
     protected string $view = 'filament.pages.setting';
-    protected static ?string $navigationLabel = 'Cấu hình';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.nav_settings');
+    }
     protected static ?int $navigationSort = 99;
 
     public ?array $data = [];
@@ -36,53 +41,53 @@ class Setting extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Section::make('Cấu hình chung')
-                    ->description('Quản lý các thông số vận hành hệ thống')
+                Section::make(__('filament.setting_general'))
+                    ->description(__('filament.setting_general_desc'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->schema([
-                        Section::make('Thông tin tài khoản nhận tiền')
-                            ->description('Cấu hình thông tin ngân hàng hiển thị cho khách hàng chuyển khoản')
+                        Section::make(__('filament.setting_bank_info'))
+                            ->description(__('filament.setting_bank_info_desc'))
                             ->icon('heroicon-o-credit-card')
                             ->schema([
                                 TextInput::make(SettingName::BIN_BANK->value)
-                                    ->label('Mã BIN Ngân hàng')
-                                    ->placeholder('Ví dụ: 970403')
+                                    ->label(__('filament.setting_bank_bin'))
+                                    ->placeholder(__('filament.setting_bank_bin_ph'))
                                     ->required()
-                                    ->helperText('Mã BIN của ngân hàng (ví dụ: 970403 cho Sacombank)'),
+                                    ->helperText(__('filament.setting_bank_bin_help')),
 
                                 TextInput::make(SettingName::ACCOUNT_NUMBER->value)
-                                    ->label('Số tài khoản')
-                                    ->placeholder('Nhập số tài khoản ngân hàng')
+                                    ->label(__('filament.setting_account_number'))
+                                    ->placeholder(__('filament.setting_account_number_ph'))
                                     ->required(),
 
                                 TextInput::make(SettingName::ACCOUNT_NAME->value)
-                                    ->label('Tên chủ tài khoản')
-                                    ->placeholder('NHAP TEN KHONG DAU')
+                                    ->label(__('filament.setting_account_name'))
+                                    ->placeholder(__('filament.setting_account_name_ph'))
                                     ->required()
                                     ->extraInputAttributes(['style' => 'text-transform: uppercase']),
 
                                 TextInput::make(SettingName::PHONE_NUMBER->value)
-                                    ->label('Số điện thoại')
-                                    ->placeholder('Nhập số điện thoại')
+                                    ->label(__('filament.setting_phone'))
+                                    ->placeholder(__('filament.setting_phone_ph'))
                                     ->required(),
 
                                 TextInput::make(SettingName::ZALO_LINK->value)
-                                    ->label('Link Zalo')
-                                    ->placeholder('Nhập link Zalo')
+                                    ->label(__('filament.setting_zalo'))
+                                    ->placeholder(__('filament.setting_zalo_ph'))
                                     ->required(),
 
                                 TextInput::make(SettingName::FACEBOOK_LINK->value)
-                                    ->label('Link Facebook')
-                                    ->placeholder('Nhập link Facebook')
+                                    ->label(__('filament.setting_facebook'))
+                                    ->placeholder(__('filament.setting_facebook_ph'))
                                     ->required(),
 
                                 TextInput::make(SettingName::BANKING->value)
-                                    ->label('Ngân hàng')
-                                    ->placeholder('Nhập tên ngân hàng')
+                                    ->label(__('filament.setting_bank_name'))
+                                    ->placeholder(__('filament.setting_bank_name_ph'))
                                     ->required(),
                                 RichEditor::make(SettingName::POPUP_CONTENT->value)
-                                    ->label('Nội dung popup')
-                                    ->placeholder('Nhập nội dung popup')
+                                    ->label(__('filament.setting_popup'))
+                                    ->placeholder(__('filament.setting_popup_ph'))
                                     ->columnSpanFull(),
                             ])
                             ->columns(2)
@@ -101,14 +106,14 @@ class Setting extends Page implements HasForms
             }
 
             Notification::make()
-                ->title('Lưu thành công')
-                ->body('Các cài đặt đã được cập nhật.')
+                ->title(__('filament.setting_save_success'))
+                ->body(__('filament.setting_save_success_body'))
                 ->success()
                 ->send();
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Lỗi')
-                ->body('Có lỗi xảy ra khi lưu cài đặt: ' . $e->getMessage())
+                ->title(__('filament.setting_save_error'))
+                ->body(__('filament.setting_save_error_body') . $e->getMessage())
                 ->danger()
                 ->send();
         }

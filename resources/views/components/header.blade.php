@@ -24,7 +24,6 @@
                 $navItems = [
                 ['route' => 'home', 'icon' => 'home', 'label' => __('home')],
                 ['route' => 'products.index', 'icon' => 'shopping_bag', 'label' => __('products')],
-                ['route' => 'deposit', 'icon' => 'account_balance_wallet', 'label' => __('deposit')],
                 ['route' => 'news.index', 'icon' => 'newspaper', 'label' => __('news')],
                 ['route' => 'policy', 'icon' => 'policy', 'label' => __('policy')],
                 ];
@@ -55,14 +54,6 @@
             </a>
 
             @auth
-            <!-- Balance Display -->
-            <div class="flex flex-col items-end px-2 md:px-4 py-1 md:py-2 rounded-lg bg-bg-card border border-border hover:border-primary/50 transition-all group cursor-pointer relative overflow-hidden shadow-inner">
-                <span class="hidden md:block text-[9px] text-text-muted uppercase tracking-widest font-black">{{ __('balance') }}</span>
-                <span class="text-primary font-black text-xs md:text-base drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">
-                    {{ number_format(auth()->user()->wallet()->value('balance'), 0, ',', '.') }} <span class="text-[10px] md:text-xs">đ</span>
-                </span>
-            </div>
-
             <!-- User Profile -->
             <a href="{{ route('user.profile') }}" class="flex items-center gap-1 md:gap-2 bg-bg-card hover:bg-white/5 px-2 md:px-4 py-1 md:py-2 rounded-lg border border-border cursor-pointer transition-all hover:border-primary/50">
                 <span class="material-icons text-primary text-xl md:text-2xl">account_circle</span>
@@ -101,27 +92,14 @@
             <!-- Mobile User Info -->
             <div class="p-4 mb-3 rounded-2xl bg-white/5 border border-white/10 shadow-2xl relative overflow-hidden group">
                 <div class="absolute -top-10 -right-10 w-24 h-24 bg-primary/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center justify-between relative z-10">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-full bg-neutral-900 flex items-center justify-center border border-white/10 shadow-inner">
-                            <span class="material-icons text-primary text-3xl">account_circle</span>
-                        </div>
-                        <div>
-                            <div class="font-black text-white text-lg tracking-tight">{{ auth()->user()->name }}</div>
-                            <div class="text-[10px] text-neutral-600 font-bold uppercase tracking-wider">ID: {{ auth()->user()->id }}</div>
-                        </div>
+                <div class="flex items-center gap-3 relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-neutral-900 flex items-center justify-center border border-white/10 shadow-inner">
+                        <span class="material-icons text-primary text-3xl">account_circle</span>
                     </div>
-                </div>
-                <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between relative z-10">
                     <div>
-                        <div class="text-[9px] text-neutral-600 uppercase font-black tracking-[0.2em]">{{ __('wallet_balance') }}</div>
-                        <div class="text-primary font-black text-2xl tracking-tighter drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">
-                            {{ number_format(auth()->user()->wallet()->value('balance'), 0, ',', '.') }}<span class="text-sm ml-1">đ</span>
-                        </div>
+                        <div class="font-black text-white text-lg tracking-tight">{{ auth()->user()->name }}</div>
+                        <div class="text-[10px] text-neutral-600 font-bold uppercase tracking-wider">ID: {{ auth()->user()->id }}</div>
                     </div>
-                    <a href="{{ route('deposit') }}" class="btn-esport px-4 py-2 rounded-xl text-xs uppercase tracking-widest shadow-lg active:scale-95">
-                        {{ __('deposit_now') }}
-                    </a>
                 </div>
             </div>
             @endauth

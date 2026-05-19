@@ -93,10 +93,7 @@
                         </span>
                         @endif
                         @auth
-                        <a href="{{ route('checkout', $product->slug) }}" class="w-full sm:w-auto btn-esport py-5 px-12 rounded-2xl flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 uppercase tracking-widest text-base font-black border-none shadow-2xl shadow-primary/30 active:scale-95 transition-all relative overflow-hidden group">
-                            <span class="material-icons text-xl">shopping_cart</span>
-                            <span class="text-lg md:text-base">{{ __('buy_now') }}</span>
-                        </a>
+                        @livewire('add-to-cart', ['productId' => $product->id])
                         @else
                         <a href="{{ route('login') }}" class="w-full sm:w-auto btn-esport py-5 px-12 rounded-2xl flex items-center justify-center gap-4 uppercase tracking-widest text-base font-black border-none group">
                             <span class="material-icons animate-pulse text-xl">login</span>

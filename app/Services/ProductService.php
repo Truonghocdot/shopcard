@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constants\CardField;
 use App\Models\Product;
 use App\Models\Category;
 use App\Types\ServiceResult;
@@ -55,6 +56,31 @@ class ProductService
                                 ->where('sell_price', '<=', $filters['max_price']);
                         });
                 });
+            }
+
+            // TCG-specific filters
+            if (!empty($filters['condition'])) {
+                $query->where(CardField::CONDITION->value, $filters['condition']);
+            }
+            if (!empty($filters['language'])) {
+                $query->where(CardField::LANGUAGE->value, $filters['language']);
+            }
+            if (!empty($filters['set'])) {
+                $query->where(CardField::SET->value, 'like', '%' . $filters['set'] . '%');
+            }
+            if (!empty($filters['rarity'])) {
+                $query->where(CardField::RARITY->value, 'like', '%' . $filters['rarity'] . '%');
+            }
+            if (!empty($filters['grading'])) {
+                $query->where(CardField::GRADING->value, $filters['grading']);
+            }
+            if (!empty($filters['card_type'])) {
+                $query->where(CardField::TYPE->value, $filters['card_type']);
+            }
+
+            // Full-text name search
+            if (!empty($filters['search'])) {
+                $query->where('title', 'like', '%' . $filters['search'] . '%');
             }
 
             // Sorting

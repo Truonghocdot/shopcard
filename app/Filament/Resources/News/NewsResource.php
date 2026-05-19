@@ -22,17 +22,17 @@ class NewsResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Quản lý tin tức';
+        return __('filament.nav_news');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Tin tức';
+        return __('filament.model_news');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Tin tức';
+        return __('filament.model_news_plural');
     }
 
     public static function form(Schema $schema): Schema

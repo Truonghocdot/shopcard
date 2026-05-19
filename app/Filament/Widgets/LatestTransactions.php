@@ -19,29 +19,29 @@ class LatestTransactions extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Thời gian')
+                    ->label(__('filament.transaction_table_created_at'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('Người dùng')
+                    ->label(__('filament.transaction_table_user'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->label('Số tiền')
+                    ->label(__('filament.transaction_table_amount'))
                     ->money('VND')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
-                    ->label('Loại')
+                    ->label(__('filament.transaction_table_type'))
                     ->badge()
-                    ->formatStateUsing(fn($state) => $state == 0 ? 'Thẻ cào' : 'Ngân hàng')
+                    ->formatStateUsing(fn($state) => $state == 0 ? __('filament.transaction_type_card') : __('filament.transaction_type_bank'))
                     ->color(fn($state) => $state == 0 ? 'info' : 'success'),
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Trạng thái')
+                    ->label(__('filament.transaction_table_status'))
                     ->badge()
                     ->formatStateUsing(fn($state) => match ($state) {
-                        0 => 'Chờ xử lý',
-                        1 => 'Thành công',
-                        2 => 'Thất bại',
-                        default => 'Không xác định',
+                        0 => __('filament.transaction_status_pending'),
+                        1 => __('filament.transaction_status_success'),
+                        2 => __('filament.transaction_status_failed'),
+                        default => __('filament.transaction_status_unknown'),
                     })
                     ->color(fn($state) => match ($state) {
                         0 => 'warning',

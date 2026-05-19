@@ -102,10 +102,6 @@
             </a>
         </div>
 
-        @livewire('auth.set-transaction-pin')
-
-
-        @livewireScripts
     </div> <!-- End Content Wrapper -->
 </body>
 

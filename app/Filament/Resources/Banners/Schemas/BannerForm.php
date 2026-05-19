@@ -16,22 +16,22 @@ class BannerForm
         return $schema
             ->components([
                 TextInput::make('sort')
-                    ->label('Thứ tự')
+                    ->label(__('filament.banner_sort'))
                     ->required()
                     ->numeric()
                     ->validationMessages([
-                        'required' => 'Thứ tự không được để trống',
-                        'numeric' => 'Thứ tự phải là số',
+                        'required' => __('filament.banner_sort_required'),
+                        'numeric' => __('filament.banner_sort_numeric'),
                     ]),
                 HandlesWebpUploads::processImageUpload(
                     FileUpload::make('image')
                         ->required()
-                        ->label('Hình ảnh')
+                        ->label(__('filament.banner_image'))
                         ->disk('public')
                         ->directory('banners')
                         ->image()
                         ->validationMessages([
-                            'required' => 'Hình ảnh không được để trống',
+                            'required' => __('filament.banner_image_required'),
                         ])
                 ),
             ]);

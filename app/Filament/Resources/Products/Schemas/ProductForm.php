@@ -2,125 +2,150 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Constants\CardCondition;
+use App\Constants\CardField;
+use App\Constants\CardGrading;
+use App\Constants\CardLanguage;
+use App\Constants\CardType;
 use App\Filament\Traits\HandlesWebpUploads;
 use App\Models\Product;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ProductForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Select::make('category_id')
-                    ->label(fn() => __('card_category'))
-                    ->relationship('category', 'title')
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                HandlesWebpUploads::processImageUpload(
-                    FileUpload::make('images')
-                        ->label(fn() => __('card_images'))
-                        ->multiple()
-                        ->image()
-                        ->disk('public')
+        return $schema->components([
+
+            // ── Basic Info ───────────────────────────────────────────────────
+            Section::make(__('filament.product_section_basic'))
+                ->columns(2)
+                ->schema([
+                    Select::make('category_id')
+                        ->label(__('card_category'))
+                        ->relationship('category', 'title')
                         ->required()
-                        ->panelLayout('grid')
-                        ->validationMessages([
-                            'required' => fn() => __('field_required'),
-                        ])
-                ),
-                TextInput::make('title')
-                    ->label(fn() => __('card_title'))
-                    ->required()
-                    ->maxLength(255)
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                        'max_length' => fn() => __('field_max_length'),
-                    ])
-                    ->live()
-                    ->debounce(2500)
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $slug = str($state)->slug();
-                        $slugOriginal = $slug;
-                        $flag = 0;
-                        while (Product::where('slug', $slug)->exists()) {
-                            $slug = str($slugOriginal)->append('-' . $flag);
-                            $flag++;
-                        }
-                        $set('slug', $slug);
-                        $set('meta_title', $state);
-                        $set('meta_description', $state);
-                    }),
-                TextInput::make('slug')
-                    ->label(fn() => __('card_slug'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('username')
-                    ->label(fn() => __('psa_cert_serial'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('phone')
-                    ->label(fn() => __('card_condition')),
-                TextInput::make('password')
-                    ->label(fn() => __('card_language'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('email')
-                    ->label(fn() => __('card_set_expansion'))
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('password2')
-                    ->label(fn() => __('card_rarity'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                RichEditor::make('content')
-                    ->label(fn() => __('card_details'))
-                    ->required()
-                    ->extraInputAttributes(['style' => 'min-height: 20vh;'])
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('sell_price')
-                    ->label(fn() => __('regular_price'))
-                    ->required()
-                    ->maxLength(255)
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                        'max_length' => fn() => __('field_max_length'),
-                    ]),
-                TextInput::make('sale_price')
-                    ->label(fn() => __('discounted_price'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('meta_title')
-                    ->label(fn() => __('meta_title_label'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-                TextInput::make('meta_description')
-                    ->label(fn() => __('meta_desc_label'))
-                    ->required()
-                    ->validationMessages([
-                        'required' => fn() => __('field_required'),
-                    ]),
-            ]);
+                        ->columnSpanFull(),
+
+                    TextInput::make('title')
+                        ->label(__('card_title'))
+                        ->required()
+                        ->maxLength(255)
+                        ->live()
+                        ->debounce(1500)
+                        ->afterStateUpdated(function (string $state, callable $set) {
+                            $slug = str($state)->slug();
+                            $base = $slug;
+                            $i    = 0;
+                            while (Product::where('slug', $slug)->exists()) {
+                                $slug = $base . '-' . $i++;
+                            }
+                            $set('slug', $slug);
+                            $set('meta_title', $state);
+                            $set('meta_description', $state);
+                        }),
+
+                    TextInput::make('slug')
+                        ->label(__('card_slug'))
+                        ->required()
+                        ->unique(Product::class, 'slug', ignoreRecord: true),
+
+                    Select::make(CardField::TYPE->value)
+                        ->label(__('filament.card_type'))
+                        ->options(CardType::options())
+                        ->default(CardType::SINGLE->value)
+                        ->required(),
+
+                    HandlesWebpUploads::processImageUpload(
+                        FileUpload::make('images')
+                            ->label(__('card_images'))
+                            ->multiple()
+                            ->image()
+                            ->disk('public')
+                            ->required()
+                            ->panelLayout('grid')
+                            ->columnSpanFull()
+                    ),
+                ]),
+
+            // ── TCG Card Details ─────────────────────────────────────────────
+            Section::make(__('filament.product_section_tcg'))
+                ->columns(2)
+                ->schema([
+                    Select::make(CardField::CONDITION->value)
+                        ->label(__('card_condition'))
+                        ->options(CardCondition::options())
+                        ->placeholder('— Select condition —'),
+
+                    Select::make(CardField::LANGUAGE->value)
+                        ->label(__('card_language'))
+                        ->options(CardLanguage::options())
+                        ->placeholder('— Select language —'),
+
+                    TextInput::make(CardField::SET->value)
+                        ->label(__('card_set_expansion')),
+
+                    TextInput::make(CardField::RARITY->value)
+                        ->label(__('card_rarity')),
+
+                    Select::make(CardField::GRADING->value)
+                        ->label(__('filament.card_grading'))
+                        ->options(CardGrading::options())
+                        ->placeholder('— Select grading company —')
+                        ->live(),
+
+                    TextInput::make(CardField::GRADE->value)
+                        ->label(__('filament.card_grade'))
+                        ->placeholder('e.g. 10 / 9.5 / 9'),
+
+                    TextInput::make(CardField::CERT->value)
+                        ->label(__('psa_cert_serial'))
+                        ->placeholder('e.g. 12345678')
+                        ->columnSpanFull(),
+                ]),
+
+            // ── Pricing ──────────────────────────────────────────────────────
+            Section::make(__('filament.product_section_pricing'))
+                ->columns(2)
+                ->schema([
+                    TextInput::make('sell_price')
+                        ->label(__('regular_price'))
+                        ->numeric()
+                        ->required()
+                        ->minValue(0),
+
+                    TextInput::make('sale_price')
+                        ->label(__('discounted_price'))
+                        ->numeric()
+                        ->minValue(0),
+                ]),
+
+            // ── Description ──────────────────────────────────────────────────
+            Section::make(__('filament.product_section_description'))
+                ->schema([
+                    RichEditor::make('content')
+                        ->label(__('card_details'))
+                        ->extraInputAttributes(['style' => 'min-height: 20vh;']),
+                ]),
+
+            // ── SEO ──────────────────────────────────────────────────────────
+            Section::make(__('filament.product_section_seo'))
+                ->columns(2)
+                ->collapsed()
+                ->schema([
+                    TextInput::make('meta_title')
+                        ->label(__('meta_title_label'))
+                        ->maxLength(255),
+
+                    TextInput::make('meta_description')
+                        ->label(__('meta_desc_label'))
+                        ->maxLength(500),
+                ]),
+        ]);
     }
 }

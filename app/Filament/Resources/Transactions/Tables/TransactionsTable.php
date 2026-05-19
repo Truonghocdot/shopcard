@@ -13,14 +13,14 @@ class TransactionsTable
         return $table
             ->columns([
                 TextColumn::make("user.name")
-                    ->label("Người mua"),
+                    ->label(__('filament.transaction_table_buyer')),
                 TextColumn::make("amount")
-                    ->label("Tổng tiền"),
+                    ->label(__('filament.transaction_table_amount')),
                 TextColumn::make("status")
-                    ->label("Trạng thái")
+                    ->label(__('filament.transaction_table_status'))
                     ->formatStateUsing(fn($state) => Transaction::labelStatus($state)),
                 TextColumn::make("created_at")
-                    ->label("Ngày tạo"),
+                    ->label(__('filament.transaction_table_created_at')),
             ])
             ->defaultSort('created_at', 'desc');
     }

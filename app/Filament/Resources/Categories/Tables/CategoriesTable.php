@@ -14,17 +14,17 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('title')
-                    ->label('Tiêu đề')
+                    ->label(__('filament.cat_title'))
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->label('Đường dẫn')
+                    ->label(__('filament.cat_slug'))
                     ->searchable(),
                 ImageColumn::make('image')
-                    ->label('Hình ảnh')
+                    ->label(__('filament.cat_image'))
                     ->disk('public')
                     ->searchable(),
                 TextColumn::make('parent.title')
-                    ->label('Danh mục cha')
+                    ->label(__('filament.cat_parent'))
                     ->searchable(),
             ])
             ->recordActions([

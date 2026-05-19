@@ -21,17 +21,17 @@ class UserResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Quản lý người dùng';
+        return __('filament.nav_users');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Người dùng';
+        return __('filament.model_user');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Người dùng';
+        return __('filament.model_users');
     }
 
     public static function form(Schema $schema): Schema
@@ -55,7 +55,7 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'edit'  => EditUser::route('/{record}/edit'),
         ];
     }
 }

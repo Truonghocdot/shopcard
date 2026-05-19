@@ -17,12 +17,12 @@ class NewsForm
         return $schema
             ->components([
                 TextInput::make("title")
-                    ->label("Tiêu đề")
+                    ->label(__('filament.news_title'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        "required" => "Tiêu đề không được để trống",
-                        "max_length" => "Tiêu đề không được vượt quá 255 ký tự",
+                        "required" => __('filament.news_title_required'),
+                        "max_length" => __('filament.news_title_max'),
                     ])
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set) {
@@ -36,10 +36,10 @@ class NewsForm
                         $set('slug', $slug);
                     }),
                 TextInput::make("slug")
-                    ->label("Slug")
+                    ->label(__('filament.news_slug'))
                     ->required()
                     ->validationMessages([
-                        "required" => "Slug không được để trống",
+                        "required" => __('filament.news_slug_required'),
                     ])
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set) {
@@ -53,66 +53,59 @@ class NewsForm
                         $set('slug', $slug);
                     }),
                 RichEditor::make("description")
-                    ->label("Mô tả")
+                    ->label(__('filament.news_description'))
                     ->extraInputAttributes(['style' => 'min-height: 20vh;'])
                     ->required()
                     ->validationMessages([
-                        "required" => "Mô tả không được để trống",
+                        "required" => __('filament.news_description_required'),
                     ]),
 
                 RichEditor::make("content")
-                    ->label("Nội dung")
+                    ->label(__('filament.news_content'))
                     ->extraInputAttributes(['style' => 'min-height: 20vh;'])
                     ->required()
                     ->validationMessages([
-                        "required" => "Nội dung không được để trống",
+                        "required" => __('filament.news_content_required'),
                     ]),
 
                 HandlesWebpUploads::processImageUpload(
                     FileUpload::make("thumbnail")
                         ->required()
-                        ->label("Hình ảnh")
+                        ->label(__('filament.news_thumbnail'))
                         ->disk("public")
                         ->directory("news")
                         ->image()
                         ->validationMessages([
-                            "required" => "Hình ảnh không được để trống",
+                            "required" => __('filament.news_thumbnail_required'),
                         ])
                 ),
                 TextInput::make("meta_title")
-                    ->label("Tiêu đề SEO")
+                    ->label(__('filament.news_meta_title'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        "required" => "Tiêu đề SEO không được để trống",
-                        "max_length" => "Tiêu đề SEO không được vượt quá 255 ký tự",
+                        "required" => __('filament.news_meta_title_required'),
+                        "max_length" => __('filament.news_meta_title_max'),
                     ]),
                 TextInput::make("meta_description")
-                    ->label("Mô tả SEO")
+                    ->label(__('filament.news_meta_description'))
                     ->required()
                     ->maxLength(255)
                     ->validationMessages([
-                        "required" => "Mô tả SEO không được để trống",
-                        "max_length" => "Mô tả SEO không được vượt quá 255 ký tự",
+                        "required" => __('filament.news_meta_description_required'),
+                        "max_length" => __('filament.news_meta_description_max'),
                     ]),
                 Select::make("published")
-                    ->label("Ngày đăng")
+                    ->label(__('filament.news_published'))
                     ->options([
-                        0 => "Bản nháp",
-                        1 => "Đã xuất bản",
+                        0 => __('filament.news_published_draft'),
+                        1 => __('filament.news_published_published'),
                     ])
                     ->required()
                     ->validationMessages([
-                        "required" => "Ngày đăng không được để trống",
+                        "required" => __('filament.news_published_required'),
                     ])
                     ->default(1),
-                TextInput::make("view_count")
-                    ->label("Lượt xem")
-                    ->required()
-                    ->validationMessages([
-                        "required" => "Lượt xem không được để trống",
-                    ])
-                    ->default(0),
             ]);
     }
 }

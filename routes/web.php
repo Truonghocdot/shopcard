@@ -50,10 +50,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/nguoi-dung', [UserController::class, 'profile'])->name('user.profile');
     Route::post('/nguoi-dung/update', [UserController::class, 'update'])->name('user.update');
 
-    Route::get('/thanh-toan/{slug}', \App\Livewire\CheckoutPage::class)->name('checkout');
+    Route::get('/gio-hang', \App\Livewire\CartPage::class)->name('cart');
+    Route::get('/thanh-toan', \App\Livewire\CheckoutPage::class)->name('checkout');
     Route::get('/thanh-toan/thanh-cong/{id}', [PurchaseController::class, 'success'])->name('purchase.success');
 
 
 });
 
 Route::feeds();
+
+// Static pages
+Route::get('/trang/{slug}', [\App\Http\Controllers\PageController::class, 'show'])->name('pages.show');

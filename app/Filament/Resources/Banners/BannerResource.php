@@ -22,17 +22,17 @@ class BannerResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Quản lý banner';
+        return __('filament.nav_banners');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Banner';
+        return __('filament.model_banner');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Banner';
+        return __('filament.model_banners');
     }
 
     public static function form(Schema $schema): Schema

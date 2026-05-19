@@ -14,10 +14,10 @@ class BannersTable
         return $table
             ->columns([
                 TextColumn::make('sort')
-                    ->label('Thứ tự')
+                    ->label(__('filament.banner_sort'))
                     ->searchable(),
                 ImageColumn::make('image')
-                    ->label('Hình ảnh')
+                    ->label(__('filament.banner_image'))
                     ->disk('public')
                     ->searchable(),
             ])

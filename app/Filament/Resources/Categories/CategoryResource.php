@@ -22,17 +22,17 @@ class CategoryResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Quản lý danh mục acc';
+        return __('filament.nav_categories');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Danh mục acc';
+        return __('filament.model_category');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Danh mục acc';
+        return __('filament.model_categories');
     }
 
     public static function form(Schema $schema): Schema

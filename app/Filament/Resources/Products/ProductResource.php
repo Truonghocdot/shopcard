@@ -23,17 +23,17 @@ class ProductResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Quản lý acc';
+        return __('filament.nav_products');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Acc';
+        return __('filament.model_product');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Acc';
+        return __('filament.model_products');
     }
 
     public static function form(Schema $schema): Schema

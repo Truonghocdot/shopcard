@@ -10,17 +10,17 @@ enum UserRole: int
     public static function getRoleName(int $role): string
     {
         return match ($role) {
-            self::CLIENT->value => 'Khách hàng',
-            self::ADMIN->value => 'Quản trị viên',
-            default => 'Không xác định',
+            self::CLIENT->value => __('filament.user_role_client'),
+            self::ADMIN->value  => __('filament.user_role_admin'),
+            default             => __('filament.user_role_unknown'),
         };
     }
 
     public static function getRoleOptions(): array
     {
         return [
-            self::CLIENT->value => 'Khách hàng',
-            self::ADMIN->value => 'Quản trị viên',
+            self::CLIENT->value => __('filament.user_role_client'),
+            self::ADMIN->value  => __('filament.user_role_admin'),
         ];
     }
 }
