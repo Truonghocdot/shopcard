@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Summer Breeze Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="sun"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">SummerBreeze</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Trang chủ</a></li>
+                    <li><a href="#">Concept</a></li>
+                    <li><a href="#">Tính năng</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Trời Xanh Mây Trắng<br><span style="color: var(--golden-sun);">Nắng Vàng</span></h1>
+            <p>Khám phá không gian thiết kế tươi mới, hiện đại và tràn đầy cảm hứng mùa hè với concept Golden Summer Breeze.</p>
+            <a href="#" class="btn">Bắt Đầu Khám Phá</a>
+        </section>
+
+        <section class="features">
+            <div class="card">
+                <div class="card-icon">☀️</div>
+                <h3>Ánh Sáng Rạng Rỡ</h3>
+                <p>Sử dụng những mảng màu vàng nắng rực rỡ làm điểm nhấn, mang lại sự tối ưu về mặt thị giác và năng lượng tích cực.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">☁️</div>
+                <h3>Tự Do & Phóng Khoáng</h3>
+                <p>Layout thoáng đãng cùng hiệu ứng kính mờ (Glassmorphism) giúp nội dung như đang lướt trên tầng mây.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌊</div>
+                <h3>Tươi Mát & Hiện Đại</h3>
+                <p>Tone màu xanh da trời chủ đạo kết hợp cùng các chuyển động mượt mà tạo cảm giác dễ chịu cho người dùng.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Subtle Mouse Parallax Effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+
+            document.querySelector('.sun').style.transform = `translate(${moveX * 2}px, ${moveY * 2}px)`;
+            
+            const clouds = document.querySelectorAll('.cloud');
+            clouds.forEach((cloud, index) => {
+                const speed = (index + 1) * 0.5;
+                cloud.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
+            });
+
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.transform = `translate(${moveX * 0.5}px, ${moveY * 0.5}px) translateY(-10px)`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&family=Outfit:wght@400;600&display=swap");
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+:root {
+    --swiper-theme-color: #ffffff !important;
+    --sky-blue: #E62E6B;
+    --sky-blue-light: #0B0E14;
+    --golden-sun: #E62E6B;
+    --golden-hover: #7C3AED;
+    --cloud-white: #FFFFFF;
+    --deep-navy: #0F172A;
+    --glass-bg: rgba(13, 17, 24, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+@theme {
+    /* Font Families */
+    --font-family-sans: "Inter", system-ui, -apple-system, sans-serif;
+    --font-family-display: "Outfit", "Lexend", sans-serif;
+
+    /* Card Vault Palette */
+    --color-primary: #E62E6B; /* Neon Magenta */
+    --color-primary-dark: #BE185D;
+    --color-primary-light: #FBCFE8;
+    --color-secondary: #7C3AED; /* Neon Purple */
+    
+    /* Dark Backgrounds */
+    --color-bg-dark: #080A0F;
+    --color-bg-card: rgba(13, 17, 24, 0.75);
+    --color-bg-surface: rgba(20, 26, 38, 0.85);
+
+    /* Text Colors for Dark Background */
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #E2E8F0;
+    --color-text-muted: #94A3B8;
+
+    /* Premium Border Colors */
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-border-light: rgba(255, 255, 255, 0.15);
+    --color-border-glow: rgba(230, 46, 107, 0.4);
+}
+
+/* Global Styles */
+body {
+    background: #080A0F;
+    background-image: radial-gradient(circle at 10% 20%, rgba(230, 46, 107, 0.04) 0%, transparent 45%),
+                      radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.04) 0%, transparent 45%);
+    background-attachment: fixed;
+    color: var(--color-text-primary);
+    font-family: var(--font-family-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+    font-family: var(--font-family-display);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Card Styles - Golden Summer */
+/* Card Styles - Premium Dark Neon */
+.card-esport {
+    background: rgba(13, 17, 24, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-esport::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent);
+    pointer-events: none;
+}
+
+.card-esport:hover {
+    box-shadow: 0 15px 35px rgba(230, 46, 107, 0.15);
+    border-color: rgba(230, 46, 107, 0.4);
+    transform: translateY(-6px);
+    background: rgba(20, 26, 38, 0.85);
+}
+
+/* Premium Button - Neon Pink & Purple Gradient */
+.btn-esport {
+    background: linear-gradient(135deg, #E62E6B, #7C3AED);
+    color: #FFFFFF;
+    font-weight: 800;
+    padding: 0.875rem 1.5rem;
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+    box-shadow: 0 8px 20px rgba(230, 46, 107, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-esport:hover {
+    box-shadow: 0 12px 25px rgba(230, 46, 107, 0.45);
+    transform: scale(1.03) translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Esport accent backgrounds */
+.bg-esport-darker {
+    background: #020617;
+}
+
+.bg-esport-gradient {
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(34, 197, 94, 0.08),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            rgba(255, 255, 255, 0.03),
+            transparent 45%
+        );
+}
+
+/* Clean soft shadows */
+.shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-medium {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom Scrollbar - Dark Esport */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+
+/* Simple gentle float animation for decorative elements */
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 12s linear infinite;
+}
+
+@keyframes shake-gentle {
+    0%,
+    100% {
+        transform: rotate(-5deg);
+    }
+    50% {
+        transform: rotate(5deg);
+    }
+}
+@keyframes swing {
+    0%,
+    100% {
+        transform: rotate(-10deg);
+        transform-origin: top center;
+    }
+    50% {
+        transform: rotate(10deg);
+        transform-origin: top center;
+    }
+}
+
+.animate-swing {
+    animation: swing 3s ease-in-out infinite;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.animate-marquee {
+    display: inline-block;
+    animation: marquee 12s linear infinite;
+}
+
+@keyframes glow-primary {
+    0%,
+    100% {
+        box-shadow:
+            0 0 5px rgba(34, 197, 94, 0.2),
+            inset 0 0 2px rgba(34, 197, 94, 0.1);
+    }
+    50% {
+        box-shadow:
+            0 0 20px rgba(34, 197, 94, 0.6),
+            inset 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+}
+
+.hover-glow-primary:hover {
+    animation: glow-primary 1.5s ease-in-out infinite;
+    border-color: var(--color-primary) !important;
+}
+
+.nav-link {
+    color: var(--color-text-secondary);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--color-primary) !important;
+    text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Glassmorphism utility */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Neon Text - Golden Glow */
+.text-neon {
+    color: #fff;
+    text-shadow:
+        0 0 10px rgba(230, 46, 107, 0.8),
+        0 0 20px rgba(230, 46, 107, 0.5);
+}
+
+/* Background Elements */
+.sun-glow {
+    position: fixed;
+    top: -100px;
+    right: -100px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(230, 46, 107, 0.12) 0%, rgba(230, 46, 107, 0) 70%);
+    filter: blur(60px);
+    z-index: -1;
+    pointer-events: none;
+    animation: pulse-sun 15s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-sun {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.cloud-element {
+    display: none !important;
+}
+
+/* Beach Decorations - Hidden for dark mode */
+.coconut-tree {
+    display: none !important;
+}
+
+.coconut-tree-left,
+.coconut-tree-right {
+    display: none !important;
+}
+
+/* Wave Divider */
+.wave-divider {
+    display: none !important;
+}
+
+/* Sea Footer */
+.sea-footer {
+    position: relative;
+    background: #06080C;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 60px;
+    margin-top: 80px;
+}
+
+/* Background Highlight */
+.beach-bg-highlight {
+    display: none !important;
+}
+
+/* Wave animation hidden */
+.wave-animation {
+    display: none !important;
+}
+
+/* Card stickers hidden */
+.card-sticker {
+    display: none !important;
+}
