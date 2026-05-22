@@ -12,24 +12,26 @@
 @endphp
 
 <div class="bg-black py-1 overflow-hidden whitespace-nowrap border-b border-white/5 relative z-60">
-    <div class="header-tagline-stage">
-        @foreach($taglineItems as $index => $taglineItem)
-            <span
-                class="header-tagline-item text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center gap-3 shrink-0"
-                style="animation-delay: {{ $index * 4.8 }}s;"
-            >
-                <span class="text-white/70">•</span>
-                <span>{{ $taglineItem }}</span>
-            </span>
-        @endforeach
+    <div class="container mx-auto px-2 md:px-4">
+        <div class="header-tagline-stage">
+            @foreach($taglineItems as $index => $taglineItem)
+                <span
+                    class="header-tagline-item text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center justify-center gap-3"
+                    data-tagline-item
+                >
+                    <span class="text-white/70">•</span>
+                    <span>{{ $taglineItem }}</span>
+                </span>
+            @endforeach
+        </div>
     </div>
 </div>
 
-<header class="sticky top-0 z-50 glass border-b border-border shadow-2xl overflow-visible h-[70px] flex items-center">
+<header class="sticky top-0 z-50 glass border-b border-border shadow-2xl overflow-visible h-[70px] flex items-center isolate">
     <!-- Removed Tet decorative branches and firecrackers -->
 
-    <div class="container mx-auto px-2 md:px-4 py-2 md:py-3 flex items-center justify-between relative z-40 gap-4">
-        <div class="flex items-center gap-6 shrink-0">
+    <div class="container mx-auto px-2 md:px-4 py-2 md:py-3 flex items-center justify-between relative z-40 gap-2 md:gap-4">
+        <div class="flex items-center gap-3 md:gap-6 shrink-0 min-w-0">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 group relative">
                 <img src="{{ asset('images/logo.png') }}" alt="Rabby TCG Logo" class="h-10 md:h-20 w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_10px_rgba(230,46,107,0.4)]">
@@ -72,16 +74,16 @@
             </form>
         </div>
 
-        <div class="flex items-center gap-3 shrink-0">
+        <div class="flex items-center gap-2 md:gap-3 shrink-0">
             <!-- Cart Icon Button -->
-            <a href="{{ route('products.index') }}" class="relative p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-primary/30 flex items-center justify-center" title="Shopping Cart">
+            <a href="{{ route('products.index') }}" class="relative hidden sm:flex p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-primary/30 items-center justify-center" title="Shopping Cart">
                 <span class="material-icons text-xl">shopping_cart</span>
                 <span class="absolute -top-1.5 -right-1.5 bg-primary text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(230,46,107,0.5)]">0</span>
             </a>
 
             @auth
             <!-- User Profile -->
-            <a href="{{ route('user.profile') }}" class="flex items-center gap-1 md:gap-2 bg-bg-card hover:bg-white/5 px-2 md:px-4 py-1 md:py-2 rounded-lg border border-border cursor-pointer transition-all hover:border-primary/50">
+            <a href="{{ route('user.profile') }}" class="hidden sm:flex items-center gap-1 md:gap-2 bg-bg-card hover:bg-white/5 px-2 md:px-4 py-1 md:py-2 rounded-lg border border-border cursor-pointer transition-all hover:border-primary/50">
                 <span class="material-icons text-primary text-xl md:text-2xl">account_circle</span>
                 <div class="flex flex-col">
                     <span class="text-text-primary text-[10px] md:text-[12px] font-bold max-w-[40px] md:max-w-none truncate">{{ auth()->user()->name }}</span>
@@ -98,21 +100,21 @@
             </form>
             @else
             <!-- Login Button -->
-            <a href="{{ route('login') }}" class="flex items-center gap-1.5 md:gap-2 btn-esport px-3 md:px-5 py-1.5 md:py-2 rounded-lg font-black transition-all shadow-lg group text-[10px] md:text-xs">
+            <a href="{{ route('login') }}" class="hidden sm:flex items-center gap-1.5 md:gap-2 btn-esport px-3 md:px-5 py-1.5 md:py-2 rounded-lg font-black transition-all shadow-lg group text-[10px] md:text-xs">
                 <span class="material-icons group-hover:rotate-12 transition-transform text-sm md:text-base">login</span>
                 <span class="tracking-widest whitespace-nowrap uppercase">{{ __('login') }}</span>
             </a>
             @endauth
 
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="lg:hidden text-white p-2 rounded-lg bg-white/15 hover:bg-white/25 transition-all border border-white/20">
+            <button id="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" class="lg:hidden text-white p-2 rounded-lg bg-white/15 hover:bg-white/25 transition-all border border-white/20 relative z-[70]">
                 <span class="material-icons text-2xl">menu</span>
             </button>
         </div>
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden lg:hidden border-t border-white/5 bg-neutral-950/95 backdrop-blur-xl">
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-full inset-x-0 z-[65] border-t border-white/5 bg-neutral-950/95 backdrop-blur-xl shadow-2xl">
         <nav class="container mx-auto px-4 py-4 flex flex-col gap-1">
             @auth
             <!-- Mobile User Info -->
@@ -137,6 +139,20 @@
                 <span class="material-icons ml-auto text-white/40">chevron_right</span>
             </a>
             @endforeach
+
+            @guest
+            <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all sm:hidden" href="{{ route('login') }}">
+                <span class="material-icons text-xl">login</span>
+                <span class="tracking-wide capitalize">{{ __('login') }}</span>
+                <span class="material-icons ml-auto text-white/40">chevron_right</span>
+            </a>
+            @endguest
+
+            <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all sm:hidden" href="{{ route('products.index') }}">
+                <span class="material-icons text-xl">shopping_cart</span>
+                <span class="tracking-wide capitalize">{{ __('products') }}</span>
+                <span class="material-icons ml-auto text-white/40">chevron_right</span>
+            </a>
 
             @auth
             <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all" href="{{ route('user.profile') }}">
@@ -163,12 +179,22 @@
     document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const taglineItems = Array.from(document.querySelectorAll('[data-tagline-item]'));
+        let activeTaglineIndex = 0;
+
+        function showTaglineItem(index) {
+            taglineItems.forEach((item, itemIndex) => {
+                item.classList.toggle('is-active', itemIndex === index);
+            });
+        }
 
         if (mobileMenuBtn && mobileMenu) {
             mobileMenuBtn.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');
+                const isExpanded = !mobileMenu.classList.contains('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
 
-                if (!mobileMenu.classList.contains('hidden')) {
+                if (isExpanded) {
                     const menuItems = mobileMenu.querySelectorAll('a');
                     menuItems.forEach((item, index) => {
                         item.style.opacity = '0';
@@ -185,8 +211,20 @@
             document.addEventListener('click', function(event) {
                 if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
                     mobileMenu.classList.add('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
                 }
             });
+        }
+
+        if (taglineItems.length > 0) {
+            showTaglineItem(activeTaglineIndex);
+
+            if (taglineItems.length > 1) {
+                setInterval(() => {
+                    activeTaglineIndex = (activeTaglineIndex + 1) % taglineItems.length;
+                    showTaglineItem(activeTaglineIndex);
+                }, 3200);
+            }
         }
     });
 </script>
@@ -205,32 +243,33 @@
         position: relative;
         height: 16px;
         overflow: hidden;
+        width: 100%;
     }
 
     @keyframes headerTaglineShot {
         0% {
             opacity: 0;
-            transform: translate3d(110%, 0, 0);
+            transform: translate3d(100%, 0, 0);
         }
 
-        10% {
+        12% {
             opacity: 1;
-            transform: translate3d(70%, 0, 0);
+            transform: translate3d(30%, 0, 0);
         }
 
-        45% {
+        40% {
             opacity: 1;
             transform: translate3d(0, 0, 0);
         }
 
-        75% {
+        72% {
             opacity: 1;
-            transform: translate3d(-65%, 0, 0);
+            transform: translate3d(-30%, 0, 0);
         }
 
         100% {
             opacity: 0;
-            transform: translate3d(-115%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
         }
     }
 
@@ -238,11 +277,14 @@
         position: absolute;
         top: 0;
         left: 0;
+        width: 100%;
         opacity: 0;
-        animation-name: headerTaglineShot;
-        animation-duration: {{ max($taglineItems->count(), 1) * 4.8 }}s;
-        animation-timing-function: ease-in-out;
-        animation-iteration-count: infinite;
+        pointer-events: none;
         will-change: transform, opacity;
+        transform: translate3d(100%, 0, 0);
+    }
+
+    .header-tagline-item.is-active {
+        animation: headerTaglineShot 3.2s ease-in-out forwards;
     }
 </style>

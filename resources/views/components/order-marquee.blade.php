@@ -10,7 +10,7 @@ $categories = \App\Models\Category::whereNull('parent_id')->get();
             <div class="bg-primary/10 border border-primary/20 rounded-lg p-2">
                 <span class="material-icons text-primary text-xl">shopping_cart</span>
             </div>
-            <span class="text-text-primary font-black text-xs md:text-sm uppercase tracking-[0.2em] drop-shadow-[0_0_8px_rgba(230,46,107,0.3)]">List Category:</span>
+            <span class="text-text-primary font-black text-xs md:text-sm uppercase tracking-[0.2em] drop-shadow-[0_0_8px_rgba(230,46,107,0.3)]">{{ __('list_category') }}:</span>
         </div>
 
         <!-- Marquee Content -->
