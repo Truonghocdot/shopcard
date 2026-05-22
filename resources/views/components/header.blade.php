@@ -12,14 +12,15 @@
 @endphp
 
 <div class="bg-black py-1 overflow-hidden whitespace-nowrap border-b border-white/5 relative z-60">
-    <div class="header-tagline-track flex items-center gap-10 whitespace-nowrap">
-        @foreach(range(1, 2) as $loopIndex)
-            @foreach($taglineItems as $taglineItem)
-                <span class="text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center gap-3 shrink-0">
-                    <span class="text-white/70">•</span>
-                    <span>{{ $taglineItem }}</span>
-                </span>
-            @endforeach
+    <div class="header-tagline-stage">
+        @foreach($taglineItems as $index => $taglineItem)
+            <span
+                class="header-tagline-item text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center gap-3 shrink-0"
+                style="animation-delay: {{ $index * 4.8 }}s;"
+            >
+                <span class="text-white/70">•</span>
+                <span>{{ $taglineItem }}</span>
+            </span>
         @endforeach
     </div>
 </div>
@@ -200,23 +201,48 @@
         color: var(--color-primary) !important;
     }
 
-    @keyframes headerTaglineMarquee {
+    .header-tagline-stage {
+        position: relative;
+        height: 16px;
+        overflow: hidden;
+    }
+
+    @keyframes headerTaglineShot {
         0% {
-            transform: translate3d(50%, 0, 0);
+            opacity: 0;
+            transform: translate3d(110%, 0, 0);
+        }
+
+        10% {
+            opacity: 1;
+            transform: translate3d(70%, 0, 0);
+        }
+
+        45% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
+        75% {
+            opacity: 1;
+            transform: translate3d(-65%, 0, 0);
         }
 
         100% {
-            transform: translate3d(-50%, 0, 0);
+            opacity: 0;
+            transform: translate3d(-115%, 0, 0);
         }
     }
 
-    .header-tagline-track {
-        width: max-content;
-        animation: headerTaglineMarquee 28s linear infinite;
-        will-change: transform;
-    }
-
-    .header-tagline-track:hover {
-        animation-play-state: paused;
+    .header-tagline-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        animation-name: headerTaglineShot;
+        animation-duration: {{ max($taglineItems->count(), 1) * 4.8 }}s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        will-change: transform, opacity;
     }
 </style>
