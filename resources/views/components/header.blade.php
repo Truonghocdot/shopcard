@@ -75,8 +75,13 @@
         </div>
 
         <div class="flex items-center gap-2 md:gap-3 shrink-0">
+            <!-- Mobile Search Button -->
+            <button id="mobile-search-btn" type="button" aria-expanded="false" aria-controls="mobile-search" class="md:hidden text-white p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all border border-white/10 relative z-[70]">
+                <span class="material-icons text-xl">search</span>
+            </button>
+
             <!-- Cart Icon Button -->
-            <a href="{{ route('products.index') }}" class="relative hidden sm:flex p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-primary/30 items-center justify-center" title="Shopping Cart">
+            <a href="{{ route('products.index') }}" class="relative flex p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-primary/30 items-center justify-center" title="Shopping Cart">
                 <span class="material-icons text-xl">shopping_cart</span>
                 <span class="absolute -top-1.5 -right-1.5 bg-primary text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(230,46,107,0.5)]">0</span>
             </a>
@@ -110,6 +115,16 @@
             <button id="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" class="lg:hidden text-white p-2 rounded-lg bg-white/15 hover:bg-white/25 transition-all border border-white/20 relative z-[70]">
                 <span class="material-icons text-2xl">menu</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Mobile Search -->
+    <div id="mobile-search" class="hidden md:hidden absolute top-full inset-x-0 z-[66] border-t border-white/5 bg-neutral-950/95 backdrop-blur-xl shadow-2xl">
+        <div class="container mx-auto px-4 py-4">
+            <form action="{{ route('products.index') }}" method="GET" class="relative">
+                <input type="text" name="search" placeholder="{{ __('placeholder_search_global') }}" class="w-full bg-white/5 border border-white/10 focus:border-primary/50 rounded-2xl px-5 py-3 text-sm text-white focus:outline-none transition-all placeholder-white/30 pl-11">
+                <span class="material-icons text-white/30 text-base absolute left-4 top-1/2 -translate-y-1/2">search</span>
+            </form>
         </div>
     </div>
 
@@ -148,12 +163,6 @@
             </a>
             @endguest
 
-            <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all sm:hidden" href="{{ route('products.index') }}">
-                <span class="material-icons text-xl">shopping_cart</span>
-                <span class="tracking-wide capitalize">{{ __('products') }}</span>
-                <span class="material-icons ml-auto text-white/40">chevron_right</span>
-            </a>
-
             @auth
             <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all" href="{{ route('user.profile') }}">
                 <span class="material-icons text-xl">account_circle</span>
@@ -177,6 +186,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const mobileSearchBtn = document.getElementById('mobile-search-btn');
+        const mobileSearch = document.getElementById('mobile-search');
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const taglineItems = Array.from(document.querySelectorAll('[data-tagline-item]'));
@@ -188,8 +199,25 @@
             });
         }
 
+        if (mobileSearchBtn && mobileSearch) {
+            mobileSearchBtn.addEventListener('click', function() {
+                const willExpand = mobileSearch.classList.contains('hidden');
+
+                mobileSearch.classList.toggle('hidden');
+                mobileSearchBtn.setAttribute('aria-expanded', willExpand ? 'true' : 'false');
+
+                if (willExpand) {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
         if (mobileMenuBtn && mobileMenu) {
             mobileMenuBtn.addEventListener('click', function() {
+                mobileSearch.classList.add('hidden');
+                mobileSearchBtn?.setAttribute('aria-expanded', 'false');
+
                 mobileMenu.classList.toggle('hidden');
                 const isExpanded = !mobileMenu.classList.contains('hidden');
                 mobileMenuBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
@@ -209,9 +237,17 @@
             });
 
             document.addEventListener('click', function(event) {
-                if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                const clickedOutsideMenu = !mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target);
+                const clickedOutsideSearch = !mobileSearchBtn.contains(event.target) && !mobileSearch.contains(event.target);
+
+                if (clickedOutsideMenu) {
                     mobileMenu.classList.add('hidden');
                     mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+
+                if (clickedOutsideSearch) {
+                    mobileSearch.classList.add('hidden');
+                    mobileSearchBtn.setAttribute('aria-expanded', 'false');
                 }
             });
         }
@@ -285,6 +321,6 @@
     }
 
     .header-tagline-item.is-active {
-        animation: headerTaglineShot 3.2s ease-in-out forwards;
+        animation: headerTaglineShot 5s ease-in-out forwards;
     }
 </style>
