@@ -34,7 +34,7 @@
         <div class="flex items-center gap-3 md:gap-6 shrink-0 min-w-0">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 group relative">
-                <img src="{{ asset('images/logo.png') }}" alt="Rabby TCG Logo" class="h-10 md:h-20 w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_10px_rgba(230,46,107,0.4)]">
+                <img src="{{ asset('images/logo.png') }}" alt="Rabby TCG Logo" class="h-14 md:h-24 w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_10px_rgba(230,46,107,0.4)]">
                 <div class="absolute -inset-2 bg-primary/10 blur-xl rounded-full scale-0 group-hover:scale-110 transition-transform duration-700 opacity-0 group-hover:opacity-100"></div>
             </a>
 
