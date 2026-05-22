@@ -6,8 +6,9 @@ use App\Models\Page;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 
 class PageForm
@@ -21,7 +22,7 @@ class PageForm
                 ->columnSpanFull()
                 ->tabs(
                     collect($locales)->map(function (string $label, string $locale) {
-                        return Tabs\Tab::make(strtoupper($locale))
+                        return Tab::make(strtoupper($locale))
                             ->label($label)
                             ->schema([
                                 TextInput::make("title.{$locale}")
