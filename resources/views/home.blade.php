@@ -18,6 +18,12 @@
 .hero-swiper-fullscreen .swiper-slide { height: 100%; }
 .hero-swiper-fullscreen .swiper-pagination-bullet { background: rgba(255,255,255,0.4) !important; opacity: 1 !important; }
 .hero-swiper-fullscreen .swiper-pagination-bullet-active { background: var(--color-primary) !important; width: 24px !important; border-radius: 4px !important; }
+.hero-swiper-fullscreen .swiper-pagination {
+    bottom: 18px !important;
+}
+.hero-banner-image {
+    filter: brightness(1.08) saturate(1.04);
+}
 .slab-graded {
     position: relative; background: rgba(13,17,24,0.75); backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.06); border-radius: 1.5rem;
@@ -61,7 +67,7 @@
 
 {{-- ② HERO BANNER --}}
 <section class="fullscreen-banner-section">
-    <div class="swiper hero-swiper-fullscreen overflow-hidden shadow-2xl relative">
+    <div class="swiper hero-swiper-fullscreen overflow-hidden relative">
         <div class="swiper-wrapper">
             @forelse($banners as $banner)
                 <div class="swiper-slide relative overflow-hidden bg-neutral-950">
@@ -73,10 +79,9 @@
                         <img
                             src="{{ url('storage/'.$banner->image) }}"
                             alt="Banner"
-                            class="w-full h-full object-cover"
+                            class="hero-banner-image w-full h-full object-cover"
                         >
                     </picture>
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/60 to-transparent"></div>
                 </div>
             @empty
                 <div class="swiper-slide bg-neutral-950 flex items-center justify-center">

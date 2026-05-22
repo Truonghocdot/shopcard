@@ -1,9 +1,26 @@
 <!-- Top Info Bar -->
+@php
+    $taglineSource = $siteSettings['site_tagline'] ?? __('premium_tcg_shop');
+    $taglineItems = collect(preg_split('/\s*[|•]\s*/u', $taglineSource))
+        ->map(fn ($item) => trim((string) $item))
+        ->filter()
+        ->values();
+
+    if ($taglineItems->isEmpty()) {
+        $taglineItems = collect([__('premium_tcg_shop')]);
+    }
+@endphp
+
 <div class="bg-black py-1 overflow-hidden whitespace-nowrap border-b border-white/5 relative z-60">
-    <div class="animate-marquee flex items-center gap-8">
-        <span class="text-primary font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
-            {{ $siteSettings['site_tagline'] ?? __('premium_tcg_shop') }}
-        </span>
+    <div class="header-tagline-track flex items-center gap-10 whitespace-nowrap">
+        @foreach(range(1, 2) as $loopIndex)
+            @foreach($taglineItems as $taglineItem)
+                <span class="text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center gap-3 shrink-0">
+                    <span class="text-white/70">•</span>
+                    <span>{{ $taglineItem }}</span>
+                </span>
+            @endforeach
+        @endforeach
     </div>
 </div>
 
@@ -181,5 +198,25 @@
     .nav-link.active {
         background: rgba(255, 255, 255, 0.05);
         color: var(--color-primary) !important;
+    }
+
+    @keyframes headerTaglineMarquee {
+        0% {
+            transform: translate3d(50%, 0, 0);
+        }
+
+        100% {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+
+    .header-tagline-track {
+        width: max-content;
+        animation: headerTaglineMarquee 28s linear infinite;
+        will-change: transform;
+    }
+
+    .header-tagline-track:hover {
+        animation-play-state: paused;
     }
 </style>
