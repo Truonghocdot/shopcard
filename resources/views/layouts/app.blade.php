@@ -96,6 +96,9 @@
             <a href="{{ $siteSettings['facebook_link'] ?? '#' }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white group">
                 <span class="material-icons text-xl md:text-2xl">message</span>
             </a>
+            <a href="{{ $siteSettings['instagram_link'] ?? '#' }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white group">
+                <span class="material-icons text-xl md:text-2xl">photo_camera</span>
+            </a>
             <a href="tel:{{ preg_replace('/\s+/', '', $siteSettings['contact_phone'] ?? '0327182537') }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white">
                 <span class="material-icons text-xl md:text-2xl">phone</span>
             </a>
