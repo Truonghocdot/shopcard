@@ -11,7 +11,7 @@
                     </a>
                 </div>
                 <p class="text-text-secondary text-sm leading-relaxed max-w-sm">
-                    {{ $siteSettings['footer_about'] ?? __('footer_about_desc') }}
+                    {!! $siteSettings['footer_about'] ?? __('footer_about_desc') !!}
                 </p>
             </div>
 
