@@ -6,16 +6,16 @@ use App\Constants\SettingName;
 use App\Models\Setting as ModelsSetting;
 use BackedEnum;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
@@ -266,7 +266,7 @@ class Setting extends Page implements HasForms
                             ->placeholder($label)
                             ->maxLength(255);
 
-                    return Tabs\Tab::make(strtoupper($locale))
+                    return Tab::make(strtoupper($locale))
                         ->label($localeLabel)
                         ->schema([$component]);
                 })->values()->all()
