@@ -42,8 +42,10 @@
     "card_set_expansion": "Card Set / Expansion",
     "card_rarity": "Card Rarity",
     "psa_cert_serial": "PSA Cert / Serial Number",
-    "footer_about_desc": "The most prestigious and secure TCG Card Shop. Automatic 24/7 transactions, enthusiastic support, and absolute security.",
+    "footer_about_desc": "The one and only fair TCG Store in town. Build by players for the players.",
     "quick_links": "Quick Links",
+    "about_us": "About Us",
+    "contact": "Contact",
     "customer_support": "Customer Support",
     "deposit_guide": "Deposit Guide",
     "policy_regulations": "Policy & Regulations",
@@ -155,6 +157,7 @@
     "country": "Country",
     "payment_method": "Payment Method",
     "paypal_payment_desc": "Secure payment via PayPal. Supports all major international credit cards.",
+    "paypal_currently_unavailable": "PayPal is currently unavailable.",
     "validate_shipping_details": "Please fill in all shipping details first!",
     "order_success_title": "Order Successful!",
     "thank_you_purchase": "Thank you for your purchase!",
@@ -240,5 +243,6 @@
     "trust_reward_points": "Earn Reward Points",
     "trust_authentic": "100% Authentic Cards",
     "trust_support_247": "24/7 Customer Support",
-    "home_show_more_categories": "Show More Categories"
+    "home_show_more_categories": "Show More Categories",
+    "placeholder_search_global":"What are you looking for?"
 }

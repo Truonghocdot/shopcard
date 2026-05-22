@@ -11,8 +11,11 @@
     left: 50%; right: 50%;
     margin-left: -50vw; margin-right: -50vw;
 }
-.hero-swiper-fullscreen { height: 320px; width: 100%; }
-@media (min-width: 768px) { .hero-swiper-fullscreen { height: 520px; } }
+/* Mobile: 1:1 → Tablet: 2:1 → Desktop: 5:1 */
+.hero-swiper-fullscreen { width: 100%; aspect-ratio: 1/1; }
+@media (min-width: 640px)  { .hero-swiper-fullscreen { aspect-ratio: 2/1; } }
+@media (min-width: 1024px) { .hero-swiper-fullscreen { aspect-ratio: 5/1; } }
+.hero-swiper-fullscreen .swiper-slide { height: 100%; }
 .hero-swiper-fullscreen .swiper-pagination-bullet { background: rgba(255,255,255,0.4) !important; opacity: 1 !important; }
 .hero-swiper-fullscreen .swiper-pagination-bullet-active { background: var(--color-primary) !important; width: 24px !important; border-radius: 4px !important; }
 .slab-graded {
@@ -43,15 +46,7 @@
 {{-- ① TRUST BAR --}}
 <div class="w-full bg-neutral-950/80 border-b border-white/5 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="flex items-center justify-center md:justify-between overflow-x-auto no-scrollbar">
-            <div class="flex items-center gap-2 px-5 py-3 shrink-0 border-r border-white/5">
-                <span class="material-icons text-primary text-base">local_shipping</span>
-                <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_free_shipping') }}</span>
-            </div>
-            <div class="flex items-center gap-2 px-5 py-3 shrink-0 border-r border-white/5">
-                <span class="material-icons text-primary text-base">stars</span>
-                <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_reward_points') }}</span>
-            </div>
+        <div class="flex items-center justify-center overflow-x-auto no-scrollbar">
             <div class="flex items-center gap-2 px-5 py-3 shrink-0 border-r border-white/5">
                 <span class="material-icons text-primary text-base">verified</span>
                 <span class="text-[10px] font-black uppercase tracking-widest text-neutral-300 whitespace-nowrap">{{ __('trust_authentic') }}</span>
@@ -70,7 +65,17 @@
         <div class="swiper-wrapper">
             @forelse($banners as $banner)
                 <div class="swiper-slide relative overflow-hidden bg-neutral-950">
-                    <img src="{{ url('storage/'.$banner->image) }}" alt="Banner" class="w-full h-full object-cover">
+                    <picture class="w-full h-full">
+                        {{-- Ảnh mobile: dùng mobile_image nếu có, fallback về image --}}
+                        @if($banner->mobile_image)
+                            <source media="(max-width: 639px)" srcset="{{ url('storage/'.$banner->mobile_image) }}">
+                        @endif
+                        <img
+                            src="{{ url('storage/'.$banner->image) }}"
+                            alt="Banner"
+                            class="w-full h-full object-cover"
+                        >
+                    </picture>
                     <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/60 to-transparent"></div>
                 </div>
             @empty

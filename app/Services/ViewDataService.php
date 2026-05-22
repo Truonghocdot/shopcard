@@ -11,6 +11,22 @@ use Illuminate\Support\Facades\Log;
 
 class ViewDataService
 {
+    public function getCheckoutPaymentConfig(): array
+    {
+        $enabled = filter_var(
+            Setting::get(SettingName::PAYPAL_ENABLED->value, '1'),
+            FILTER_VALIDATE_BOOL,
+            FILTER_NULL_ON_FAILURE
+        );
+
+        return [
+            'paypal_enabled' => $enabled ?? true,
+            'paypal_client_id' => Setting::get(SettingName::PAYPAL_CLIENT_ID->value, 'sb'),
+            'paypal_currency' => Setting::get(SettingName::PAYPAL_CURRENCY->value, 'USD'),
+            'paypal_environment' => Setting::get(SettingName::PAYPAL_ENVIRONMENT->value, 'sandbox'),
+        ];
+    }
+
     /**
      * Get recent orders for marquee display
      */

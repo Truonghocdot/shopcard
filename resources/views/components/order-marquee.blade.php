@@ -44,7 +44,7 @@ $categories = \App\Models\Category::whereNull('parent_id')->get();
 <style>
     @keyframes marquee {
         0% {
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(50%, 0, 0);
         }
 
         100% {

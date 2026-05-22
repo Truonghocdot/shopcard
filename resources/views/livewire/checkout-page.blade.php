@@ -199,7 +199,13 @@
                         PROCESSING PAYMENT...
                     </div>
 
+                    @if($paymentConfig['paypal_enabled'] ?? false)
                     <div id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
+                    @else
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
+                        {{ __('paypal_currently_unavailable') }}
+                    </div>
+                    @endif
                 </div>
 
                 <p class="text-[10px] text-neutral-600 font-bold text-center mt-6 leading-relaxed uppercase tracking-widest">
@@ -210,9 +216,14 @@
     </div>
 
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&disable-funding=card"></script>
+    @if($paymentConfig['paypal_enabled'] ?? false)
+    <script src="https://www.paypal.com/sdk/js?client-id={{ urlencode($paymentConfig['paypal_client_id'] ?? 'sb') }}&currency={{ urlencode($paymentConfig['paypal_currency'] ?? 'USD') }}&disable-funding=card"></script>
     <script>
         document.addEventListener('livewire:load', function () {
+            if (typeof paypal === 'undefined') {
+                return;
+            }
+
             function getShippingErrors() {
                 const fields = ['shipping_name','shipping_phone','shipping_email','shipping_address','shipping_city','shipping_postal_code','shipping_country'];
                 for (const id of fields) {
@@ -236,7 +247,7 @@
                 createOrder: function(data, actions) {
                     const usd = parseFloat(@this.get('finalAmountUSD'));
                     return actions.order.create({
-                        purchase_units: [{ amount: { currency_code: 'USD', value: usd.toFixed(2) } }]
+                        purchase_units: [{ amount: { currency_code: '{{ $paymentConfig['paypal_currency'] ?? 'USD' }}', value: usd.toFixed(2) } }]
                     });
                 },
                 onApprove: function(data, actions) {
@@ -258,4 +269,5 @@
             }).render('#paypal-button-container');
         });
     </script>
+    @endif
 </div>

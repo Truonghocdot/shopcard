@@ -3,10 +3,9 @@
 namespace App\Filament\Resources\Banners\Schemas;
 
 use App\Filament\Traits\HandlesWebpUploads;
-use App\Models\Banner;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class BannerForm
@@ -21,19 +20,38 @@ class BannerForm
                     ->numeric()
                     ->validationMessages([
                         'required' => __('filament.banner_sort_required'),
-                        'numeric' => __('filament.banner_sort_numeric'),
+                        'numeric'  => __('filament.banner_sort_numeric'),
                     ]),
-                HandlesWebpUploads::processImageUpload(
-                    FileUpload::make('image')
-                        ->required()
-                        ->label(__('filament.banner_image'))
-                        ->disk('public')
-                        ->directory('banners')
-                        ->image()
-                        ->validationMessages([
-                            'required' => __('filament.banner_image_required'),
-                        ])
-                ),
+
+                Section::make(__('filament.banner_images_section'))
+                    ->description(__('filament.banner_images_section_desc'))
+                    ->columns(2)
+                    ->schema([
+                        HandlesWebpUploads::processImageUpload(
+                            FileUpload::make('image')
+                                ->required()
+                                ->label(__('filament.banner_image'))
+                                ->helperText(__('filament.banner_image_hint'))
+                                ->disk('public')
+                                ->directory('banners')
+                                ->image()
+                                ->imagePreviewHeight('160')
+                                ->validationMessages([
+                                    'required' => __('filament.banner_image_required'),
+                                ])
+                        ),
+
+                        HandlesWebpUploads::processImageUpload(
+                            FileUpload::make('mobile_image')
+                                ->label(__('filament.banner_mobile_image'))
+                                ->helperText(__('filament.banner_mobile_image_hint'))
+                                ->disk('public')
+                                ->directory('banners/mobile')
+                                ->image()
+                                ->imagePreviewHeight('160')
+                                ->nullable()
+                        ),
+                    ]),
             ]);
     }
 }

@@ -21,6 +21,33 @@ class Setting extends Model
         });
     }
 
+    public static function getLocalized(string $key, ?string $locale = null, $default = null): mixed
+    {
+        $locale ??= app()->getLocale();
+        $fallback = config('app.fallback_locale', config('locales.default', 'en'));
+        $value = self::get($key, $default);
+
+        if (! is_string($value)) {
+            return $value;
+        }
+
+        $decoded = json_decode($value, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || ! is_array($decoded)) {
+            return $value;
+        }
+
+        return $decoded[$locale]
+            ?? $decoded[$fallback]
+            ?? collect($decoded)->filter(fn ($item) => filled($item))->first()
+            ?? $default;
+    }
+
+    public static function setLocalized(string $key, array $value): void
+    {
+        self::set($key, json_encode($value, JSON_UNESCAPED_UNICODE));
+    }
+
     public static function set(string $key, $value): void
     {
         self::updateOrCreate(

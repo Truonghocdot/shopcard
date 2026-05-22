@@ -4,7 +4,7 @@
 
         <div class="mt-6">
             <x-filament::button type="submit" size="lg">
-                Lưu cài đặt
+                {{ __('filament.setting_save') }}
             </x-filament::button>
         </div>
     </form>

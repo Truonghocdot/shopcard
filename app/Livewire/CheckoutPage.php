@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Services\CartService;
 use App\Services\CouponService;
 use App\Services\OrderService;
+use App\Services\ViewDataService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -32,6 +33,9 @@ class CheckoutPage extends Component
     protected CartService $cartService;
     protected CouponService $couponService;
     protected OrderService $orderService;
+    protected ViewDataService $viewDataService;
+
+    public array $paymentConfig = [];
 
     protected $rules = [
         'shipping_name'        => 'required|string|max:100',
@@ -46,11 +50,13 @@ class CheckoutPage extends Component
     public function boot(
         CartService $cartService,
         CouponService $couponService,
-        OrderService $orderService
+        OrderService $orderService,
+        ViewDataService $viewDataService
     ): void {
         $this->cartService  = $cartService;
         $this->couponService = $couponService;
         $this->orderService  = $orderService;
+        $this->viewDataService = $viewDataService;
     }
 
     public function mount(): void
@@ -72,6 +78,8 @@ class CheckoutPage extends Component
             $this->couponCode = $code;
             $this->applyCoupon();
         }
+
+        $this->paymentConfig = $this->viewDataService->getCheckoutPaymentConfig();
     }
 
     // ── Computed properties ──────────────────────────────────────────────────

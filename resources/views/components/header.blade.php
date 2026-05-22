@@ -2,7 +2,7 @@
 <div class="bg-black py-1 overflow-hidden whitespace-nowrap border-b border-white/5 relative z-60">
     <div class="animate-marquee flex items-center gap-8">
         <span class="text-primary font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
-            {{ __('premium_tcg_shop') }}
+            {{ $siteSettings['site_tagline'] ?? __('premium_tcg_shop') }}
         </span>
     </div>
 </div>
@@ -14,7 +14,7 @@
         <div class="flex items-center gap-6 shrink-0">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 group relative">
-                <img src="{{ asset('images/logo.png') }}" alt="Rabby TCG Logo" class="h-10 md:h-12 w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_10px_rgba(230,46,107,0.4)]">
+                <img src="{{ asset('images/logo.png') }}" alt="Rabby TCG Logo" class="h-10 md:h-20 w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_10px_rgba(230,46,107,0.4)]">
                 <div class="absolute -inset-2 bg-primary/10 blur-xl rounded-full scale-0 group-hover:scale-110 transition-transform duration-700 opacity-0 group-hover:opacity-100"></div>
             </a>
 
@@ -25,12 +25,20 @@
                 ['route' => 'home', 'icon' => 'home', 'label' => __('home')],
                 ['route' => 'products.index', 'icon' => 'shopping_bag', 'label' => __('products')],
                 ['route' => 'news.index', 'icon' => 'newspaper', 'label' => __('news')],
-                ['route' => 'policy', 'icon' => 'policy', 'label' => __('policy')],
                 ];
+
+                foreach (($headerPages ?? []) as $page) {
+                $navItems[] = [
+                'url' => route('pages.show', $page->slug),
+                'icon' => $page->slug === \App\Models\Page::SLUG_CONTACT ? 'mail' : 'info',
+                'label' => $page->title,
+                'active' => request()->routeIs('pages.show') && request()->route('slug') === $page->slug,
+                ];
+                }
                 @endphp
 
                 @foreach($navItems as $item)
-                <a class="nav-link font-bold flex items-center gap-2 text-text-secondary hover:text-text-primary px-3 py-2 rounded-lg transition-all {{ request()->routeIs($item['route']) ? 'active text-primary bg-white/5' : '' }}" href="{{ route($item['route']) }}">
+                <a class="nav-link font-bold flex items-center gap-2 text-text-secondary hover:text-text-primary px-3 py-2 rounded-lg transition-all {{ ($item['active'] ?? (isset($item['route']) && request()->routeIs($item['route']))) ? 'active text-primary bg-white/5' : '' }}" href="{{ $item['url'] ?? route($item['route']) }}">
                     <span class="material-icons text-base">{{ $item['icon'] }}</span>
                     <span class="text-[10px] tracking-widest uppercase">{{ $item['label'] }}</span>
                 </a>
@@ -41,7 +49,7 @@
         <!-- Center TCG Search Input -->
         <div class="hidden md:flex flex-1 max-w-md relative">
             <form action="{{ route('products.index') }}" method="GET" class="w-full relative">
-                <input type="text" name="search" placeholder="Search premium TCG cards..." class="w-full bg-white/5 border border-white/10 focus:border-primary/50 rounded-full px-5 py-2 text-xs text-white focus:outline-none transition-all placeholder-white/30 pl-10">
+                <input type="text" name="search" placeholder="{{ __('placeholder_search_global') }}" class="w-full bg-white/5 border border-white/10 focus:border-primary/50 rounded-full px-5 py-2 text-xs text-white focus:outline-none transition-all placeholder-white/30 pl-10">
                 <span class="material-icons text-white/30 text-sm absolute left-3.5 top-1/2 -translate-y-1/2">search</span>
             </form>
         </div>
@@ -105,7 +113,7 @@
             @endauth
 
             @foreach($navItems as $item)
-            <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all" href="{{ route($item['route']) }}">
+            <a class="flex items-center gap-3 text-white/90 hover:text-white hover:bg-white/10 font-semibold py-3 px-4 rounded-lg transition-all" href="{{ $item['url'] ?? route($item['route']) }}">
                 <span class="material-icons text-xl">{{ $item['icon'] }}</span>
                 <span class="tracking-wide capitalize">{{ $item['label'] }}</span>
                 <span class="material-icons ml-auto text-white/40">chevron_right</span>

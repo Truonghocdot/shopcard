@@ -22,6 +22,7 @@ class PagesTable
                 TextColumn::make('title')
                     ->label(__('filament.page_title'))
                     ->searchable()
+                    ->formatStateUsing(fn (Page $record): string => $record->title ?? '—')
                     ->sortable(),
 
                 TextColumn::make('slug')
@@ -38,6 +39,18 @@ class PagesTable
                         : __('filament.field_inactive'))
                     ->color(fn (int $state): string => $state === Page::STATUS_ACTIVE ? 'success' : 'danger')
                     ->sortable(),
+
+                TextColumn::make('show_in_header')
+                    ->label(__('filament.page_show_in_header'))
+                    ->badge()
+                    ->formatStateUsing(fn (bool $state): string => $state ? __('filament.field_yes') : __('filament.field_no'))
+                    ->color(fn (bool $state): string => $state ? 'info' : 'gray'),
+
+                TextColumn::make('show_in_footer')
+                    ->label(__('filament.page_show_in_footer'))
+                    ->badge()
+                    ->formatStateUsing(fn (bool $state): string => $state ? __('filament.field_yes') : __('filament.field_no'))
+                    ->color(fn (bool $state): string => $state ? 'info' : 'gray'),
 
                 TextColumn::make('updated_at')
                     ->label(__('filament.field_updated_at'))

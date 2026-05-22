@@ -10,6 +10,12 @@ class PageController extends Controller
     {
         $page = Page::active()->where('slug', $slug)->firstOrFail();
 
-        return view('pages.show', compact('page'));
+        return view('pages.show', [
+            'page' => $page,
+            'pageTitle' => $page->title,
+            'pageMetaTitle' => $page->meta_title,
+            'pageMetaDescription' => $page->meta_description,
+            'pageContent' => $page->content,
+        ]);
     }
 }
