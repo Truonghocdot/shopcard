@@ -224,14 +224,10 @@
 
                 if (isExpanded) {
                     const menuItems = mobileMenu.querySelectorAll('a');
-                    menuItems.forEach((item, index) => {
-                        item.style.opacity = '0';
-                        item.style.transform = 'translateX(-20px)';
-                        setTimeout(() => {
-                            item.style.transition = 'all 0.3s ease-out';
-                            item.style.opacity = '1';
-                            item.style.transform = 'translateX(0)';
-                        }, index * 50);
+                    menuItems.forEach((item) => {
+                        item.style.transition = 'all 0.2s ease-out';
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateX(0)';
                     });
                 }
             });
