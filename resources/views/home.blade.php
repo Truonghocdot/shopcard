@@ -108,18 +108,18 @@
             </a>
         </div>
 
-        {{-- Desktop: mosaic grid — first item 2×2, rest 1×1 --}}
+        {{-- Desktop: uniform grid --}}
         <div class="hidden md:grid grid-cols-4 auto-rows-[180px] gap-4">
-            @foreach($categories->take(9) as $i => $category)
+            @foreach($categories->take(8) as $category)
                 <a href="{{ route('categories.show', $category->slug) }}"
-                    class="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-primary/50 shadow-xl transition-all duration-500 {{ $i === 0 ? 'col-span-2 row-span-2' : '' }}">
+                    class="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-primary/50 shadow-xl transition-all duration-500">
                     <img src="{{ url('storage/'.$category->image) }}" alt="{{ $category->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#080A0F]/90 via-[#080A0F]/20 to-transparent flex flex-col justify-end p-4">
-                        <h3 class="font-black {{ $i === 0 ? 'text-xl' : 'text-xs' }} text-white uppercase tracking-widest group-hover:text-primary transition-colors leading-tight">
+                        <h3 class="font-black text-sm text-white uppercase tracking-widest group-hover:text-primary transition-colors leading-tight line-clamp-2">
                             {{ $category->title }}
                         </h3>
-                        @if($i === 0 && $category->description)
+                        @if($category->description)
                             <p class="text-neutral-400 text-[10px] mt-1 line-clamp-2">{!! strip_tags($category->description) !!}</p>
                         @endif
                     </div>
@@ -141,7 +141,7 @@
             @endforeach
         </div>
 
-        @if($categories->count() > 9)
+        @if($categories->count() > 8)
             <div class="text-center">
                 <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 text-neutral-300 hover:text-white font-black uppercase tracking-widest text-xs transition-all">
                     <span class="material-icons text-sm">expand_more</span>

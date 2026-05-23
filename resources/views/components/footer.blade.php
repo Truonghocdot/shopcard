@@ -94,12 +94,16 @@
                     @endif
                     @if(!empty($siteSettings['instagram_link']))
                     <a class="w-12 h-12 bg-white/5 hover:bg-primary border border-white/10 text-white rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-lg" href="{{ $siteSettings['instagram_link'] }}" aria-label="Instagram" target="_blank" rel="noopener">
-                        <span class="material-icons">photo_camera</span>
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5a4.25 4.25 0 0 0 4.25 4.25h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5a4.25 4.25 0 0 0-4.25-4.25h-8.5Zm8.75 2.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
+                        </svg>
                     </a>
                     @endif
                     @if(!empty($siteSettings['tiktok_link']))
                     <a class="w-12 h-12 bg-white/5 hover:bg-primary border border-white/10 text-white rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-lg" href="{{ $siteSettings['tiktok_link'] }}" aria-label="Tiktok" target="_blank" rel="noopener">
-                        <span class="material-icons text-xl">tiktok</span>
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.28V2h-3.13v13.24c0 1.77-1.41 3.22-3.17 3.27a3.18 3.18 0 0 1-3.3-3.18 3.18 3.18 0 0 1 3.18-3.18c.35 0 .69.06 1 .16V9.12a6.3 6.3 0 0 0-1-.08A6.31 6.31 0 0 0 3 15.35a6.31 6.31 0 0 0 6.52 6.3 6.46 6.46 0 0 0 6.3-6.46V8.47a7.9 7.9 0 0 0 4.77 1.6V6.94c-.34 0-.67-.08-1-.25Z"/>
+                        </svg>
                     </a>
                     @endif
                 </div>

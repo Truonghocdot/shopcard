@@ -4,7 +4,7 @@ $categories = \App\Models\Category::whereNull('parent_id')->get();
 @endphp
 
 <div class="border-y border-border py-1.5 md:py-3 overflow-hidden glass shadow-2xl">
-    <div class="container mx-auto px-4 flex items-center gap-4">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
         <!-- Icon & Label -->
         <div class="flex items-center gap-2 shrink-0">
             <div class="bg-primary/10 border border-primary/20 rounded-lg p-2">
@@ -13,52 +13,22 @@ $categories = \App\Models\Category::whereNull('parent_id')->get();
             <span class="text-text-primary font-black text-[10px] md:text-sm uppercase tracking-[0.14em] md:tracking-[0.2em] drop-shadow-[0_0_8px_rgba(230,46,107,0.3)]">{{ __('list_category') }}:</span>
         </div>
 
-        <!-- Marquee Content -->
-        <div class="flex-1 overflow-hidden min-w-0">
-            <div class="marquee-content inline-flex flex-nowrap gap-6 items-center whitespace-nowrap">
-                @if($categories->count() > 0)
-                    @foreach($categories as $category)
-                    <a href="{{ route('categories.show', $category->slug) }}" class="flex items-center gap-3 shrink-0 glass border border-white/10 rounded-lg px-4 py-2 shadow-xl group hover:border-primary/50 transition-all animate-pulse">
-                        <span class="material-icons text-primary text-sm">shopping_cart</span>
-                        <span class="text-neutral-100 font-bold text-sm">
-                            {{ $category->title }}
-                        </span>
-                    </a>
-                    @endforeach
-
-                    <!-- Duplicate for seamless loop -->
-                    @foreach($categories as $category)
-                    <a href="{{ route('categories.show', $category->slug) }}" class="flex items-center gap-3 shrink-0 bg-bg-card border border-border rounded-lg px-4 py-2 hover:border-primary/50 transition-all shadow-lg">
-                        <span class="material-icons text-primary/80 text-sm">shopping_cart</span>
-                        <span class="text-text-primary font-bold text-sm">
-                            {{ $category->title }}
-                        </span>
-                    </a>
-                    @endforeach
-                @endif
+        <!-- Static Category List -->
+        <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap gap-2 md:gap-3">
+                @forelse($categories as $category)
+                <a href="{{ route('categories.show', $category->slug) }}" class="flex items-center gap-2 glass border border-white/10 rounded-lg px-3 md:px-4 py-2 shadow-lg hover:border-primary/50 transition-all">
+                    <span class="material-icons text-primary text-sm">shopping_cart</span>
+                    <span class="text-neutral-100 font-bold text-xs md:text-sm">
+                        {{ $category->title }}
+                    </span>
+                </a>
+                @empty
+                <span class="text-neutral-500 text-xs font-bold uppercase tracking-widest">
+                    {{ __('no_categories') }}
+                </span>
+                @endforelse
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    @keyframes marquee {
-        0% {
-            transform: translate3d(50%, 0, 0);
-        }
-
-        100% {
-            transform: translate3d(-50%, 0, 0);
-        }
-    }
-
-    .marquee-content {
-        width: max-content;
-        animation: marquee 52s linear infinite;
-        will-change: transform;
-    }
-
-    .marquee-content:hover {
-        animation-play-state: paused;
-    }
-</style>

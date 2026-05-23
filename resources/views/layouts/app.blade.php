@@ -97,7 +97,9 @@
                 <span class="material-icons text-xl md:text-2xl">message</span>
             </a>
             <a href="{{ $siteSettings['instagram_link'] ?? '#' }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white group">
-                <span class="material-icons text-xl md:text-2xl">photo_camera</span>
+                <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5a4.25 4.25 0 0 0 4.25 4.25h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5a4.25 4.25 0 0 0-4.25-4.25h-8.5Zm8.75 2.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
+                </svg>
             </a>
             <a href="tel:{{ preg_replace('/\s+/', '', $siteSettings['contact_phone'] ?? '0327182537') }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white">
                 <span class="material-icons text-xl md:text-2xl">phone</span>
