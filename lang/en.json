@@ -143,6 +143,7 @@
     "country": "Country",
     "payment_method": "Payment Method",
     "paypal_payment_desc": "Secure payment via PayPal. Supports all major international credit cards.",
+    "complete_shipping_to_unlock_paypal": "Complete shipping information to unlock PayPal checkout.",
     "vietqr_payment_desc": "Scan VietQR and complete your bank transfer. Orders will be created in pending status until payment is confirmed.",
     "vietqr_generate_before_transfer": "Generate your VietQR order first to receive the exact transfer reference used by SePay.",
     "vietqr_generate_order": "Generate VietQR Order",

@@ -143,6 +143,7 @@
     "country": "Quốc gia",
     "payment_method": "Phương thức thanh toán",
     "paypal_payment_desc": "Thanh toán an toàn qua PayPal. Hỗ trợ tất cả các thẻ tín dụng quốc tế phổ biến.",
+    "complete_shipping_to_unlock_paypal": "Hãy nhập đầy đủ thông tin nhận hàng để mở thanh toán PayPal.",
     "vietqr_payment_desc": "Quét VietQR và hoàn tất chuyển khoản ngân hàng. Đơn hàng sẽ được tạo ở trạng thái chờ cho đến khi thanh toán được xác nhận.",
     "vietqr_generate_before_transfer": "Hãy tạo đơn VietQR trước để nhận đúng mã nội dung chuyển khoản dùng cho SePay đối soát tự động.",
     "vietqr_generate_order": "Tạo đơn VietQR",

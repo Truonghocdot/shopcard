@@ -1,4 +1,21 @@
-<div class="max-w-5xl mx-auto relative z-10 px-4 py-8" x-data="{ validating: false, errorMessage: '' }">
+<div class="max-w-5xl mx-auto relative z-10 px-4 py-8" x-data="{
+    validating: false,
+    errorMessage: '',
+    shippingReady() {
+        const fields = ['shipping_name', 'shipping_phone', 'shipping_email', 'shipping_address', 'shipping_city', 'shipping_postal_code', 'shipping_country'];
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        for (const id of fields) {
+            const el = document.getElementById(id);
+            if (!el || !el.value.trim()) {
+                return false;
+            }
+        }
+
+        const email = document.getElementById('shipping_email')?.value.trim() ?? '';
+        return emailPattern.test(email);
+    }
+}">
     <div class="mb-12 text-center relative">
         <div class="absolute -top-20 -left-20 w-64 h-64 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
         <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none"></div>
@@ -240,7 +257,11 @@
                             PROCESSING PAYMENT...
                         </div>
 
-                        <div wire:ignore id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
+                        <div x-show="!shippingReady()" class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
+                            {{ __('complete_shipping_to_unlock_paypal') }}
+                        </div>
+
+                        <div x-show="shippingReady()" wire:ignore id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
                         <p id="paypal-debug-message" class="hidden mt-3 text-[10px] font-black uppercase tracking-widest text-amber-300">
                             PayPal button could not be rendered. Check PayPal client ID or SDK loading.
                         </p>
