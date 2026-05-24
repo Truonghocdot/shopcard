@@ -13,10 +13,18 @@
 
 <div class="bg-black py-1 overflow-hidden whitespace-nowrap border-b border-white/5 relative z-60">
     <div class="container mx-auto px-2 md:px-4">
-        <div class="header-tagline-stage">
+        <div class="header-tagline-stage" data-tagline-stage>
+            <div class="header-tagline-initial text-primary font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3" data-tagline-initial>
+                @foreach($taglineItems as $taglineItem)
+                    <span class="inline-flex items-center gap-3 shrink-0">
+                        <span class="text-white/70">•</span>
+                        <span>{{ $taglineItem }}</span>
+                    </span>
+                @endforeach
+            </div>
             @foreach($taglineItems as $index => $taglineItem)
                 <span
-                    class="header-tagline-item text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center justify-center gap-3"
+                    class="header-tagline-item text-primary font-black text-[10px] uppercase tracking-[0.2em] inline-flex items-center justify-start gap-3"
                     data-tagline-item
                 >
                     <span class="text-white/70">•</span>
@@ -190,13 +198,33 @@
         const mobileSearch = document.getElementById('mobile-search');
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const taglineStage = document.querySelector('[data-tagline-stage]');
+        const taglineInitial = document.querySelector('[data-tagline-initial]');
         const taglineItems = Array.from(document.querySelectorAll('[data-tagline-item]'));
         let activeTaglineIndex = 0;
+        let taglineIntervalId = null;
 
         function showTaglineItem(index) {
             taglineItems.forEach((item, itemIndex) => {
                 item.classList.toggle('is-active', itemIndex === index);
             });
+        }
+
+        function startTaglineSequence() {
+            if (!taglineStage || !taglineInitial || taglineItems.length === 0) {
+                return;
+            }
+
+            taglineStage.classList.add('is-sequencing');
+            taglineInitial.classList.add('hidden');
+            showTaglineItem(activeTaglineIndex);
+
+            if (taglineItems.length > 1) {
+                taglineIntervalId = window.setInterval(() => {
+                    activeTaglineIndex = (activeTaglineIndex + 1) % taglineItems.length;
+                    showTaglineItem(activeTaglineIndex);
+                }, 9000);
+            }
         }
 
         if (mobileSearchBtn && mobileSearch) {
@@ -248,15 +276,8 @@
             });
         }
 
-        if (taglineItems.length > 0) {
-            showTaglineItem(activeTaglineIndex);
-
-            if (taglineItems.length > 1) {
-                setInterval(() => {
-                    activeTaglineIndex = (activeTaglineIndex + 1) % taglineItems.length;
-                    showTaglineItem(activeTaglineIndex);
-                }, 3200);
-            }
+        if (taglineInitial && taglineItems.length > 0) {
+            window.setTimeout(startTaglineSequence, 2400);
         }
     });
 </script>
@@ -273,35 +294,44 @@
 
     .header-tagline-stage {
         position: relative;
-        height: 16px;
+        height: 18px;
         overflow: hidden;
         width: 100%;
     }
 
-    @keyframes headerTaglineShot {
+    .header-tagline-initial {
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .header-tagline-stage.is-sequencing .header-tagline-initial {
+        display: none;
+    }
+
+    @keyframes headerTaglineTraverse {
         0% {
             opacity: 0;
             transform: translate3d(100%, 0, 0);
         }
 
-        12% {
+        8% {
             opacity: 1;
-            transform: translate3d(30%, 0, 0);
+            transform: translate3d(100%, 0, 0);
         }
 
-        40% {
+        70% {
             opacity: 1;
             transform: translate3d(0, 0, 0);
         }
 
-        72% {
+        88% {
             opacity: 1;
-            transform: translate3d(-30%, 0, 0);
+            transform: translate3d(0, 0, 0);
         }
 
         100% {
             opacity: 0;
-            transform: translate3d(-100%, 0, 0);
+            transform: translate3d(0, 0, 0);
         }
     }
 
@@ -310,13 +340,16 @@
         top: 0;
         left: 0;
         width: 100%;
+        padding-left: 0;
         opacity: 0;
         pointer-events: none;
         will-change: transform, opacity;
         transform: translate3d(100%, 0, 0);
+        display: none;
     }
 
     .header-tagline-item.is-active {
-        animation: headerTaglineShot 5s ease-in-out forwards;
+        display: inline-flex;
+        animation: headerTaglineTraverse 8.8s linear forwards;
     }
 </style>
