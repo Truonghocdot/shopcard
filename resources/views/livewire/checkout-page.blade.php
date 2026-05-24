@@ -220,7 +220,8 @@
                         </label>
                     </div>
 
-                    @if($paymentMethod === 'paypal')
+                    @if($paymentConfig['paypal_enabled'] ?? false)
+                    <div class="{{ $paymentMethod === 'paypal' ? 'block' : 'hidden' }}">
                     <div class="p-4 bg-indigo-950/20 border border-indigo-500/10 rounded-2xl my-6">
                         <div class="flex items-center gap-3 mb-2">
                             <span class="material-icons text-indigo-400 text-lg">payment</span>
@@ -239,9 +240,9 @@
                         PROCESSING PAYMENT...
                     </div>
 
-                    @if($paymentConfig['paypal_enabled'] ?? false)
-                    <div id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
-                    @else
+                    <div wire:ignore id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
+                    </div>
+                    @elseif($paymentMethod === 'paypal')
                     <div class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
                         {{ __('paypal_currently_unavailable') }}
                     </div>
@@ -357,49 +358,66 @@
                 return;
             }
 
-            function getShippingErrors() {
-                const fields = ['shipping_name','shipping_phone','shipping_email','shipping_address','shipping_city','shipping_postal_code','shipping_country'];
-                for (const id of fields) {
-                    const el = document.getElementById(id);
-                    if (!el || !el.value.trim()) return "{{ __('validate_shipping_details') }}";
+            function renderPayPalButtons() {
+                const container = document.getElementById('paypal-button-container');
+                if (!container || container.dataset.rendered === 'true') {
+                    return;
                 }
-                return null;
+
+                function getShippingErrors() {
+                    const fields = ['shipping_name','shipping_phone','shipping_email','shipping_address','shipping_city','shipping_postal_code','shipping_country'];
+                    for (const id of fields) {
+                        const el = document.getElementById(id);
+                        if (!el || !el.value.trim()) return "{{ __('validate_shipping_details') }}";
+                    }
+                    return null;
+                }
+
+                paypal.Buttons({
+                    onClick: function(data, actions) {
+                        const err = getShippingErrors();
+                        if (err) {
+                            document.querySelector('[x-data]').__x.$data.errorMessage = err;
+                            document.getElementById('shipping_name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            return actions.reject();
+                        }
+                        document.querySelector('[x-data]').__x.$data.errorMessage = '';
+                        return actions.resolve();
+                    },
+                    createOrder: function(data, actions) {
+                        const usd = parseFloat(@this.get('finalAmountUSD'));
+                        return actions.order.create({
+                            purchase_units: [{ amount: { currency_code: '{{ $paymentConfig['paypal_currency'] ?? 'USD' }}', value: usd.toFixed(2) } }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        const alpine = document.querySelector('[x-data]').__x.$data;
+                        alpine.validating = true;
+                        alpine.errorMessage = '';
+                        return actions.order.capture().then(function(details) {
+                            const fields = ['shipping_name','shipping_phone','shipping_email','shipping_address','shipping_city','shipping_postal_code','shipping_country'];
+                            fields.forEach(id => @this.set(id, document.getElementById(id).value.trim()));
+                            @this.call('processPayPalPayment', details.id);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal error:', err);
+                        const alpine = document.querySelector('[x-data]').__x.$data;
+                        alpine.errorMessage = 'An error occurred during PayPal Checkout. Please try again.';
+                        alpine.validating = false;
+                    }
+                }).render('#paypal-button-container');
+
+                container.dataset.rendered = 'true';
             }
 
-            paypal.Buttons({
-                onClick: function(data, actions) {
-                    const err = getShippingErrors();
-                    if (err) {
-                        document.querySelector('[x-data]').__x.$data.errorMessage = err;
-                        document.getElementById('shipping_name').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        return actions.reject();
-                    }
-                    document.querySelector('[x-data]').__x.$data.errorMessage = '';
-                    return actions.resolve();
-                },
-                createOrder: function(data, actions) {
-                    const usd = parseFloat(@this.get('finalAmountUSD'));
-                    return actions.order.create({
-                        purchase_units: [{ amount: { currency_code: '{{ $paymentConfig['paypal_currency'] ?? 'USD' }}', value: usd.toFixed(2) } }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    const alpine = document.querySelector('[x-data]').__x.$data;
-                    alpine.validating = true;
-                    alpine.errorMessage = '';
-                    return actions.order.capture().then(function(details) {
-                        const fields = ['shipping_name','shipping_phone','shipping_email','shipping_address','shipping_city','shipping_postal_code','shipping_country'];
-                        fields.forEach(id => @this.set(id, document.getElementById(id).value.trim()));
-                        @this.call('processPayPalPayment', details.id);
-                    });
-                },
-                onError: function(err) {
-                    console.error('PayPal error:', err);
-                    const alpine = document.querySelector('[x-data]').__x.$data;
-                    alpine.errorMessage = 'An error occurred during PayPal Checkout. Please try again.';
-                    alpine.validating = false;
-                }
-            }).render('#paypal-button-container');
+            renderPayPalButtons();
+
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('paypal-method-selected', () => {
+                    setTimeout(renderPayPalButtons, 100);
+                });
+            });
         });
     </script>
     @endif

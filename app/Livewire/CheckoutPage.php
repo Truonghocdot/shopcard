@@ -311,6 +311,13 @@ class CheckoutPage extends Component
         }
     }
 
+    public function updatedPaymentMethod(string $value): void
+    {
+        if ($value === 'paypal') {
+            $this->dispatch('paypal-method-selected');
+        }
+    }
+
     public function checkVietQrPaymentStatus(): mixed
     {
         $pendingCheckout = session('pending_vietqr_checkout');
