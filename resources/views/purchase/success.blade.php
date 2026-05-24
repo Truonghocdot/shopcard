@@ -83,6 +83,43 @@
             </div>
             @endif
 
+            <div class="bg-white/5 rounded-2xl border border-white/5 p-6 space-y-4">
+                <h4 class="font-black text-xs text-white uppercase tracking-widest flex items-center gap-2 border-b border-white/5 pb-3">
+                    <span class="material-icons text-primary text-sm">stars</span>
+                    {{ __('card_details') }}
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('psa_cert_serial') }}</span>
+                        <span class="font-mono font-bold text-indigo-400">{{ $order->product->cert ?? 'N/A' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('card_condition') }}</span>
+                        <span class="font-bold text-neutral-200">{{ $order->product->condition ?? 'N/A' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('card_language') }}</span>
+                        <span class="font-bold text-neutral-200">{{ $order->product->language ?? 'N/A' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('card_set_expansion') }}</span>
+                        <span class="font-bold text-neutral-200">{{ $order->product->set ?? 'N/A' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('card_rarity') }}</span>
+                        <span class="font-bold text-primary">{{ $order->product->rarity ?? 'N/A' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('filament.card_grading') }}</span>
+                        <span class="font-bold text-neutral-200">{{ $order->product->grading ?? 'N/A' }}</span>
+                    </div>
+                    <div class="md:col-span-2">
+                        <span class="text-neutral-500 block mb-0.5 uppercase tracking-widest text-[9px] font-black">{{ __('filament.card_grade') }}</span>
+                        <span class="font-bold text-neutral-200">{{ $order->product->grade ?? 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- PayPal Transaction Details -->
             <div class="bg-white/5 rounded-2xl border border-white/5 p-6 space-y-4">
                 <h4 class="font-black text-xs text-white uppercase tracking-widest flex items-center gap-2 border-b border-white/5 pb-3">

@@ -125,23 +125,31 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                             <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5">
                                 <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('psa_cert_serial') }}</span>
-                                <span class="font-mono font-black text-indigo-400 select-all">{{ $selectedOrder->product->username ?? 'N/A' }}</span>
+                                <span class="font-mono font-black text-indigo-400 select-all">{{ $selectedOrder->product->cert ?? 'N/A' }}</span>
                             </div>
                             <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5">
                                 <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('card_condition') }}</span>
-                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->phone ?? 'N/A' }}</span>
+                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->condition ?? 'N/A' }}</span>
                             </div>
                             <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5">
                                 <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('card_language') }}</span>
-                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->password ?? 'N/A' }}</span>
+                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->language ?? 'N/A' }}</span>
                             </div>
                             <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5">
                                 <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('card_set_expansion') }}</span>
-                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->email ?? 'N/A' }}</span>
+                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->set ?? 'N/A' }}</span>
+                            </div>
+                            <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5">
+                                <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('card_rarity') }}</span>
+                                <span class="font-black text-primary">{{ $selectedOrder->product->rarity ?? 'N/A' }}</span>
+                            </div>
+                            <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5">
+                                <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('filament.card_grading') }}</span>
+                                <span class="font-bold text-neutral-200">{{ $selectedOrder->product->grading ?? 'N/A' }}</span>
                             </div>
                             <div class="bg-neutral-950/40 p-3.5 rounded-xl border border-white/5 md:col-span-2">
-                                <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('card_rarity') }}</span>
-                                <span class="font-black text-primary">{{ $selectedOrder->product->password2 ?? 'N/A' }}</span>
+                                <span class="text-neutral-500 block mb-1 uppercase tracking-widest text-[9px] font-black">{{ __('filament.card_grade') }}</span>
+                                <span class="font-black text-primary">{{ $selectedOrder->product->grade ?? 'N/A' }}</span>
                             </div>
                         </div>
                     </div>

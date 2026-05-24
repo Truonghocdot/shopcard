@@ -28,6 +28,7 @@ class OrderService
             // Get product with lock
             $product = Product::where('id', $productId)
                 ->where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->lockForUpdate()
                 ->first();
 
@@ -87,7 +88,7 @@ class OrderService
             ]);
 
             // Update product status
-            $product->update(['status' => Product::STATUS_SOLD]);
+            $product->decrementStock();
 
             // Deduct wallet balance
             $wallet->decrement('balance', $finalAmount);
@@ -129,6 +130,7 @@ class OrderService
             // Get product with lock
             $product = Product::where('id', $productId)
                 ->where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->lockForUpdate()
                 ->first();
 
@@ -183,7 +185,7 @@ class OrderService
             ]);
 
             // Update product status
-            $product->update(['status' => Product::STATUS_SOLD]);
+            $product->decrementStock();
 
             // Record coupon usage if applicable
             if ($couponId) {
@@ -224,6 +226,7 @@ class OrderService
             // Lock and validate all products at once
             $products = Product::whereIn('id', $productIds)
                 ->where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
@@ -288,7 +291,7 @@ class OrderService
                     'completed_at'   => now(),
                 ]);
 
-                $product->update(['status' => Product::STATUS_SOLD]);
+                $product->decrementStock();
 
                 $orders[] = $order;
             }
@@ -327,6 +330,7 @@ class OrderService
 
             $products = Product::whereIn('id', $productIds)
                 ->where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
@@ -388,7 +392,7 @@ class OrderService
                     'notes'           => json_encode($notesData),
                 ]);
 
-                $product->update(['status' => Product::STATUS_SOLD]);
+                $product->decrementStock();
 
                 $orders[] = $order;
             }
@@ -421,6 +425,7 @@ class OrderService
 
             $products = Product::whereIn('id', $productIds)
                 ->where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
@@ -480,7 +485,7 @@ class OrderService
                     'notes'           => json_encode($notesData),
                 ]);
 
-                $product->update(['status' => Product::STATUS_SOLD]);
+                $product->decrementStock();
 
                 $orders[] = $order;
             }

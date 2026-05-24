@@ -35,6 +35,7 @@ class Product extends Model
         'meta_description',
         'images',
         'status',
+        'quantity',
         // Legacy generic columns (kept for backward compat, data migrated)
         'phone',
         'password',
@@ -58,6 +59,7 @@ class Product extends Model
             'sell_price'                => 'decimal:2',
             'sale_price'                => 'decimal:2',
             'status'                    => 'integer',
+            'quantity'                  => 'integer',
             'images'                    => 'array',
             'created_at'                => 'datetime',
             CardField::TYPE->value      => 'integer',
@@ -132,17 +134,35 @@ class Product extends Model
 
     public function isSold(): bool
     {
-        return $this->status === self::STATUS_SOLD;
+        return $this->status === self::STATUS_SOLD || $this->quantity <= 0;
     }
 
     public function isUnsold(): bool
     {
-        return $this->status === self::STATUS_UNSOLD;
+        return $this->status === self::STATUS_UNSOLD && $this->quantity > 0;
     }
 
     public function markAsSold(): void
     {
-        $this->update(['status' => self::STATUS_SOLD]);
+        $this->update([
+            'status' => self::STATUS_SOLD,
+            'quantity' => 0,
+        ]);
+    }
+
+    public function hasStock(int $amount = 1): bool
+    {
+        return $this->quantity >= $amount;
+    }
+
+    public function decrementStock(int $amount = 1): void
+    {
+        $newQuantity = max(0, $this->quantity - $amount);
+
+        $this->update([
+            'quantity' => $newQuantity,
+            'status' => $newQuantity > 0 ? self::STATUS_UNSOLD : self::STATUS_SOLD,
+        ]);
     }
 
     public function getDiscountPercent(): ?float

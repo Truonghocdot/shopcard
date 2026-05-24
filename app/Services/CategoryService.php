@@ -43,6 +43,7 @@ class CategoryService
         try {
             $products = Product::where('category_id', $categoryId)
                 ->where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->with('category')
                 ->latest()
                 ->paginate($perPage);

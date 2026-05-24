@@ -79,6 +79,13 @@ class ProductForm
                         ->default(CardType::SINGLE->value)
                         ->required(),
 
+                    TextInput::make('quantity')
+                        ->label(__('filament.product_quantity'))
+                        ->numeric()
+                        ->default(1)
+                        ->minValue(0)
+                        ->required(),
+
                     HandlesWebpUploads::processImageUpload(
                         FileUpload::make('images')
                             ->label(__('card_images'))
@@ -141,6 +148,15 @@ class ProductForm
                         ->label(__('discounted_price'))
                         ->numeric()
                         ->minValue(0),
+
+                    Select::make('status')
+                        ->label(__('status'))
+                        ->options([
+                            Product::STATUS_UNSOLD => __('filament.field_active'),
+                            Product::STATUS_SOLD => __('filament.field_inactive'),
+                        ])
+                        ->default(Product::STATUS_UNSOLD)
+                        ->required(),
                 ]),
 
             // ── Description ──────────────────────────────────────────────────

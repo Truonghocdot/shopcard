@@ -10,6 +10,7 @@ return [
     'product_section_pricing'     => 'Giá bán',
     'product_section_description' => 'Mô tả',
     'product_section_seo'         => 'SEO',
+    'product_quantity'            => 'Số lượng',
     'product_meta_title_help'     => 'Tự động tạo từ tiêu đề sản phẩm và tên site cho đến khi bạn chỉnh thủ công.',
     'product_meta_description_help' => 'Tự động tạo mô tả SEO dựa trên tiêu đề sản phẩm và tên site.',
 

@@ -25,9 +25,9 @@ class StatsOverview extends BaseWidget
         $soldProducts = Product::where('status', 1)->count();
 
         // New Stats
-        $stockCount = Product::where('status', Product::STATUS_UNSOLD)->count();
+        $stockCount = Product::where('status', Product::STATUS_UNSOLD)->sum('quantity');
         $stockValue = Product::where('status', Product::STATUS_UNSOLD)
-            ->sum(\Illuminate\Support\Facades\DB::raw('COALESCE(sale_price, sell_price)'));
+            ->sum(\Illuminate\Support\Facades\DB::raw('COALESCE(sale_price, sell_price) * quantity'));
         $couponSpend = \App\Models\Order::where('status', \App\Models\Order::STATUS_COMPLETED)->sum('discount_amount');
 
         return [

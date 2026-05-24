@@ -20,6 +20,7 @@ class ProductService
     {
         try {
             $query = $this->product::where('status', Product::STATUS_UNSOLD)
+                ->where('quantity', '>', 0)
                 ->with('category');
 
             // Filter by category (support parent-child hierarchy)
@@ -152,6 +153,7 @@ class ProductService
                 return $this->product::where('category_id', $categoryId)
                     ->where('id', '!=', $productId)
                     ->where('status', Product::STATUS_UNSOLD)
+                    ->where('quantity', '>', 0)
                     ->latest()
                     ->take($limit)
                     ->get();
@@ -174,6 +176,7 @@ class ProductService
 
             $flashSaleProducts = Cache::remember($cacheKey, 600, function () use ($limit) {
                 return $this->product::where('status', Product::STATUS_UNSOLD)
+                    ->where('quantity', '>', 0)
                     ->whereNotNull('sale_price')
                     ->whereNotNull('sell_price')
                     ->with('category')

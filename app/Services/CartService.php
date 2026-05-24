@@ -23,6 +23,7 @@ class CartService
     {
         $product = Product::where('id', $productId)
             ->where('status', Product::STATUS_UNSOLD)
+            ->where('quantity', '>', 0)
             ->with('category')
             ->first();
 

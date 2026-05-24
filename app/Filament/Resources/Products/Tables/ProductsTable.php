@@ -96,6 +96,10 @@ class ProductsTable
                     ->money('VND')
                     ->sortable(),
 
+                TextColumn::make('quantity')
+                    ->label(__('filament.product_quantity'))
+                    ->sortable(),
+
                 TextColumn::make('status')
                     ->label(__('status'))
                     ->badge()
