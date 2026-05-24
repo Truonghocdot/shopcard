@@ -311,6 +311,34 @@ class CheckoutPage extends Component
         }
     }
 
+    public function checkVietQrPaymentStatus(): mixed
+    {
+        $pendingCheckout = session('pending_vietqr_checkout');
+        $orderIds = $pendingCheckout['order_ids'] ?? [];
+
+        if (empty($orderIds)) {
+            return null;
+        }
+
+        $result = $this->orderService->getOrdersByIds(Auth::id(), $orderIds);
+
+        if ($result->isError()) {
+            return null;
+        }
+
+        $orders = $result->getData();
+        $allCompleted = $orders->every(fn ($order) => $order->status === \App\Models\Order::STATUS_COMPLETED);
+
+        if (! $allCompleted) {
+            return null;
+        }
+
+        session()->forget('pending_vietqr_checkout');
+        $this->showVietQrModal = false;
+
+        return redirect()->route('purchase.success', $orders->first()->id);
+    }
+
     public function processCodOrder(): mixed
     {
         $this->validate();

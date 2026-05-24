@@ -308,7 +308,7 @@
     </div>
 
     @if($paymentMethod === 'vietqr' && $vietQrOrderCreated && $vietQrPaymentReference && $showVietQrModal)
-    <div class="fixed inset-0 z-[120] flex items-center justify-center p-4">
+    <div wire:poll.4s="checkVietQrPaymentStatus" class="fixed inset-0 z-[120] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" wire:click="closeVietQrModal"></div>
         <div class="relative w-full max-w-md bg-neutral-950 border border-emerald-500/20 rounded-3xl p-6 shadow-2xl">
             <button

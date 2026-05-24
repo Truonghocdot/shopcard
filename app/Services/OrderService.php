@@ -521,6 +521,24 @@ class OrderService
         }
     }
 
+    public function getOrdersByIds(int $userId, array $orderIds): ServiceResult
+    {
+        try {
+            $orders = $this->order::where('user_id', $userId)
+                ->whereIn('id', $orderIds)
+                ->get();
+
+            if ($orders->isEmpty()) {
+                return ServiceResult::error('Đơn hàng không tồn tại');
+            }
+
+            return ServiceResult::success($orders);
+        } catch (\Exception $e) {
+            Log::error('OrderService::getOrdersByIds error: ' . $e->getMessage());
+            return ServiceResult::error('Không thể lấy danh sách đơn hàng', null, $e);
+        }
+    }
+
     /**
      * Get user orders with pagination
      */
