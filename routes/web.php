@@ -9,10 +9,21 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SepayWebhookController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::post('/locale/{locale}', function (Request $request, string $locale) {
+    $supportedLocales = array_keys(config('locales.supported', ['en' => 'English']));
+
+    abort_unless(in_array($locale, $supportedLocales, true), 404);
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('locale.switch');
 
 // chính sách
 Route::get('/chinh-sach', function () {

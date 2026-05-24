@@ -47,9 +47,6 @@
 
 /* Global Styles */
 body {
-    background: #080A0F;
-    background-image: radial-gradient(circle at 10% 20%, rgba(230, 46, 107, 0.04) 0%, transparent 45%),
-                      radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.04) 0%, transparent 45%);
     background-attachment: fixed;
     color: var(--color-text-primary);
     font-family: var(--font-family-sans);

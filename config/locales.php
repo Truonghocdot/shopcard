@@ -5,5 +5,6 @@ return [
 
     'supported' => [
         'en' => 'English',
+        'vi' => 'Tiếng Việt',
     ],
 ];

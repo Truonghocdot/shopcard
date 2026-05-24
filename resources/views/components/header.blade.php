@@ -83,6 +83,14 @@
         </div>
 
         <div class="flex items-center gap-2 md:gap-3 shrink-0">
+            <div class="hidden md:flex items-center">
+                @include('components.language-switcher', [
+                    'locales' => $supportedLocales ?? config('locales.supported', ['en' => 'English']),
+                    'currentLocale' => $currentLocale ?? app()->getLocale(),
+                    'buttonClass' => 'w-8 h-8 p-1',
+                ])
+            </div>
+
             <!-- Mobile Search Button -->
             <button id="mobile-search-btn" type="button" aria-expanded="false" aria-controls="mobile-search" class="md:hidden text-white p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all border border-white/10 relative z-[70]">
                 <span class="material-icons text-xl">search</span>
@@ -139,6 +147,15 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden lg:hidden absolute top-full inset-x-0 z-[65] border-t border-white/5 bg-neutral-950/95 backdrop-blur-xl shadow-2xl">
         <nav class="container mx-auto px-4 py-4 flex flex-col gap-1">
+            <div class="flex items-center justify-between px-4 pb-3 border-b border-white/5 mb-2">
+                <span class="text-[10px] font-black uppercase tracking-[0.18em] text-neutral-500">{{ __('settings') }}</span>
+                @include('components.language-switcher', [
+                    'locales' => $supportedLocales ?? config('locales.supported', ['en' => 'English']),
+                    'currentLocale' => $currentLocale ?? app()->getLocale(),
+                    'buttonClass' => 'w-8 h-8 p-1',
+                ])
+            </div>
+
             @auth
             <!-- Mobile User Info -->
             <div class="p-4 mb-3 rounded-2xl bg-white/5 border border-white/10 shadow-2xl relative overflow-hidden group">

@@ -14,6 +14,8 @@ class NewsForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $siteName = config('app.name', 'Rabby TCG');
+
         return $schema
             ->components([
                 TextInput::make("title")
@@ -25,32 +27,37 @@ class NewsForm
                         "max_length" => __('filament.news_title_max'),
                     ])
                     ->live()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $slug = str($state)->slug();
-                        $slugOriginal = $slug;
-                        $flag = 0;
-                        while (News::where('slug', $slug)->exists()) {
-                            $slug = str($slugOriginal)->append('-' . $flag);
-                            $flag++;
+                    ->afterStateUpdated(function (?string $state, callable $set, callable $get) use ($siteName) {
+                        if (blank($state)) {
+                            return;
                         }
-                        $set('slug', $slug);
+
+                        if (blank($get('slug'))) {
+                            $set('slug', self::generateUniqueSlug($state));
+                        }
+
+                        if (blank($get('meta_title'))) {
+                            $set('meta_title', self::generateMetaTitle($state, $siteName));
+                        }
+
+                        if (blank($get('meta_description'))) {
+                            $set('meta_description', self::generateMetaDescription($state, $siteName));
+                        }
                     }),
                 TextInput::make("slug")
                     ->label(__('filament.news_slug'))
                     ->required()
+                    ->maxLength(255)
                     ->validationMessages([
                         "required" => __('filament.news_slug_required'),
                     ])
                     ->live()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $slug = str($state)->slug();
-                        $slugOriginal = $slug;
-                        $flag = 0;
-                        while (News::where('slug', $slug)->exists()) {
-                            $slug = str($slugOriginal)->append('-' . $flag);
-                            $flag++;
+                    ->afterStateUpdated(function (?string $state, callable $set) {
+                        if (blank($state)) {
+                            return;
                         }
-                        $set('slug', $slug);
+
+                        $set('slug', self::generateUniqueSlug($state));
                     }),
                 RichEditor::make("description")
                     ->label(__('filament.news_description'))
@@ -82,6 +89,7 @@ class NewsForm
                 TextInput::make("meta_title")
                     ->label(__('filament.news_meta_title'))
                     ->required()
+                    ->helperText(__('filament.product_meta_title_help'))
                     ->maxLength(255)
                     ->validationMessages([
                         "required" => __('filament.news_meta_title_required'),
@@ -90,6 +98,7 @@ class NewsForm
                 TextInput::make("meta_description")
                     ->label(__('filament.news_meta_description'))
                     ->required()
+                    ->helperText(__('filament.product_meta_description_help'))
                     ->maxLength(255)
                     ->validationMessages([
                         "required" => __('filament.news_meta_description_required'),
@@ -107,5 +116,34 @@ class NewsForm
                     ])
                     ->default(1),
             ]);
+    }
+
+    private static function generateUniqueSlug(string $value): string
+    {
+        $slug = str($value)->slug()->value();
+        $baseSlug = $slug;
+        $counter = 1;
+
+        while (News::where('slug', $slug)->exists()) {
+            $slug = "{$baseSlug}-{$counter}";
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    private static function generateMetaTitle(string $title, string $siteName): string
+    {
+        return str($title)
+            ->append(' - ' . $siteName)
+            ->limit(255, '')
+            ->value();
+    }
+
+    private static function generateMetaDescription(string $title, string $siteName): string
+    {
+        return str("{$title} at {$siteName}. Read the latest news, updates, releases, and collector insights.")
+            ->limit(255, '')
+            ->value();
     }
 }

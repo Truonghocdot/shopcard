@@ -20,6 +20,8 @@ class ProductForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $siteName = config('app.name', 'Rabby TCG');
+
         return $schema->components([
 
             // ── Basic Info ───────────────────────────────────────────────────
@@ -38,21 +40,37 @@ class ProductForm
                         ->maxLength(255)
                         ->live()
                         ->debounce(1500)
-                        ->afterStateUpdated(function (string $state, callable $set) {
-                            $slug = str($state)->slug();
-                            $base = $slug;
-                            $i    = 0;
-                            while (Product::where('slug', $slug)->exists()) {
-                                $slug = $base . '-' . $i++;
+                        ->afterStateUpdated(function (?string $state, callable $set, callable $get) use ($siteName) {
+                            if (blank($state)) {
+                                return;
                             }
-                            $set('slug', $slug);
-                            $set('meta_title', $state);
-                            $set('meta_description', $state);
+
+                            if (blank($get('slug'))) {
+                                $set('slug', self::generateUniqueSlug($state));
+                            }
+
+                            if (blank($get('meta_title'))) {
+                                $set('meta_title', self::generateMetaTitle($state, $siteName));
+                            }
+
+                            if (blank($get('meta_description'))) {
+                                $set('meta_description', self::generateMetaDescription($state, $siteName));
+                            }
                         }),
 
                     TextInput::make('slug')
                         ->label(__('card_slug'))
                         ->required()
+                        ->maxLength(255)
+                        ->live()
+                        ->debounce(600)
+                        ->afterStateUpdated(function (?string $state, callable $set) {
+                            if (blank($state)) {
+                                return;
+                            }
+
+                            $set('slug', self::generateUniqueSlug($state));
+                        })
                         ->unique(Product::class, 'slug', ignoreRecord: true),
 
                     Select::make(CardField::TYPE->value)
@@ -140,12 +158,43 @@ class ProductForm
                 ->schema([
                     TextInput::make('meta_title')
                         ->label(__('meta_title_label'))
+                        ->helperText(__('filament.product_meta_title_help'))
                         ->maxLength(255),
 
                     TextInput::make('meta_description')
                         ->label(__('meta_desc_label'))
+                        ->helperText(__('filament.product_meta_description_help'))
                         ->maxLength(500),
                 ]),
         ]);
+    }
+
+    private static function generateUniqueSlug(string $value): string
+    {
+        $slug = str($value)->slug()->value();
+        $baseSlug = $slug;
+        $counter = 1;
+
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = "{$baseSlug}-{$counter}";
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    private static function generateMetaTitle(string $title, string $siteName): string
+    {
+        return str($title)
+            ->append(' - ' . $siteName)
+            ->limit(255, '')
+            ->value();
+    }
+
+    private static function generateMetaDescription(string $title, string $siteName): string
+    {
+        return str("{$title} available at {$siteName}. Explore authentic TCG cards, sealed products, and collector highlights.")
+            ->limit(500, '')
+            ->value();
     }
 }

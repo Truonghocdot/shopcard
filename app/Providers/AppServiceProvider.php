@@ -23,8 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        app()->setLocale(config('locales.default', config('app.locale')));
-
         // Register observers
         \App\Models\Setting::observe(\App\Observers\SettingObserver::class);
         \App\Models\User::observe(\App\Observers\UserObserver::class);
@@ -37,9 +35,13 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['components.header', 'components.footer', 'layouts.app'], function ($view): void {
             $headerPages = Page::forHeader()->get();
             $footerPages = Page::forFooter()->get();
+            $supportedLocales = config('locales.supported', ['en' => 'English']);
+            $currentLocale = app()->getLocale();
 
             $view->with('headerPages', $headerPages)
                 ->with('footerPages', $footerPages)
+                ->with('supportedLocales', $supportedLocales)
+                ->with('currentLocale', $currentLocale)
                 ->with('siteSettings', [
                     'site_name' => Setting::getLocalized(SettingName::SITE_NAME->value, default: 'Rabby TCG'),
                     'site_tagline' => Setting::getLocalized(SettingName::SITE_TAGLINE->value, default: __('premium_tcg_shop')),

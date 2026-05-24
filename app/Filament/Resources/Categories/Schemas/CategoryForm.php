@@ -63,10 +63,8 @@ class CategoryForm
                     ->nullable(),
                 Textarea::make('description')
                     ->label(__('filament.cat_description'))
-                    ->required()
                     ->rows(5)
                     ->validationMessages([
-                        'required' => __('filament.required'),
                         'max_length' => __('field_max_length'),
                     ]),
                 HandlesWebpUploads::processImageUpload(

@@ -12,6 +12,8 @@ return [
     'product_section_pricing'     => 'Pricing',
     'product_section_description' => 'Description',
     'product_section_seo'         => 'SEO',
+    'product_meta_title_help'     => 'Auto-generated from product title and site name until you edit it manually.',
+    'product_meta_description_help' => 'Auto-generated SEO description based on the product title and site name.',
 
     // Orders
     'nav_orders'            => 'Orders',

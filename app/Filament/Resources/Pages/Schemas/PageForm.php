@@ -16,38 +16,38 @@ class PageForm
     public static function configure(Schema $schema): Schema
     {
         $locales = config('locales.supported', ['en' => 'English']);
+        $defaultLocale = config('locales.default', 'en');
+        $siteName = config('app.name', 'Rabby TCG');
 
         return $schema->components([
             Tabs::make('translations')
                 ->columnSpanFull()
                 ->tabs(
-                    collect($locales)->map(function (string $label, string $locale) {
+                    collect($locales)->map(function (string $label, string $locale) use ($defaultLocale, $siteName) {
                         return Tab::make(strtoupper($locale))
                             ->label($label)
                             ->schema([
                                 TextInput::make("title.{$locale}")
                                     ->label(__('filament.page_title'))
-                                    ->required($locale === config('locales.default', 'en'))
+                                    ->required($locale === $defaultLocale)
                                     ->maxLength(255)
-                                    ->live($locale === config('locales.default', 'en'))
-                                    ->afterStateUpdated(function (?string $state, callable $set, callable $get) use ($locale) {
-                                        if ($locale !== config('locales.default', 'en')) {
+                                    ->live()
+                                    ->afterStateUpdated(function (?string $state, callable $set, callable $get) use ($locale, $defaultLocale, $siteName) {
+                                        if (blank($state)) {
                                             return;
                                         }
 
-                                        if (blank($state) || filled($get('slug'))) {
-                                            return;
+                                        if ($locale === $defaultLocale && blank($get('slug'))) {
+                                            $set('slug', self::generateUniqueSlug($state));
                                         }
 
-                                        $slug = str($state)->slug();
-                                        $base = $slug;
-                                        $i = 1;
-
-                                        while (Page::where('slug', $slug)->exists()) {
-                                            $slug = $base . '-' . $i++;
+                                        if (blank(data_get($get('meta_title'), $locale))) {
+                                            $set("meta_title.{$locale}", self::generateMetaTitle($state, $siteName));
                                         }
 
-                                        $set('slug', $slug);
+                                        if (blank(data_get($get('meta_description'), $locale))) {
+                                            $set("meta_description.{$locale}", self::generateMetaDescription($state, $siteName));
+                                        }
                                     }),
 
                                 RichEditor::make("content.{$locale}")
@@ -57,10 +57,12 @@ class PageForm
 
                                 TextInput::make("meta_title.{$locale}")
                                     ->label(__('filament.page_meta_title'))
+                                    ->helperText(__('filament.product_meta_title_help'))
                                     ->maxLength(255),
 
                                 TextInput::make("meta_description.{$locale}")
                                     ->label(__('filament.page_meta_description'))
+                                    ->helperText(__('filament.product_meta_description_help'))
                                     ->maxLength(500),
                             ]);
                     })->values()->all()
@@ -70,6 +72,14 @@ class PageForm
                 ->label(__('filament.field_slug'))
                 ->required()
                 ->maxLength(255)
+                ->live()
+                ->afterStateUpdated(function (?string $state, callable $set) {
+                    if (blank($state)) {
+                        return;
+                    }
+
+                    $set('slug', self::generateUniqueSlug($state));
+                })
                 ->unique(Page::class, 'slug', ignoreRecord: true),
 
             Select::make('status')
@@ -93,5 +103,34 @@ class PageForm
                 ->default(0)
                 ->required(),
         ]);
+    }
+
+    private static function generateUniqueSlug(string $value): string
+    {
+        $slug = str($value)->slug()->value();
+        $baseSlug = $slug;
+        $counter = 1;
+
+        while (Page::where('slug', $slug)->exists()) {
+            $slug = "{$baseSlug}-{$counter}";
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    private static function generateMetaTitle(string $title, string $siteName): string
+    {
+        return str($title)
+            ->append(' - ' . $siteName)
+            ->limit(255, '')
+            ->value();
+    }
+
+    private static function generateMetaDescription(string $title, string $siteName): string
+    {
+        return str("{$title} at {$siteName}. Read more details, company information, and policy content here.")
+            ->limit(500, '')
+            ->value();
     }
 }
