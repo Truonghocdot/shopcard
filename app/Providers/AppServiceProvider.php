@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Constants\SettingName;
+use App\Models\Category;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Services\CartService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -33,13 +35,19 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Order::observe(\App\Observers\OrderObserver::class);
         \App\Models\Banner::observe(\App\Observers\BannerObserver::class);
 
-        View::composer(['components.header', 'components.footer', 'layouts.app'], function ($view): void {
+        View::composer(['components.header', 'components.footer', 'layouts.app', 'components.order-marquee'], function ($view): void {
             $headerPages = Page::forHeader()->get();
             $footerPages = Page::forFooter()->get();
             $supportedLocales = config('locales.supported', ['en' => 'English']);
             $currentLocale = app()->getLocale();
             $authUser = Auth::user();
             $authWallet = $authUser?->ensureWallet();
+            $cartCount = app(CartService::class)->count();
+            $orderMarqueeCategories = cache()->remember('categories:marquee', 3600, function () {
+                return Category::whereNull('parent_id')
+                    ->orderBy('title')
+                    ->get(['id', 'title', 'slug']);
+            });
 
             $view->with('headerPages', $headerPages)
                 ->with('footerPages', $footerPages)
@@ -47,6 +55,8 @@ class AppServiceProvider extends ServiceProvider
                 ->with('currentLocale', $currentLocale)
                 ->with('authWallet', $authWallet)
                 ->with('authWalletBalance', (float) ($authWallet?->balance ?? 0))
+                ->with('cartCount', $cartCount)
+                ->with('orderMarqueeCategories', $orderMarqueeCategories)
                 ->with('siteSettings', [
                     'site_name' => Setting::getLocalized(SettingName::SITE_NAME->value, default: 'Rabby TCG'),
                     'site_tagline' => Setting::getLocalized(SettingName::SITE_TAGLINE->value, default: __('premium_tcg_shop')),

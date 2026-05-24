@@ -34,7 +34,7 @@
                 <!-- Image -->
                 <div class="w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-white/5 bg-neutral-950">
                     @if($item['image'])
-                    <img src="{{ url('storage/'.$item['image']) }}" alt="{{ $item['title'] }}" class="w-full h-full object-cover">
+                    <img src="{{ url('storage/'.$item['image']) }}" alt="{{ $item['title'] }}" class="w-full h-full object-cover" loading="lazy" decoding="async">
                     @else
                     <div class="w-full h-full flex items-center justify-center text-neutral-700">
                         <span class="material-icons">image</span>
@@ -74,7 +74,7 @@
                 <!-- Coupon -->
                 <div class="mb-6">
                     <label class="block text-[10px] font-black text-neutral-400 mb-2 uppercase tracking-widest">{{ __('coupon_code') }}</label>
-                    <div class="flex gap-2">
+                    <div class="flex flex-col gap-2">
                         <input
                             type="text"
                             wire:model.defer="couponCode"

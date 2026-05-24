@@ -35,8 +35,11 @@ class CacheService
      */
     public static function clearCategoryCaches(?int $categoryId = null): void
     {
-        Cache::forget('categories:featured');
+        Cache::forget('categories:marquee');
         Cache::forget('categories:all_with_children');
+        for ($limit = 1; $limit <= 20; $limit++) {
+            Cache::forget("categories:featured:{$limit}");
+        }
 
         if ($categoryId) {
             Cache::forget("category:slug:*");

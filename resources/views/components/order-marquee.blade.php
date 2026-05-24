@@ -1,8 +1,4 @@
 {{-- Order Marquee Component --}}
-@php
-$categories = \App\Models\Category::whereNull('parent_id')->get();
-@endphp
-
 <div class="border-y border-border py-1.5 md:py-3 overflow-hidden glass shadow-2xl">
     <div class="container mx-auto px-4 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
         <!-- Icon & Label -->
@@ -16,7 +12,7 @@ $categories = \App\Models\Category::whereNull('parent_id')->get();
         <!-- Static Category List -->
         <div class="flex-1 min-w-0">
             <div class="flex flex-wrap gap-2 md:gap-3">
-                @forelse($categories as $category)
+                @forelse(($orderMarqueeCategories ?? collect()) as $category)
                 <a href="{{ route('categories.show', $category->slug) }}" class="flex items-center gap-2 glass border border-white/10 rounded-lg px-3 md:px-4 py-2 shadow-lg hover:border-primary/50 transition-all">
                     <span class="material-icons text-primary text-sm">shopping_cart</span>
                     <span class="text-neutral-100 font-bold text-xs md:text-sm">

@@ -5,6 +5,7 @@
         ->map(fn ($item) => trim((string) $item))
         ->filter()
         ->values();
+    $initialCartCount = (int) ($cartCount ?? 0);
 
     if ($taglineItems->isEmpty()) {
         $taglineItems = collect([__('premium_tcg_shop')]);
@@ -97,9 +98,9 @@
             </button>
 
             <!-- Cart Icon Button -->
-            <a href="{{ route('products.index') }}" class="relative flex p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-primary/30 items-center justify-center" title="Shopping Cart">
+            <a href="{{ route('cart') }}" class="relative flex p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-primary/30 items-center justify-center" title="Shopping Cart">
                 <span class="material-icons text-xl">shopping_cart</span>
-                <span class="absolute -top-1.5 -right-1.5 bg-primary text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(230,46,107,0.5)]">0</span>
+                <span id="header-cart-count" class="absolute -top-1.5 -right-1.5 bg-primary text-white text-[9px] font-black min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(230,46,107,0.5)]">{{ $initialCartCount }}</span>
             </a>
 
             @auth
@@ -215,6 +216,7 @@
         const mobileSearch = document.getElementById('mobile-search');
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const headerCartCount = document.getElementById('header-cart-count');
         const taglineStage = document.querySelector('[data-tagline-stage]');
         const taglineInitial = document.querySelector('[data-tagline-initial]');
         const taglineItems = Array.from(document.querySelectorAll('[data-tagline-item]'));
@@ -225,6 +227,15 @@
             taglineItems.forEach((item, itemIndex) => {
                 item.classList.toggle('is-active', itemIndex === index);
             });
+        }
+
+        function updateCartCount(count) {
+            if (!headerCartCount) {
+                return;
+            }
+
+            headerCartCount.textContent = count;
+            headerCartCount.classList.toggle('hidden', Number(count) <= 0);
         }
 
         function startTaglineSequence() {
@@ -296,6 +307,14 @@
         if (taglineInitial && taglineItems.length > 0) {
             window.setTimeout(startTaglineSequence, 2400);
         }
+
+        updateCartCount({{ $initialCartCount }});
+
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('cart-updated', ({ count }) => {
+                updateCartCount(count);
+            });
+        });
     });
 </script>
 
