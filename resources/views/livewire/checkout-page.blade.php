@@ -241,6 +241,9 @@
                         </div>
 
                         <div wire:ignore id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
+                        <p id="paypal-debug-message" class="hidden mt-3 text-[10px] font-black uppercase tracking-widest text-amber-300">
+                            PayPal button could not be rendered. Check PayPal client ID or SDK loading.
+                        </p>
                         @else
                         <div class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
                             {{ __('paypal_currently_unavailable') }}
@@ -359,8 +362,16 @@
 
             function renderPayPalButtons() {
                 const container = document.getElementById('paypal-button-container');
-                if (!container || container.dataset.rendered === 'true') {
+                const debugMessage = document.getElementById('paypal-debug-message');
+
+                if (!container) {
                     return;
+                }
+
+                container.innerHTML = '';
+                container.dataset.rendered = 'false';
+                if (debugMessage) {
+                    debugMessage.classList.add('hidden');
                 }
 
                 function getShippingErrors() {
@@ -405,9 +416,14 @@
                         alpine.errorMessage = 'An error occurred during PayPal Checkout. Please try again.';
                         alpine.validating = false;
                     }
-                }).render('#paypal-button-container');
-
-                container.dataset.rendered = 'true';
+                }).render('#paypal-button-container').then(function () {
+                    container.dataset.rendered = 'true';
+                }).catch(function (err) {
+                    console.error('PayPal render error:', err);
+                    if (debugMessage) {
+                        debugMessage.classList.remove('hidden');
+                    }
+                });
             }
 
             renderPayPalButtons();
