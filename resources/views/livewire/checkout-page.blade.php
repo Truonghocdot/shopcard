@@ -133,7 +133,7 @@
                 <!-- Coupon -->
                 <div class="mb-8">
                     <label class="block text-[10px] font-black text-neutral-400 mb-3 uppercase tracking-widest">{{ __('coupon_code') }}</label>
-                    <div class="flex gap-2">
+                    <div class="flex flex-col gap-2">
                         <input type="text" wire:model.defer="couponCode"
                             class="flex-1 bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-primary/20 rounded-xl px-4 py-3 text-neutral-200 text-sm outline-hidden placeholder-neutral-700 transition-all font-bold"
                             placeholder="{{ __('cart.coupon_placeholder') }}"
@@ -181,7 +181,47 @@
                 <!-- PayPal -->
                 <div class="mt-8 pt-8 border-t border-white/5">
                     <h3 class="text-[10px] font-black text-neutral-400 mb-4 uppercase tracking-widest">{{ __('payment_method') }}</h3>
-                    <div class="p-4 bg-indigo-950/20 border border-indigo-500/10 rounded-2xl mb-6">
+                    <div class="space-y-4">
+                        @if($paymentConfig['paypal_enabled'] ?? false)
+                        <label class="block cursor-pointer">
+                            <input type="radio" class="hidden" wire:model.live="paymentMethod" value="paypal">
+                            <div class="p-4 rounded-2xl border transition-all {{ $paymentMethod === 'paypal' ? 'bg-indigo-950/30 border-indigo-400/40' : 'bg-indigo-950/10 border-indigo-500/10' }}">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="material-icons text-indigo-400 text-lg">payment</span>
+                                    <span class="font-black text-xs text-white uppercase tracking-wider">PayPal / Credit Card</span>
+                                </div>
+                                <p class="text-[10px] text-neutral-500 leading-relaxed font-bold uppercase tracking-wider">{{ __('paypal_payment_desc') }}</p>
+                            </div>
+                        </label>
+                        @endif
+
+                        @if($paymentConfig['vietqr_enabled'] ?? false)
+                        <label class="block cursor-pointer">
+                            <input type="radio" class="hidden" wire:model.live="paymentMethod" value="vietqr">
+                            <div class="p-4 rounded-2xl border transition-all {{ $paymentMethod === 'vietqr' ? 'bg-emerald-950/30 border-emerald-400/40' : 'bg-emerald-950/10 border-emerald-500/10' }}">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="material-icons text-emerald-400 text-lg">qr_code_2</span>
+                                    <span class="font-black text-xs text-white uppercase tracking-wider">VietQR / Bank Transfer</span>
+                                </div>
+                                <p class="text-[10px] text-neutral-500 leading-relaxed font-bold uppercase tracking-wider">{{ __('vietqr_payment_desc') }}</p>
+                            </div>
+                        </label>
+                        @endif
+
+                        <label class="block cursor-pointer">
+                            <input type="radio" class="hidden" wire:model.live="paymentMethod" value="cod">
+                            <div class="p-4 rounded-2xl border transition-all {{ $paymentMethod === 'cod' ? 'bg-amber-950/30 border-amber-400/40' : 'bg-amber-950/10 border-amber-500/10' }}">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="material-icons text-amber-400 text-lg">local_shipping</span>
+                                    <span class="font-black text-xs text-white uppercase tracking-wider">COD / Cash on Delivery</span>
+                                </div>
+                                <p class="text-[10px] text-neutral-500 leading-relaxed font-bold uppercase tracking-wider">{{ __('cod_payment_desc') }}</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    @if($paymentMethod === 'paypal')
+                    <div class="p-4 bg-indigo-950/20 border border-indigo-500/10 rounded-2xl my-6">
                         <div class="flex items-center gap-3 mb-2">
                             <span class="material-icons text-indigo-400 text-lg">payment</span>
                             <span class="font-black text-xs text-white uppercase tracking-wider">PayPal / Credit Card</span>
@@ -204,6 +244,67 @@
                     @else
                     <div class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
                         {{ __('paypal_currently_unavailable') }}
+                    </div>
+                    @endif
+                    @elseif($paymentMethod === 'vietqr')
+                    <div class="my-6 p-5 bg-emerald-950/20 border border-emerald-500/10 rounded-2xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="material-icons text-emerald-400 text-xl">qr_code_2</span>
+                            <span class="font-black text-xs text-white uppercase tracking-wider">VietQR</span>
+                        </div>
+                        @if($vietQrOrderCreated && $vietQrPaymentReference)
+                        <div class="flex justify-center mb-5">
+                            <div class="bg-white p-3 rounded-2xl">
+                                <img
+                                    alt="VietQR"
+                                    class="w-52 h-52 rounded-xl"
+                                    src="https://api.vietqr.io/image/{{ $paymentConfig['bank_bin'] }}-{{ $paymentConfig['bank_number'] }}-compact2.png?amount={{ (int) $this->vietQrAmount }}&addInfo={{ urlencode($vietQrPaymentReference) }}&accountName={{ urlencode($paymentConfig['bank_account_name'] ?? '') }}"
+                                >
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs">
+                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('bank') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_name'] ?? '—' }}</span></p>
+                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('account_holder') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_account_name'] ?? '—' }}</span></p>
+                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('account_number') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_number'] ?? '—' }}</span></p>
+                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('total_payment') }}:</span> <span class="font-bold text-primary">{{ number_format($this->vietQrAmount) }}đ</span></p>
+                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('transfer_reference') }}:</span> <span class="font-bold text-white">{{ $vietQrPaymentReference }}</span></p>
+                        </div>
+                        <p class="mt-4 text-[10px] text-emerald-300 font-black uppercase tracking-widest">{{ __('vietqr_auto_confirm_note') }}</p>
+                        @else
+                        <p class="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mb-4">{{ __('vietqr_generate_before_transfer') }}</p>
+                        <button
+                            type="button"
+                            wire:click="processVietQrOrder"
+                            wire:loading.attr="disabled"
+                            wire:target="processVietQrOrder"
+                            class="mt-5 w-full px-4 py-3 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                        >
+                            <span wire:loading.remove wire:target="processVietQrOrder">{{ __('vietqr_generate_order') }}</span>
+                            <span wire:loading wire:target="processVietQrOrder">{{ __('cart.processing') }}</span>
+                        </button>
+                        @endif
+                    </div>
+                    @elseif($paymentMethod === 'cod')
+                    <div class="my-6 p-5 bg-amber-950/20 border border-amber-500/10 rounded-2xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="material-icons text-amber-400 text-xl">local_shipping</span>
+                            <span class="font-black text-xs text-white uppercase tracking-wider">Cash on Delivery</span>
+                        </div>
+                        <div class="space-y-3 text-xs text-neutral-300">
+                            <p>{{ __('cod_payment_desc') }}</p>
+                            <p><span class="text-neutral-500 uppercase tracking-widest">{{ __('total_payment') }}:</span> <span class="font-bold text-primary">{{ number_format($this->finalAmount) }}đ</span></p>
+                            <p><span class="text-neutral-500 uppercase tracking-widest">{{ __('shipping_information') }}:</span> <span class="font-bold text-white">{{ $shipping_address ?: '—' }}</span></p>
+                        </div>
+                        <button
+                            type="button"
+                            wire:click="processCodOrder"
+                            wire:loading.attr="disabled"
+                            wire:target="processCodOrder"
+                            class="mt-5 w-full px-4 py-3 bg-amber-500 hover:bg-amber-400 text-neutral-950 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                        >
+                            <span wire:loading.remove wire:target="processCodOrder">{{ __('cod_confirm_order') }}</span>
+                            <span wire:loading wire:target="processCodOrder">{{ __('cart.processing') }}</span>
+                        </button>
                     </div>
                     @endif
                 </div>

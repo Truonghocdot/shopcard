@@ -88,28 +88,6 @@
         <!-- Main Content -->
         <div class="flex-1 min-w-0">
             <div x-show="activeTab === 'info'" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Wallet Info -->
-                    <div class="bg-linear-to-br from-primary via-primary-hover to-emerald-800 rounded-3xl p-8 text-bg-dark shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500">
-                        <!-- Decorative glows -->
-                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-white/20 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-                        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-700 delay-100"></div>
-
-                        <div class="flex items-start justify-between mb-8 relative z-10">
-                            <div class="size-14 rounded-2xl bg-bg-dark/20 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
-                                <span class="material-icons text-3xl text-bg-dark">account_balance_wallet</span>
-                            </div>
-                            <span class="text-[10px] font-black bg-bg-dark/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 uppercase tracking-widest shadow-inner">VIETNAM DONG</span>
-                        </div>
-                        <div class="relative z-10">
-                            <p class="text-bg-dark/60 text-[10px] font-black uppercase tracking-[0.2em] mb-2 pl-1">{{ __('available_balance') }}</p>
-                            <h3 class="text-4xl font-black tracking-tighter flex items-baseline gap-2">
-                                {{ number_format(Auth::user()->wallet->balance ?? 0) }}
-                                <span class="text-lg font-black text-bg-dark/40 uppercase">VND</span>
-                            </h3>
-                        </div>
-                    </div>
-                </div>
 
                 <livewire:user.profile-info wire:key="profile-info-content" />
             </div>

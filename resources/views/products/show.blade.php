@@ -81,10 +81,6 @@
                             <span class="bg-primary text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-full shadow-[0_0_10px_rgba(230,46,107,0.4)] uppercase tracking-widest">{{ __('super_sale') }}</span>
                             @endif
                         </div>
-                        <div class="mt-3 text-xs text-text-muted font-bold flex items-center gap-1.5">
-                            <span class="material-icons text-primary text-sm">redeem</span>
-                            <span>{{ __('cashback_reward') }}</span>
-                        </div>
                     </div>
                     <div class="flex flex-col items-end w-full sm:w-auto">
                         @if($product->sell_price && $product->sell_price > $product->getFinalPrice())

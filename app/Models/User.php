@@ -6,6 +6,7 @@ use App\Constants\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Wallet;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Panel;
@@ -50,6 +51,16 @@ class User extends Authenticatable implements FilamentUser
     public function wallet(): HasOne
     {
         return $this->hasOne(Wallet::class);
+    }
+
+    public function ensureWallet(): Wallet
+    {
+        return $this->wallet()->firstOrCreate([], ['balance' => 0]);
+    }
+
+    public function getWalletBalanceAttribute(): float
+    {
+        return (float) $this->ensureWallet()->balance;
     }
 
     public function transactions(): HasMany

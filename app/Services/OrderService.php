@@ -316,6 +316,189 @@ class OrderService
         }
     }
 
+    public function createPendingVietQrCartOrder(
+        int $userId,
+        array $productIds,
+        array $shippingInfo,
+        ?string $couponCode = null
+    ): ServiceResult {
+        try {
+            DB::beginTransaction();
+
+            $products = Product::whereIn('id', $productIds)
+                ->where('status', Product::STATUS_UNSOLD)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            if ($products->count() !== count($productIds)) {
+                DB::rollBack();
+                return ServiceResult::error('One or more products are no longer available.');
+            }
+
+            $subtotal = $products->sum(fn ($p) => $p->getFinalPrice());
+
+            $couponId = null;
+            $totalDiscount = 0;
+            $coupon = null;
+
+            if ($couponCode) {
+                $couponResult = $this->couponService->validateCoupon($couponCode, $userId, $subtotal);
+
+                if ($couponResult->isError()) {
+                    DB::rollBack();
+                    return $couponResult;
+                }
+
+                $coupon = $couponResult->getData();
+                $couponId = $coupon->id;
+                $totalDiscount = $coupon->calculateDiscount($subtotal);
+            }
+
+            $orders = [];
+            $paymentReference = 'QR' . $userId . strtoupper(substr(uniqid(), -6));
+
+            foreach ($products as $product) {
+                $productPrice = $product->getFinalPrice();
+                $itemDiscount = $subtotal > 0
+                    ? round(($productPrice / $subtotal) * $totalDiscount, 2)
+                    : 0;
+
+                $finalAmount = max(0, $productPrice - $itemDiscount);
+
+                $notesData = [
+                    'shipping_info'  => $shippingInfo,
+                    'payment_method' => 'vietqr',
+                    'payment_status' => 'pending',
+                    'payment_reference' => $paymentReference,
+                    'status_history' => [
+                        ['status' => 'pending_payment', 'timestamp' => now()->toDateTimeString(), 'notes' => 'Awaiting VietQR transfer confirmation']
+                    ],
+                ];
+
+                $order = $this->order::create([
+                    'user_id'         => $userId,
+                    'product_id'      => $product->id,
+                    'coupon_id'       => $couponId,
+                    'order_number'    => Order::generateOrderNumber(),
+                    'product_price'   => $productPrice,
+                    'discount_amount' => $itemDiscount,
+                    'final_amount'    => $finalAmount,
+                    'status'          => Order::STATUS_PENDING,
+                    'notes'           => json_encode($notesData),
+                ]);
+
+                $product->update(['status' => Product::STATUS_SOLD]);
+
+                $orders[] = $order;
+            }
+
+            if ($couponId && $coupon) {
+                $this->couponService->recordCouponUsage($couponId, $userId, $totalDiscount);
+            }
+
+            DB::commit();
+
+            return ServiceResult::success([
+                'orders' => $orders,
+                'payment_reference' => $paymentReference,
+            ], 'VietQR order created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('OrderService::createPendingVietQrCartOrder error: ' . $e->getMessage());
+            return ServiceResult::error('Could not create VietQR order.', null, $e);
+        }
+    }
+
+    public function createPendingCodCartOrder(
+        int $userId,
+        array $productIds,
+        array $shippingInfo,
+        ?string $couponCode = null
+    ): ServiceResult {
+        try {
+            DB::beginTransaction();
+
+            $products = Product::whereIn('id', $productIds)
+                ->where('status', Product::STATUS_UNSOLD)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            if ($products->count() !== count($productIds)) {
+                DB::rollBack();
+                return ServiceResult::error('One or more products are no longer available.');
+            }
+
+            $subtotal = $products->sum(fn ($p) => $p->getFinalPrice());
+
+            $couponId = null;
+            $totalDiscount = 0;
+            $coupon = null;
+
+            if ($couponCode) {
+                $couponResult = $this->couponService->validateCoupon($couponCode, $userId, $subtotal);
+
+                if ($couponResult->isError()) {
+                    DB::rollBack();
+                    return $couponResult;
+                }
+
+                $coupon = $couponResult->getData();
+                $couponId = $coupon->id;
+                $totalDiscount = $coupon->calculateDiscount($subtotal);
+            }
+
+            $orders = [];
+
+            foreach ($products as $product) {
+                $productPrice = $product->getFinalPrice();
+                $itemDiscount = $subtotal > 0
+                    ? round(($productPrice / $subtotal) * $totalDiscount, 2)
+                    : 0;
+
+                $finalAmount = max(0, $productPrice - $itemDiscount);
+
+                $notesData = [
+                    'shipping_info'  => $shippingInfo,
+                    'payment_method' => 'cod',
+                    'payment_status' => 'pending',
+                    'status_history' => [
+                        ['status' => 'pending_cod', 'timestamp' => now()->toDateTimeString(), 'notes' => 'Awaiting COD confirmation and delivery']
+                    ],
+                ];
+
+                $order = $this->order::create([
+                    'user_id'         => $userId,
+                    'product_id'      => $product->id,
+                    'coupon_id'       => $couponId,
+                    'order_number'    => Order::generateOrderNumber(),
+                    'product_price'   => $productPrice,
+                    'discount_amount' => $itemDiscount,
+                    'final_amount'    => $finalAmount,
+                    'status'          => Order::STATUS_PENDING,
+                    'notes'           => json_encode($notesData),
+                ]);
+
+                $product->update(['status' => Product::STATUS_SOLD]);
+
+                $orders[] = $order;
+            }
+
+            if ($couponId && $coupon) {
+                $this->couponService->recordCouponUsage($couponId, $userId, $totalDiscount);
+            }
+
+            DB::commit();
+
+            return ServiceResult::success($orders, 'COD order created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('OrderService::createPendingCodCartOrder error: ' . $e->getMessage());
+            return ServiceResult::error('Could not create COD order.', null, $e);
+        }
+    }
+
     /**
      * Get order by ID for specific user
      */

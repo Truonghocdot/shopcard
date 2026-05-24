@@ -24,6 +24,11 @@ class ViewDataService
             'paypal_client_id' => Setting::get(SettingName::PAYPAL_CLIENT_ID->value, 'sb'),
             'paypal_currency' => Setting::get(SettingName::PAYPAL_CURRENCY->value, 'USD'),
             'paypal_environment' => Setting::get(SettingName::PAYPAL_ENVIRONMENT->value, 'sandbox'),
+            'vietqr_enabled' => filled(Setting::get(SettingName::BIN_BANK->value)) && filled(Setting::get(SettingName::ACCOUNT_NUMBER->value)),
+            'bank_bin' => Setting::get(SettingName::BIN_BANK->value),
+            'bank_number' => Setting::get(SettingName::ACCOUNT_NUMBER->value),
+            'bank_account_name' => Setting::get(SettingName::ACCOUNT_NAME->value),
+            'bank_name' => Setting::get(SettingName::BANKING->value),
         ];
     }
 

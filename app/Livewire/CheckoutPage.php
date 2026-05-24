@@ -29,6 +29,9 @@ class CheckoutPage extends Component
     public string $shipping_city        = '';
     public string $shipping_postal_code = '';
     public string $shipping_country     = 'United States';
+    public string $paymentMethod        = 'paypal';
+    public ?string $vietQrPaymentReference = null;
+    public bool $vietQrOrderCreated = false;
 
     protected CartService $cartService;
     protected CouponService $couponService;
@@ -61,7 +64,9 @@ class CheckoutPage extends Component
 
     public function mount(): void
     {
-        if ($this->cartService->isEmpty()) {
+        $pendingVietQrCheckout = session('pending_vietqr_checkout');
+
+        if ($this->cartService->isEmpty() && ! $pendingVietQrCheckout) {
             redirect()->route('cart');
             return;
         }
@@ -80,6 +85,13 @@ class CheckoutPage extends Component
         }
 
         $this->paymentConfig = $this->viewDataService->getCheckoutPaymentConfig();
+        $this->paymentMethod = ($this->paymentConfig['paypal_enabled'] ?? false) ? 'paypal' : 'vietqr';
+
+        if ($pendingVietQrCheckout) {
+            $this->paymentMethod = 'vietqr';
+            $this->vietQrOrderCreated = true;
+            $this->vietQrPaymentReference = $pendingVietQrCheckout['payment_reference'] ?? null;
+        }
     }
 
     // ── Computed properties ──────────────────────────────────────────────────
@@ -102,6 +114,17 @@ class CheckoutPage extends Component
     public function getFinalAmountUSDProperty(): float
     {
         return round($this->finalAmount / 25000, 2);
+    }
+
+    public function getVietQrAmountProperty(): float
+    {
+        $pendingVietQrCheckout = session('pending_vietqr_checkout');
+
+        if ($pendingVietQrCheckout) {
+            return (float) ($pendingVietQrCheckout['amount'] ?? $this->finalAmount);
+        }
+
+        return $this->finalAmount;
     }
 
     // ── Coupon ───────────────────────────────────────────────────────────────
@@ -185,6 +208,111 @@ class CheckoutPage extends Component
         }
 
         // Clear cart & coupon session
+        $this->cartService->clear();
+        session()->forget('checkout_coupon');
+
+        $orders = $result->getData();
+        $firstOrder = is_array($orders) ? $orders[0] : $orders;
+
+        return redirect()->route('purchase.success', $firstOrder->id);
+    }
+
+    public function processVietQrOrder(): mixed
+    {
+        $this->validate();
+
+        if ($this->cartService->isEmpty()) {
+            session()->flash('error', __('cart.empty'));
+            return null;
+        }
+
+        $shippingInfo = [
+            'name'        => $this->shipping_name,
+            'phone'       => $this->shipping_phone,
+            'email'       => $this->shipping_email,
+            'address'     => $this->shipping_address,
+            'city'        => $this->shipping_city,
+            'postal_code' => $this->shipping_postal_code,
+            'country'     => $this->shipping_country,
+        ];
+
+        $couponCode = $this->couponValid && $this->appliedCoupon
+            ? $this->appliedCoupon->code
+            : null;
+
+        $result = $this->orderService->createPendingVietQrCartOrder(
+            Auth::id(),
+            $this->cartService->productIds(),
+            $shippingInfo,
+            $couponCode
+        );
+
+        if ($result->isError()) {
+            session()->flash('error', $result->getMessage());
+            return null;
+        }
+
+        $payload = $result->getData();
+        $orders = $payload['orders'] ?? [];
+        $paymentReference = $payload['payment_reference'] ?? null;
+
+        $this->cartService->clear();
+        session()->forget('checkout_coupon');
+
+        $this->vietQrOrderCreated = true;
+        $this->vietQrPaymentReference = $paymentReference;
+        $this->couponCode = '';
+        $this->couponMessage = __('vietqr_order_created');
+        $this->resetCoupon();
+
+        session([
+            'pending_vietqr_checkout' => [
+                'payment_reference' => $paymentReference,
+                'amount' => array_sum(array_map(fn ($order) => (float) $order->final_amount, $orders)),
+                'order_ids' => array_map(fn ($order) => $order->id, $orders),
+            ],
+        ]);
+
+        session()->flash('success', __('vietqr_order_created'));
+
+        return null;
+    }
+
+    public function processCodOrder(): mixed
+    {
+        $this->validate();
+
+        if ($this->cartService->isEmpty()) {
+            session()->flash('error', __('cart.empty'));
+            return null;
+        }
+
+        $shippingInfo = [
+            'name'        => $this->shipping_name,
+            'phone'       => $this->shipping_phone,
+            'email'       => $this->shipping_email,
+            'address'     => $this->shipping_address,
+            'city'        => $this->shipping_city,
+            'postal_code' => $this->shipping_postal_code,
+            'country'     => $this->shipping_country,
+        ];
+
+        $couponCode = $this->couponValid && $this->appliedCoupon
+            ? $this->appliedCoupon->code
+            : null;
+
+        $result = $this->orderService->createPendingCodCartOrder(
+            Auth::id(),
+            $this->cartService->productIds(),
+            $shippingInfo,
+            $couponCode
+        );
+
+        if ($result->isError()) {
+            session()->flash('error', $result->getMessage());
+            return null;
+        }
+
         $this->cartService->clear();
         session()->forget('checkout_coupon');
 

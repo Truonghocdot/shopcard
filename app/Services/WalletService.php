@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Wallet;
 use App\Types\ServiceResult;
 use Illuminate\Support\Facades\Log;
@@ -16,11 +17,12 @@ class WalletService
     public function getUserWallet(int $userId): ServiceResult
     {
         try {
-            $wallet = $this->wallet::where('user_id', $userId)->first();
-
-            if (!$wallet) {
-                return ServiceResult::error('Ví không tồn tại');
+            $user = User::find($userId);
+            if (! $user) {
+                return ServiceResult::error('Người dùng không tồn tại');
             }
+
+            $wallet = $user->ensureWallet();
 
             return ServiceResult::success($wallet);
         } catch (\Exception $e) {
@@ -55,11 +57,13 @@ class WalletService
     public function withdraw(int $userId, float $amount): ServiceResult
     {
         try {
-            $wallet = $this->wallet::where('user_id', $userId)->lockForUpdate()->first();
-
-            if (!$wallet) {
-                return ServiceResult::error('Ví không tồn tại');
+            $user = User::find($userId);
+            if (! $user) {
+                return ServiceResult::error('Người dùng không tồn tại');
             }
+
+            $wallet = $this->wallet::where('user_id', $userId)->lockForUpdate()->first()
+                ?? $user->ensureWallet();
 
             if ($wallet->balance < $amount) {
                 return ServiceResult::error('Số dư không đủ');
@@ -80,11 +84,12 @@ class WalletService
     public function checkBalance(int $userId, float $requiredAmount): ServiceResult
     {
         try {
-            $wallet = $this->wallet::where('user_id', $userId)->first();
-
-            if (!$wallet) {
-                return ServiceResult::error('Ví không tồn tại');
+            $user = User::find($userId);
+            if (! $user) {
+                return ServiceResult::error('Người dùng không tồn tại');
             }
+
+            $wallet = $user->ensureWallet();
 
             $hasSufficientBalance = $wallet->balance >= $requiredAmount;
 

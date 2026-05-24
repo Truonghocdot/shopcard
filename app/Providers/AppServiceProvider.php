@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Constants\SettingName;
 use App\Models\Page;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -37,11 +38,15 @@ class AppServiceProvider extends ServiceProvider
             $footerPages = Page::forFooter()->get();
             $supportedLocales = config('locales.supported', ['en' => 'English']);
             $currentLocale = app()->getLocale();
+            $authUser = Auth::user();
+            $authWallet = $authUser?->ensureWallet();
 
             $view->with('headerPages', $headerPages)
                 ->with('footerPages', $footerPages)
                 ->with('supportedLocales', $supportedLocales)
                 ->with('currentLocale', $currentLocale)
+                ->with('authWallet', $authWallet)
+                ->with('authWalletBalance', (float) ($authWallet?->balance ?? 0))
                 ->with('siteSettings', [
                     'site_name' => Setting::getLocalized(SettingName::SITE_NAME->value, default: 'Rabby TCG'),
                     'site_tagline' => Setting::getLocalized(SettingName::SITE_TAGLINE->value, default: __('premium_tcg_shop')),

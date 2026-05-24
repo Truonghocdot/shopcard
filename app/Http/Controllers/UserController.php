@@ -16,6 +16,8 @@ class UserController extends Controller
 
     public function profile()
     {
+        Auth::user()?->ensureWallet();
+
         $ordersResult = $this->orderService->getAllUserOrders(Auth::id());
         $orders = $ordersResult->isSuccess() ? $ordersResult->getData() : collect();
 
