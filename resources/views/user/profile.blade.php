@@ -69,10 +69,6 @@
                     </nav>
 
                     <div class="mt-8 pt-8 border-t border-border flex flex-col gap-3 relative z-10">
-                        <a href="{{ route('deposit') }}" class="w-full flex cursor-pointer items-center justify-center rounded-2xl py-4 btn-esport text-[11px] font-black uppercase tracking-widest shadow-primary/20 border-none active:scale-95 transition-all">
-                            <span class="material-icons mr-2 text-[20px]">add_circle</span>
-                            <span>{{ __('deposit_now') }}</span>
-                        </a>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="w-full flex cursor-pointer items-center justify-center rounded-2xl py-4 bg-bg-dark/50 hover:bg-white/5 text-text-muted hover:text-text-primary transition-all text-[11px] font-black uppercase tracking-widest active:scale-95 border border-border">

@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\Log;
 class WebhookService
 {
     public function __construct(
-        protected TransactionService $transactionService,
-        protected WalletService $walletService
+        protected TransactionService $transactionService
     ) {}
 
     /**
@@ -39,52 +38,7 @@ class WebhookService
                 return ServiceResult::success(null, 'Transaction already processed');
             }
 
-            $vietQrOrderResult = $this->processPendingVietQrOrders($content, $transactionId, (float) $amount);
-            if ($vietQrOrderResult->isSuccess()) {
-                return $vietQrOrderResult;
-            }
-
-            // Extract user ID from content
-            $userIdResult = $this->extractUserIdFromContent($content);
-            if ($userIdResult->isError()) {
-                return $userIdResult;
-            }
-
-            $userId = $userIdResult->getData();
-
-            // Process transaction
-            DB::beginTransaction();
-
-            // Create transaction record
-            $transactionResult = $this->transactionService->createTransaction([
-                'user_id' => $userId,
-                'service_type' => 0, // topup
-                'amount' => $amount,
-                'status' => 1, // success
-                'request_id' => $transactionId,
-                'provider' => 'sepay',
-            ]);
-
-            if ($transactionResult->isError()) {
-                DB::rollBack();
-                return $transactionResult;
-            }
-
-            // Update wallet balance
-            $depositResult = $this->walletService->deposit($userId, $amount);
-            if ($depositResult->isError()) {
-                DB::rollBack();
-                return $depositResult;
-            }
-
-            DB::commit();
-
-            Log::info('Sepay Webhook: Transaction processed successfully', [
-                'user_id' => $userId,
-                'amount' => $amount,
-            ]);
-
-            return ServiceResult::success(null, 'Transaction processed successfully');
+            return $this->processPendingVietQrOrders($content, $transactionId, (float) $amount);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('WebhookService::processSepayWebhook error: ' . $e->getMessage());
@@ -99,7 +53,7 @@ class WebhookService
             $paymentReference = $matches[0] ?? null;
 
             if (! $paymentReference) {
-                return ServiceResult::error('No VietQR order reference found');
+                return ServiceResult::error('No matching VietQR orders found');
             }
 
             $orders = Order::pending()
@@ -162,27 +116,6 @@ class WebhookService
             DB::rollBack();
             Log::error('WebhookService::processPendingVietQrOrders error: ' . $e->getMessage());
             return ServiceResult::error('VietQR order processing failed', null, $e);
-        }
-    }
-
-    /**
-     * Extract user ID from webhook content
-     * Expected format: "rabbytcg 123" or "vanhfco 123"
-     */
-    protected function extractUserIdFromContent(string $content): ServiceResult
-    {
-        try {
-            if (!preg_match('/(?:vanhfco|rabbytcg)\s+(\d+)/i', $content, $matches)) {
-                Log::warning('WebhookService: Invalid content format', ['content' => $content]);
-                return ServiceResult::error('Invalid content format');
-            }
-
-            $userId = (int) $matches[1];
-
-            return ServiceResult::success($userId);
-        } catch (\Exception $e) {
-            Log::error('WebhookService::extractUserIdFromContent error: ' . $e->getMessage());
-            return ServiceResult::error('Cannot extract user ID from content', null, $e);
         }
     }
 }

@@ -81,16 +81,12 @@
                         </div>
                     </div>
 
-                    @if($wallet->balance < $product->getFinalPrice())
-                        <a href="{{ route('deposit') }}" class="w-full sm:w-auto px-10 py-4 btn-esport rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all text-center">
-                            {{ __('deposit_now') }}
-                        </a>
-                        @else
+                    @if($wallet->balance >= $product->getFinalPrice())
                         <div class="hidden sm:flex items-center gap-2 text-emerald-400/50 text-[10px] font-black uppercase tracking-widest">
                             <span class="material-icons text-sm">check_circle</span>
                             {{ __('sufficient_balance') }}
                         </div>
-                        @endif
+                    @endif
                 </div>
             </div>
         </div>

@@ -78,7 +78,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Services\OrderService::class);
         $this->app->bind(\App\Services\UserService::class);
         $this->app->bind(\App\Services\TransactionService::class);
-        $this->app->bind(\App\Services\DepositService::class);
         $this->app->bind(\App\Services\WebhookService::class);
         $this->app->bind(\App\Services\LeaderboardService::class);
         $this->app->bind(\App\Services\ViewDataService::class);

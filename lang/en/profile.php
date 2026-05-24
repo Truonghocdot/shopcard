@@ -43,7 +43,6 @@ return [
     'txn_type'      => 'Transaction Type',
     'txn_status'    => 'Status',
     'txn_all'       => 'All',
-    'txn_deposit'   => 'Deposit',
     'txn_purchase'  => 'Purchase',
     'txn_pending'   => 'Pending',
     'txn_success'   => 'Successful',

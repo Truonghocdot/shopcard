@@ -36,7 +36,6 @@ return [
     'txn_type'      => 'Loại giao dịch',
     'txn_status'    => 'Trạng thái',
     'txn_all'       => 'Tất cả',
-    'txn_deposit'   => 'Nạp tiền',
     'txn_purchase'  => 'Mua hàng',
     'txn_pending'   => 'Đang chờ',
     'txn_success'   => 'Thành công',

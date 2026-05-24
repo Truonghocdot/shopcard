@@ -7,7 +7,6 @@
             <label class="block text-sm font-bold mb-2 text-gray-600 uppercase tracking-wide">{{ __('profile.txn_type') }}</label>
             <select wire:model.live="filterType" class="w-full bg-white border border-gray-200 focus:border-primary rounded-lg px-4 py-2 text-gray-800">
                 <option value="">{{ __('profile.txn_all') }}</option>
-                <option value="0">{{ __('profile.txn_deposit') }}</option>
                 <option value="1">{{ __('profile.txn_purchase') }}</option>
             </select>
         </div>
@@ -40,11 +39,7 @@
                 <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td class="py-3 px-2 text-sm text-gray-800 font-bold">#{{ $transaction->id }}</td>
                     <td class="py-3 px-2 text-sm">
-                        @if($transaction->service_type == 0)
-                        <span class="text-green-600 font-semibold">{{ __('profile.txn_deposit') }}</span>
-                        @else
                         <span class="text-red-500 font-semibold">{{ __('profile.txn_purchase') }}</span>
-                        @endif
                     </td>
                     <td class="py-3 px-2 text-sm text-right font-black text-gray-800">{{ number_format($transaction->amount) }} đ</td>
                     <td class="py-3 px-2 text-sm text-center">

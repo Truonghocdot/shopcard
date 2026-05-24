@@ -3,7 +3,6 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DepositController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PurchaseController;
@@ -56,8 +55,6 @@ Route::post('/webhook/sepay', [SepayWebhookController::class, 'handle'])->name('
 
 // Trang người dùng & Mua hàng
 Route::middleware('auth')->group(function () {
-    // Trang nạp tiền
-    Route::get('/nap-tien', [DepositController::class, 'index'])->name('deposit');
     Route::get('/nguoi-dung', [UserController::class, 'profile'])->name('user.profile');
     Route::post('/nguoi-dung/update', [UserController::class, 'update'])->name('user.update');
 
