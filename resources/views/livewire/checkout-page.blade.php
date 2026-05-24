@@ -220,33 +220,32 @@
                         </label>
                     </div>
 
-                    @if($paymentConfig['paypal_enabled'] ?? false)
-                    <div class="{{ $paymentMethod === 'paypal' ? 'block' : 'hidden' }}">
-                    <div class="p-4 bg-indigo-950/20 border border-indigo-500/10 rounded-2xl my-6">
-                        <div class="flex items-center gap-3 mb-2">
-                            <span class="material-icons text-indigo-400 text-lg">payment</span>
-                            <span class="font-black text-xs text-white uppercase tracking-wider">PayPal / Credit Card</span>
+                    @if($paymentMethod === 'paypal')
+                        @if($paymentConfig['paypal_enabled'] ?? false)
+                        <div class="p-4 bg-indigo-950/20 border border-indigo-500/10 rounded-2xl my-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="material-icons text-indigo-400 text-lg">payment</span>
+                                <span class="font-black text-xs text-white uppercase tracking-wider">PayPal / Credit Card</span>
+                            </div>
+                            <p class="text-[10px] text-neutral-500 leading-relaxed font-bold uppercase tracking-wider">{{ __('paypal_payment_desc') }}</p>
                         </div>
-                        <p class="text-[10px] text-neutral-500 leading-relaxed font-bold uppercase tracking-wider">{{ __('paypal_payment_desc') }}</p>
-                    </div>
 
-                    <div x-show="errorMessage" class="mb-4 p-3 bg-pink-500/10 border border-pink-500/20 text-pink-500 rounded-xl font-black uppercase tracking-widest text-[9px] flex items-center gap-2" style="display: none;">
-                        <span class="material-icons text-xs">warning</span>
-                        <span x-text="errorMessage"></span>
-                    </div>
+                        <div x-show="errorMessage" class="mb-4 p-3 bg-pink-500/10 border border-pink-500/20 text-pink-500 rounded-xl font-black uppercase tracking-widest text-[9px] flex items-center gap-2" style="display: none;">
+                            <span class="material-icons text-xs">warning</span>
+                            <span x-text="errorMessage"></span>
+                        </div>
 
-                    <div x-show="validating" class="mb-4 p-4 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2" style="display: none;">
-                        <span class="material-icons animate-spin text-sm">refresh</span>
-                        PROCESSING PAYMENT...
-                    </div>
+                        <div x-show="validating" class="mb-4 p-4 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2" style="display: none;">
+                            <span class="material-icons animate-spin text-sm">refresh</span>
+                            PROCESSING PAYMENT...
+                        </div>
 
-                    <div wire:ignore id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
-                    </div>
-                    @elseif($paymentMethod === 'paypal')
-                    <div class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
-                        {{ __('paypal_currently_unavailable') }}
-                    </div>
-                    @endif
+                        <div wire:ignore id="paypal-button-container" class="relative z-10" style="min-height: 150px;"></div>
+                        @else
+                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-neutral-400">
+                            {{ __('paypal_currently_unavailable') }}
+                        </div>
+                        @endif
                     @elseif($paymentMethod === 'vietqr')
                     <div class="my-6 p-5 bg-emerald-950/20 border border-emerald-500/10 rounded-2xl">
                         <div class="flex items-center gap-3 mb-4">
