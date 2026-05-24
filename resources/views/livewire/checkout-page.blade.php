@@ -59,7 +59,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('full_name') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">person</span>
-                            <input type="text" id="shipping_name" wire:model.defer="shipping_name" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="John Doe">
+                            <input type="text" id="shipping_name" wire:model.live.debounce.300ms="shipping_name" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="John Doe">
                         </div>
                         @error('shipping_name') <p class="text-[9px] font-black text-pink-500 uppercase tracking-widest mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -67,7 +67,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('phone_number') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">phone</span>
-                            <input type="text" id="shipping_phone" wire:model.defer="shipping_phone" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="+1 234 567 890">
+                            <input type="text" id="shipping_phone" wire:model.live.debounce.300ms="shipping_phone" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="+1 234 567 890">
                         </div>
                         @error('shipping_phone') <p class="text-[9px] font-black text-pink-500 uppercase tracking-widest mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -75,7 +75,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('email_address') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">email</span>
-                            <input type="email" id="shipping_email" wire:model.defer="shipping_email" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="johndoe@example.com">
+                            <input type="email" id="shipping_email" wire:model.live.debounce.300ms="shipping_email" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="johndoe@example.com">
                         </div>
                         @error('shipping_email') <p class="text-[9px] font-black text-pink-500 uppercase tracking-widest mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -83,7 +83,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('shipping_address') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">home</span>
-                            <input type="text" id="shipping_address" wire:model.defer="shipping_address" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="123 Main Street">
+                            <input type="text" id="shipping_address" wire:model.live.debounce.300ms="shipping_address" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="123 Main Street">
                         </div>
                         @error('shipping_address') <p class="text-[9px] font-black text-pink-500 uppercase tracking-widest mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -91,7 +91,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('city_state') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">location_city</span>
-                            <input type="text" id="shipping_city" wire:model.defer="shipping_city" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="New York / NY">
+                            <input type="text" id="shipping_city" wire:model.live.debounce.300ms="shipping_city" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="New York / NY">
                         </div>
                         @error('shipping_city') <p class="text-[9px] font-black text-pink-500 uppercase tracking-widest mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -99,7 +99,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('postal_code') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">local_post_office</span>
-                            <input type="text" id="shipping_postal_code" wire:model.defer="shipping_postal_code" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="10001">
+                            <input type="text" id="shipping_postal_code" wire:model.live.debounce.300ms="shipping_postal_code" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold" placeholder="10001">
                         </div>
                         @error('shipping_postal_code') <p class="text-[9px] font-black text-pink-500 uppercase tracking-widest mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -107,7 +107,7 @@
                         <label class="block text-[10px] font-black text-neutral-400 uppercase tracking-widest">{{ __('country') }} <span class="text-pink-500">*</span></label>
                         <div class="relative">
                             <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-neutral-700 text-sm">public</span>
-                            <select id="shipping_country" wire:model.defer="shipping_country" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold appearance-none">
+                            <select id="shipping_country" wire:model.live="shipping_country" class="w-full bg-neutral-950/50 border border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-2xl pl-11 pr-4 py-3.5 text-white text-sm outline-hidden transition-all font-bold appearance-none">
                                 <option value="United States" class="bg-neutral-950">United States</option>
                                 <option value="United Kingdom" class="bg-neutral-950">United Kingdom</option>
                                 <option value="Canada" class="bg-neutral-950">Canada</option>
