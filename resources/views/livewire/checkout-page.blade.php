@@ -253,23 +253,14 @@
                             <span class="font-black text-xs text-white uppercase tracking-wider">VietQR</span>
                         </div>
                         @if($vietQrOrderCreated && $vietQrPaymentReference)
-                        <div class="flex justify-center mb-5">
-                            <div class="bg-white p-3 rounded-2xl">
-                                <img
-                                    alt="VietQR"
-                                    class="w-52 h-52 rounded-xl"
-                                    src="https://api.vietqr.io/image/{{ $paymentConfig['bank_bin'] }}-{{ $paymentConfig['bank_number'] }}-compact2.png?amount={{ (int) $this->vietQrAmount }}&addInfo={{ urlencode($vietQrPaymentReference) }}&accountName={{ urlencode($paymentConfig['bank_account_name'] ?? '') }}"
-                                >
-                            </div>
-                        </div>
-                        <div class="space-y-2 text-xs">
-                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('bank') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_name'] ?? '—' }}</span></p>
-                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('account_holder') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_account_name'] ?? '—' }}</span></p>
-                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('account_number') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_number'] ?? '—' }}</span></p>
-                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('total_payment') }}:</span> <span class="font-bold text-primary">{{ number_format($this->vietQrAmount) }}đ</span></p>
-                            <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('transfer_reference') }}:</span> <span class="font-bold text-white">{{ $vietQrPaymentReference }}</span></p>
-                        </div>
-                        <p class="mt-4 text-[10px] text-emerald-300 font-black uppercase tracking-widest">{{ __('vietqr_auto_confirm_note') }}</p>
+                        <p class="text-[10px] text-emerald-300 font-black uppercase tracking-widest mb-4">{{ __('vietqr_order_created') }}</p>
+                        <button
+                            type="button"
+                            wire:click="openVietQrModal"
+                            class="w-full px-4 py-3 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all"
+                        >
+                            {{ __('vietqr_open_qr_modal') }}
+                        </button>
                         @else
                         <p class="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mb-4">{{ __('vietqr_generate_before_transfer') }}</p>
                         <button
@@ -315,6 +306,47 @@
             </div>
         </div>
     </div>
+
+    @if($paymentMethod === 'vietqr' && $vietQrOrderCreated && $vietQrPaymentReference && $showVietQrModal)
+    <div class="fixed inset-0 z-[120] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" wire:click="closeVietQrModal"></div>
+        <div class="relative w-full max-w-md bg-neutral-950 border border-emerald-500/20 rounded-3xl p-6 shadow-2xl">
+            <button
+                type="button"
+                wire:click="closeVietQrModal"
+                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center"
+            >
+                <span class="material-icons text-sm">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 mb-5">
+                <span class="material-icons text-emerald-400 text-2xl">qr_code_2</span>
+                <div>
+                    <h3 class="text-white text-sm font-black uppercase tracking-widest">VietQR</h3>
+                    <p class="text-emerald-300 text-[10px] font-black uppercase tracking-widest">{{ __('vietqr_auto_confirm_note') }}</p>
+                </div>
+            </div>
+
+            <div class="flex justify-center mb-5">
+                <div class="bg-white p-3 rounded-2xl">
+                    <img
+                        alt="VietQR"
+                        class="w-56 h-56 rounded-xl"
+                        src="https://api.vietqr.io/image/{{ $paymentConfig['bank_bin'] }}-{{ $paymentConfig['bank_number'] }}-compact2.png?amount={{ (int) $this->vietQrAmount }}&addInfo={{ urlencode($vietQrPaymentReference) }}&accountName={{ urlencode($paymentConfig['bank_account_name'] ?? '') }}"
+                    >
+                </div>
+            </div>
+
+            <div class="space-y-2 text-xs">
+                <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('bank') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_name'] ?? '—' }}</span></p>
+                <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('account_holder') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_account_name'] ?? '—' }}</span></p>
+                <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('account_number') }}:</span> <span class="font-bold text-white">{{ $paymentConfig['bank_number'] ?? '—' }}</span></p>
+                <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('total_payment') }}:</span> <span class="font-bold text-primary">{{ number_format($this->vietQrAmount) }}đ</span></p>
+                <p class="text-neutral-300"><span class="text-neutral-500 uppercase tracking-widest">{{ __('transfer_reference') }}:</span> <span class="font-bold text-white">{{ $vietQrPaymentReference }}</span></p>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <!-- PayPal SDK -->
     @if($paymentConfig['paypal_enabled'] ?? false)

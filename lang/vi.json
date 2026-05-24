@@ -146,6 +146,7 @@
     "vietqr_payment_desc": "Quét VietQR và hoàn tất chuyển khoản ngân hàng. Đơn hàng sẽ được tạo ở trạng thái chờ cho đến khi thanh toán được xác nhận.",
     "vietqr_generate_before_transfer": "Hãy tạo đơn VietQR trước để nhận đúng mã nội dung chuyển khoản dùng cho SePay đối soát tự động.",
     "vietqr_generate_order": "Tạo đơn VietQR",
+    "vietqr_open_qr_modal": "Mở popup thanh toán VietQR",
     "vietqr_confirm_transfer": "Tôi đã chuyển khoản qua VietQR",
     "vietqr_order_created": "Đã tạo đơn VietQR. Hãy chuyển khoản đúng nội dung bên dưới để SePay tự động xác nhận thanh toán.",
     "vietqr_auto_confirm_note": "SePay sẽ tự động xác nhận đơn hàng sau khi phát hiện giao dịch chuyển khoản khớp.",

@@ -146,6 +146,7 @@
     "vietqr_payment_desc": "Scan VietQR and complete your bank transfer. Orders will be created in pending status until payment is confirmed.",
     "vietqr_generate_before_transfer": "Generate your VietQR order first to receive the exact transfer reference used by SePay.",
     "vietqr_generate_order": "Generate VietQR Order",
+    "vietqr_open_qr_modal": "Open VietQR Payment Popup",
     "vietqr_confirm_transfer": "I Have Transferred via VietQR",
     "vietqr_order_created": "VietQR order created. Transfer with the exact reference below so SePay can auto-confirm your payment.",
     "vietqr_auto_confirm_note": "SePay will automatically confirm this order after it detects a matching bank transfer.",

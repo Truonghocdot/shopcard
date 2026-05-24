@@ -32,6 +32,7 @@ class CheckoutPage extends Component
     public string $paymentMethod        = 'paypal';
     public ?string $vietQrPaymentReference = null;
     public bool $vietQrOrderCreated = false;
+    public bool $showVietQrModal = false;
 
     protected CartService $cartService;
     protected CouponService $couponService;
@@ -91,6 +92,7 @@ class CheckoutPage extends Component
             $this->paymentMethod = 'vietqr';
             $this->vietQrOrderCreated = true;
             $this->vietQrPaymentReference = $pendingVietQrCheckout['payment_reference'] ?? null;
+            $this->showVietQrModal = true;
         }
     }
 
@@ -98,16 +100,28 @@ class CheckoutPage extends Component
 
     public function getItemsProperty(): array
     {
+        if ($this->cartService->isEmpty() && session('pending_vietqr_checkout.items')) {
+            return session('pending_vietqr_checkout.items', []);
+        }
+
         return $this->cartService->getItems();
     }
 
     public function getSubtotalProperty(): float
     {
+        if ($this->cartService->isEmpty() && session()->has('pending_vietqr_checkout.subtotal')) {
+            return (float) session('pending_vietqr_checkout.subtotal');
+        }
+
         return $this->cartService->subtotal();
     }
 
     public function getFinalAmountProperty(): float
     {
+        if ($this->cartService->isEmpty() && session()->has('pending_vietqr_checkout.final_amount')) {
+            return (float) session('pending_vietqr_checkout.final_amount');
+        }
+
         return max(0, $this->subtotal - $this->discount);
     }
 
@@ -255,11 +269,15 @@ class CheckoutPage extends Component
         $payload = $result->getData();
         $orders = $payload['orders'] ?? [];
         $paymentReference = $payload['payment_reference'] ?? null;
+        $currentItems = array_values($this->items);
+        $currentSubtotal = $this->subtotal;
+        $currentFinalAmount = array_sum(array_map(fn ($order) => (float) $order->final_amount, $orders));
 
         $this->cartService->clear();
         session()->forget('checkout_coupon');
 
         $this->vietQrOrderCreated = true;
+        $this->showVietQrModal = true;
         $this->vietQrPaymentReference = $paymentReference;
         $this->couponCode = '';
         $this->couponMessage = __('vietqr_order_created');
@@ -268,14 +286,29 @@ class CheckoutPage extends Component
         session([
             'pending_vietqr_checkout' => [
                 'payment_reference' => $paymentReference,
-                'amount' => array_sum(array_map(fn ($order) => (float) $order->final_amount, $orders)),
+                'amount' => $currentFinalAmount,
                 'order_ids' => array_map(fn ($order) => $order->id, $orders),
+                'items' => $currentItems,
+                'subtotal' => $currentSubtotal,
+                'final_amount' => $currentFinalAmount,
             ],
         ]);
 
         session()->flash('success', __('vietqr_order_created'));
 
         return null;
+    }
+
+    public function closeVietQrModal(): void
+    {
+        $this->showVietQrModal = false;
+    }
+
+    public function openVietQrModal(): void
+    {
+        if ($this->vietQrOrderCreated) {
+            $this->showVietQrModal = true;
+        }
     }
 
     public function processCodOrder(): mixed
