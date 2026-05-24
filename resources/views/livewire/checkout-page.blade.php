@@ -355,8 +355,9 @@
     @if($paymentConfig['paypal_enabled'] ?? false)
     <script src="https://www.paypal.com/sdk/js?client-id={{ urlencode($paymentConfig['paypal_client_id'] ?? 'sb') }}&currency={{ urlencode($paymentConfig['paypal_currency'] ?? 'USD') }}&disable-funding=card"></script>
     <script>
-        document.addEventListener('livewire:load', function () {
+        function initializePayPalCheckout() {
             if (typeof paypal === 'undefined') {
+                console.warn('PayPal SDK not loaded');
                 return;
             }
 
@@ -432,8 +433,16 @@
                 Livewire.on('paypal-method-selected', () => {
                     setTimeout(renderPayPalButtons, 100);
                 });
-            });
-        });
+            }, { once: true });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePayPalCheckout, { once: true });
+        } else {
+            initializePayPalCheckout();
+        }
+
+        document.addEventListener('livewire:navigated', initializePayPalCheckout);
     </script>
     @endif
 </div>
