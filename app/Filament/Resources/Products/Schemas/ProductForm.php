@@ -45,10 +45,6 @@ class ProductForm
                                 return;
                             }
 
-                            if (blank($get('slug'))) {
-                                $set('slug', self::generateUniqueSlug($state));
-                            }
-
                             if (blank($get('meta_title'))) {
                                 $set('meta_title', self::generateMetaTitle($state, $siteName));
                             }
@@ -57,21 +53,6 @@ class ProductForm
                                 $set('meta_description', self::generateMetaDescription($state, $siteName));
                             }
                         }),
-
-                    TextInput::make('slug')
-                        ->label(__('card_slug'))
-                        ->required()
-                        ->maxLength(255)
-                        ->live()
-                        ->debounce(600)
-                        ->afterStateUpdated(function (?string $state, callable $set) {
-                            if (blank($state)) {
-                                return;
-                            }
-
-                            $set('slug', self::generateUniqueSlug($state));
-                        })
-                        ->unique(Product::class, 'slug', ignoreRecord: true),
 
                     Select::make(CardField::TYPE->value)
                         ->label(__('filament.card_type'))
@@ -183,20 +164,6 @@ class ProductForm
                         ->maxLength(500),
                 ]),
         ]);
-    }
-
-    private static function generateUniqueSlug(string $value): string
-    {
-        $slug = str($value)->slug()->value();
-        $baseSlug = $slug;
-        $counter = 1;
-
-        while (Product::where('slug', $slug)->exists()) {
-            $slug = "{$baseSlug}-{$counter}";
-            $counter++;
-        }
-
-        return $slug;
     }
 
     private static function generateMetaTitle(string $title, string $siteName): string

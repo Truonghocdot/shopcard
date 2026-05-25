@@ -6,14 +6,15 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
-    <nav class="flex mb-8 text-[10px] font-black text-text-muted overflow-x-auto whitespace-nowrap pb-2 uppercase tracking-[0.2em]">
-        <a class="hover:text-primary flex items-center transition-colors" href="{{ route('home') }}">
-            <span class="material-icons text-sm mr-2">home</span> {{ __('home') }}
+    <nav class="flex items-center mb-8 text-[10px] font-black text-text-muted overflow-x-auto whitespace-nowrap pb-2 uppercase tracking-[0.2em]">
+        <a class="hover:text-primary inline-flex items-center gap-2 leading-none transition-colors" href="{{ route('home') }}">
+            <span class="material-icons text-sm leading-none self-center">home</span>
+            <span class="inline-flex items-center leading-none">{{ __('home') }}</span>
         </a>
         <span class="mx-3 text-white/10">/</span>
-        <a class="hover:text-primary transition-colors font-black text-text-secondary" href="{{ route('products.index', ['category' => $product->category_id]) }}">{{ $product->category->title }}</a>
+        <a class="hover:text-primary inline-flex items-center leading-none transition-colors font-black text-text-secondary" href="{{ route('products.index', ['category' => $product->category_id]) }}">{{ $product->category->title }}</a>
         <span class="mx-3 text-white/10">/</span>
-        <span class="text-primary font-black drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">ID #{{ $product->id }}</span>
+        <span class="inline-flex items-center leading-none text-primary font-black drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ $product->title }}</span>
     </nav>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -122,11 +123,6 @@
                 </button>
                 <div x-show="activeTab === 1" x-collapse x-cloak class="border-t border-border p-6 bg-bg-dark/40 font-bold text-sm text-text-secondary leading-relaxed space-y-4">
                     <div>{!! $product->content !!}</div>
-                    <div class="pt-4 border-t border-border">
-                        <a href="https://zalo.me/g/wilgna867" class="text-primary font-black hover:text-text-primary transition-colors text-xs flex items-center gap-2">
-                            <span class="material-icons text-sm">group</span> {{ __('join_zalo_group') }}
-                        </a>
-                    </div>
                 </div>
             </div>
 
@@ -172,9 +168,18 @@
                     <span class="material-icons transition-transform duration-300" :class="{'rotate-180': activeTab === 4}">expand_more</span>
                 </button>
                 <div x-show="activeTab === 4" x-collapse x-cloak class="border-t border-border p-6 bg-bg-dark/40 font-bold text-sm text-text-muted leading-relaxed space-y-3">
-                    <p class="flex gap-2"><span class="text-primary font-black">PSA Cert:</span> {{ __('security_1') }}</p>
-                    <p class="flex gap-2"><span class="text-primary font-black">Sleeve & Toploader:</span> {{ __('security_2') }}</p>
-                    <p class="flex gap-2"><span class="text-primary font-black">Condition:</span> {{ __('security_3') }}</p>
+                    <p class="flex gap-3 items-start">
+                        <span class="w-36 shrink-0 text-primary font-black">{{ __('security_label_cert') }}:</span>
+                        <span>{{ __('security_1') }}</span>
+                    </p>
+                    <p class="flex gap-3 items-start">
+                        <span class="w-36 shrink-0 text-primary font-black">{{ __('security_label_sleeve') }}:</span>
+                        <span>{{ __('security_2') }}</span>
+                    </p>
+                    <p class="flex gap-3 items-start">
+                        <span class="w-36 shrink-0 text-primary font-black">{{ __('security_label_condition') }}:</span>
+                        <span>{{ __('security_3') }}</span>
+                    </p>
                 </div>
             </div>
 
