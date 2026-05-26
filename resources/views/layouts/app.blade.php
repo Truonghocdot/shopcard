@@ -98,11 +98,6 @@
                     <path d="M13.5 22v-8.2h2.8l.42-3.2H13.5V8.56c0-.93.26-1.56 1.6-1.56h1.72V4.14c-.3-.04-1.33-.14-2.53-.14-2.5 0-4.22 1.52-4.22 4.32v2.28H7.25v3.2h2.87V22h3.38Z"/>
                 </svg>
             </a>
-            <a href="{{ $siteSettings['facebook_link'] ?? '#' }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white group">
-                <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2C6.48 2 2 6.15 2 11.27c0 2.92 1.46 5.52 3.75 7.21V22l3.28-1.8c.88.24 1.81.37 2.97.37 5.52 0 10-4.15 10-9.27S17.52 2 12 2Zm.99 12.48-2.54-2.71-4.95 2.71 5.45-5.78 2.61 2.71 4.87-2.71-5.44 5.78Z"/>
-                </svg>
-            </a>
             <a href="{{ $siteSettings['instagram_link'] ?? '#' }}" class="w-10 h-10 md:w-12 md:h-12 bg-bg-card border border-primary/20 text-primary rounded-full flex items-center justify-center hover:scale-110 transition shadow-[0_0_15px_rgba(230,46,107,0.3)] hover:bg-primary hover:text-white group">
                 <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5a4.25 4.25 0 0 0 4.25 4.25h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5a4.25 4.25 0 0 0-4.25-4.25h-8.5Zm8.75 2.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>

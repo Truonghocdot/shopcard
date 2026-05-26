@@ -110,10 +110,5 @@
             </div>
         </div>
 
-        <div class="text-center border-t border-white/5 pt-8">
-            <p class="text-text-muted text-[10px] font-black uppercase tracking-widest md:tracking-[0.3em] px-4 leading-loose">
-                Copyright © {{ date('Y') }} <span class="text-primary/70">{{ $siteSettings['site_name'] ?? 'RabbyTCG.com' }}</span> <br class="md:hidden"> - {{ $siteSettings['footer_copyright'] ?? __('copyright_text') }}
-            </p>
-        </div>
     </div>
 </footer>
