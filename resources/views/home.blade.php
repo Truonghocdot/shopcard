@@ -169,17 +169,28 @@
                     <div class="holo-card-glow"></div>
                     <div class="bg-neutral-900/80 border-b border-white/5 px-3 py-2 flex items-center justify-between text-[9px] font-black uppercase tracking-wider">
                         <span class="text-neutral-500">{{ $product->category->title ?? 'TCG' }}</span>
-                        @if($product->getDiscountPercent())
-                            <span class="text-pink-400">-{{ number_format($product->getDiscountPercent()) }}% OFF</span>
-                        @else
-                            <span class="text-indigo-400 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse"></span>HOT</span>
-                        @endif
+                        <span class="{{ $product->quantity > 0 ? 'text-emerald-400' : 'text-pink-400' }}">{{ $product->quantity > 0 ? __('in_stock') : __('sold_out') }}</span>
                     </div>
                     <div class="relative overflow-hidden aspect-square border-b border-white/5 bg-neutral-950 flex items-center justify-center p-2">
-                        <img alt="{{ $product->title }}"
-                            class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
-                            src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
-                            loading="lazy" decoding="async">
+                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full h-full">
+                            <img alt="{{ $product->title }}"
+                                class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
+                                src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
+                                loading="lazy" decoding="async">
+                        </a>
+                        @if($product->quantity <= 0)
+                            <div class="absolute top-2 left-2 z-10 pointer-events-none">
+                                <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-14 md:w-16 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
+                            </div>
+                        @endif
+                        @if($product->getDiscountPercent())
+                            <div class="absolute top-2 right-2 bg-pink-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                                -{{ number_format($product->getDiscountPercent()) }}%
+                            </div>
+                        @endif
+                        <div class="absolute bottom-2 left-2 bg-[#080A0F]/90 px-2 py-0.5 rounded text-[8px] text-neutral-500 font-bold border border-white/5">
+                            #{{ $product->id }}
+                        </div>
                     </div>
                     <div class="p-4 space-y-3 flex-1 flex flex-col">
                         <h4 class="font-bold text-xs md:text-sm line-clamp-2 text-white group-hover:text-primary transition-colors tracking-tight leading-tight flex-1">
@@ -187,14 +198,20 @@
                         </h4>
                         <div class="flex items-baseline gap-2">
                             <span class="text-base font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }}đ</span>
-                            @if($product->sell_price && $product->sell_price > $product->getFinalPrice())
+                            @if($product->getDiscountPercent() && $product->sell_price && $product->sell_price > $product->getFinalPrice())
                                 <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
                             @endif
                         </div>
+                        @if($product->quantity <= 0)
+                        <a href="{{ route('products.show', $product->slug) }}" class="flex items-center justify-center w-full py-2 rounded-xl transition-all">
+                            <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-20 md:w-24 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
+                        </a>
+                        @else
                         <a href="{{ route('products.show', $product->slug) }}"
                             class="flex items-center justify-center gap-2 w-full btn-esport py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
                             <span class="material-icons text-sm">visibility</span>{{ __('view_details') }}
                         </a>
+                        @endif
                     </div>
                 </div>
             @empty
