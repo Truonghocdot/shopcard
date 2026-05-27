@@ -226,10 +226,12 @@
                         <span class="{{ $product->quantity > 0 ? 'text-emerald-400' : 'text-pink-400' }}">{{ $product->quantity > 0 ? __('in_stock') : __('sold_out') }}</span>
                     </div>
                     <div class="relative overflow-hidden aspect-square border-b border-white/5 bg-neutral-950 flex items-center justify-center p-2">
-                        <img alt="{{ $product->title }}"
-                            class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
-                            src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
-                            loading="lazy" decoding="async">
+                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full h-full">
+                            <img alt="{{ $product->title }}"
+                                class="w-full h-full object-contain group-hover:scale-105 transition duration-500 rounded"
+                                src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
+                                loading="lazy" decoding="async">
+                        </a>
                         @if($product->quantity <= 0)
                             <div class="absolute top-2 left-2 z-10">
                                 <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-14 md:w-16 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
@@ -254,10 +256,16 @@
                                 <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
                             @endif
                         </div>
-                        <a href="{{ route('products.show', $product->slug) }}"
-                            class="flex items-center justify-center gap-2 w-full {{ $product->quantity <= 0 ? 'bg-white/5 border border-white/10 text-neutral-400' : 'btn-esport' }} py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
-                            <span class="material-icons text-sm">shopping_cart</span>{{ $product->quantity <= 0 ? __('sold_out') : __('add_to_cart') }}
+                        @if($product->quantity <= 0)
+                        <a href="{{ route('products.show', $product->slug) }}" class="flex items-center justify-center w-full py-2 rounded-xl transition-all">
+                            <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-20 md:w-24 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
                         </a>
+                        @else
+                        <a href="{{ route('products.show', $product->slug) }}"
+                            class="flex items-center justify-center gap-2 w-full btn-esport py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
+                            <span class="material-icons text-sm">shopping_cart</span>{{ __('add_to_cart') }}
+                        </a>
+                        @endif
                     </div>
                 </div>
             @empty

@@ -155,7 +155,9 @@
                 @foreach($products as $product)
                 <div class="card-esport group transition-all hover:scale-[1.02] relative">
                     <div class="relative overflow-hidden aspect-video">
-                        <img alt="{{ $product->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" src="{{ url('storage/'.$product->images[0]) ?? 'https://via.placeholder.com/400x225' }}" loading="lazy">
+                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full h-full">
+                            <img alt="{{ $product->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" src="{{ url('storage/'.$product->images[0]) ?? 'https://via.placeholder.com/400x225' }}" loading="lazy">
+                        </a>
                         @if($product->quantity <= 0)
                         <div class="absolute top-2 left-2 z-10">
                             <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-16 md:w-20 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
@@ -178,10 +180,16 @@
                             @endif
                             <span class="text-xl font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }} <span class="text-sm">đ</span></span>
                         </div>
-                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full {{ $product->quantity <= 0 ? 'bg-white/5 border border-white/10 text-neutral-400 cursor-not-allowed' : 'btn-esport' }} justify-center items-center py-2.5 rounded-xl text-center text-xs md:text-sm font-black uppercase tracking-widest transition-all relative overflow-hidden group-hover:gap-3">
-                            <span class="material-icons text-sm mr-1">shopping_cart</span>
-                            {{ $product->quantity <= 0 ? __('sold_out') : __('read_more') }}
+                        @if($product->quantity <= 0)
+                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full py-2 rounded-xl text-center transition-all">
+                            <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-24 h-auto mx-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
                         </a>
+                        @else
+                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full btn-esport justify-center items-center py-2.5 rounded-xl text-center text-xs md:text-sm font-black uppercase tracking-widest transition-all relative overflow-hidden group-hover:gap-3">
+                            <span class="material-icons text-sm mr-1">shopping_cart</span>
+                            {{ __('read_more') }}
+                        </a>
+                        @endif
                     </div>
                 </div>
                 @endforeach
