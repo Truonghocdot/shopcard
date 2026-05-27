@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
+    public const VIETQR_EXPIRY_MINUTES = 15;
+
     public function __construct(
         protected Order $order,
         protected CouponService $couponService,
@@ -376,6 +378,7 @@ class OrderService
 
             $orders = [];
             $paymentReference = 'QR' . $userId . strtoupper(substr(uniqid(), -6));
+            $expiresAt = now()->addMinutes(self::VIETQR_EXPIRY_MINUTES);
 
             foreach ($products as $product) {
                 $productPrice = $product->getFinalPrice();
@@ -390,6 +393,7 @@ class OrderService
                     'payment_method' => 'vietqr',
                     'payment_status' => 'pending',
                     'payment_reference' => $paymentReference,
+                    'expires_at' => $expiresAt->toDateTimeString(),
                     'status_history' => [
                         ['status' => 'pending_payment', 'timestamp' => now()->toDateTimeString(), 'notes' => 'Awaiting VietQR transfer confirmation']
                     ],
@@ -435,6 +439,7 @@ class OrderService
             return ServiceResult::success([
                 'orders' => $orders,
                 'payment_reference' => $paymentReference,
+                'expires_at' => $expiresAt->toDateTimeString(),
             ], 'VietQR order created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -570,6 +575,69 @@ class OrderService
         } catch (\Exception $e) {
             Log::error('OrderService::getOrdersByIds error: ' . $e->getMessage());
             return ServiceResult::error('Không thể lấy danh sách đơn hàng', null, $e);
+        }
+    }
+
+    public function cancelExpiredPendingOrders(?string $paymentMethod = null): ServiceResult
+    {
+        try {
+            DB::beginTransaction();
+
+            $orders = $this->order::where('status', Order::STATUS_PENDING)
+                ->when($paymentMethod, function ($query) use ($paymentMethod) {
+                    $query->where('notes', 'like', '%"payment_method":"' . $paymentMethod . '"%');
+                })
+                ->get()
+                ->filter(function (Order $order) {
+                    $notes = json_decode($order->notes ?? '{}', true);
+                    $expiresAt = $notes['expires_at'] ?? null;
+
+                    return $expiresAt && now()->greaterThanOrEqualTo($expiresAt);
+                });
+
+            $cancelledCount = 0;
+            $restockedCount = 0;
+
+            foreach ($orders as $order) {
+                $notes = json_decode($order->notes ?? '{}', true);
+
+                if ($order->product) {
+                    $order->product?->incrementStock();
+                    $restockedCount++;
+                }
+
+                $notes['payment_status'] = 'expired';
+                $notes['status_history'][] = [
+                    'status' => 'expired',
+                    'timestamp' => now()->toDateTimeString(),
+                    'notes' => 'Pending order expired and stock was restored',
+                ];
+
+                $order->update([
+                    'status' => Order::STATUS_CANCELLED,
+                    'notes' => json_encode($notes),
+                ]);
+
+                if (($notes['payment_method'] ?? null) === 'vietqr' && ! empty($notes['payment_reference'])) {
+                    \App\Models\Transaction::where('request_id', $notes['payment_reference'])
+                        ->where('provider', 'vietqr')
+                        ->where('status', \App\Models\Transaction::STATUS_PENDING)
+                        ->update(['status' => \App\Models\Transaction::STATUS_FAILED]);
+                }
+
+                $cancelledCount++;
+            }
+
+            DB::commit();
+
+            return ServiceResult::success([
+                'cancelled_orders' => $cancelledCount,
+                'restocked_products' => $restockedCount,
+            ], 'Expired pending orders cleaned successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('OrderService::cancelExpiredPendingOrders error: ' . $e->getMessage());
+            return ServiceResult::error('Could not clean expired pending orders.', null, $e);
         }
     }
 

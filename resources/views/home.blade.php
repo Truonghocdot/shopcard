@@ -231,8 +231,8 @@
                             src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
                             loading="lazy" decoding="async">
                         @if($product->quantity <= 0)
-                            <div class="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center">
-                                <span class="bg-pink-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-[0_0_12px_rgba(244,114,182,0.5)]">{{ __('sold_out') }}</span>
+                            <div class="absolute top-2 left-2 bg-pink-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-[0_0_12px_rgba(244,114,182,0.5)] z-10">
+                                {{ __('sold_out') }}
                             </div>
                         @endif
                         @if($product->getDiscountPercent())

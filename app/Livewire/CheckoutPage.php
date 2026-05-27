@@ -31,6 +31,7 @@ class CheckoutPage extends Component
     public string $shipping_country     = 'United States';
     public string $paymentMethod        = 'paypal';
     public ?string $vietQrPaymentReference = null;
+    public ?string $vietQrExpiresAt = null;
     public bool $vietQrOrderCreated = false;
     public bool $showVietQrModal = false;
 
@@ -92,6 +93,7 @@ class CheckoutPage extends Component
             $this->paymentMethod = 'vietqr';
             $this->vietQrOrderCreated = true;
             $this->vietQrPaymentReference = $pendingVietQrCheckout['payment_reference'] ?? null;
+            $this->vietQrExpiresAt = $pendingVietQrCheckout['expires_at'] ?? null;
             $this->showVietQrModal = true;
         }
     }
@@ -139,6 +141,15 @@ class CheckoutPage extends Component
         }
 
         return $this->finalAmount;
+    }
+
+    public function getVietQrExpiresAtTimestampProperty(): ?int
+    {
+        if (! $this->vietQrExpiresAt) {
+            return null;
+        }
+
+        return strtotime($this->vietQrExpiresAt) ?: null;
     }
 
     // ── Coupon ───────────────────────────────────────────────────────────────
@@ -269,6 +280,7 @@ class CheckoutPage extends Component
         $payload = $result->getData();
         $orders = $payload['orders'] ?? [];
         $paymentReference = $payload['payment_reference'] ?? null;
+        $expiresAt = $payload['expires_at'] ?? null;
         $currentItems = array_values($this->items);
         $currentSubtotal = $this->subtotal;
         $currentFinalAmount = array_sum(array_map(fn ($order) => (float) $order->final_amount, $orders));
@@ -279,6 +291,7 @@ class CheckoutPage extends Component
         $this->vietQrOrderCreated = true;
         $this->showVietQrModal = true;
         $this->vietQrPaymentReference = $paymentReference;
+        $this->vietQrExpiresAt = $expiresAt;
         $this->couponCode = '';
         $this->couponMessage = __('vietqr_order_created');
         $this->resetCoupon();
@@ -286,6 +299,7 @@ class CheckoutPage extends Component
         session([
             'pending_vietqr_checkout' => [
                 'payment_reference' => $paymentReference,
+                'expires_at' => $expiresAt,
                 'amount' => $currentFinalAmount,
                 'order_ids' => array_map(fn ($order) => $order->id, $orders),
                 'items' => $currentItems,
@@ -344,6 +358,15 @@ class CheckoutPage extends Component
         $this->showVietQrModal = false;
 
         return redirect()->route('purchase.success', $orders->first()->id);
+    }
+
+    public function refreshVietQrCountdownState(): void
+    {
+        $pendingCheckout = session('pending_vietqr_checkout');
+
+        if (! $pendingCheckout) {
+            $this->showVietQrModal = false;
+        }
     }
 
     public function processCodOrder(): mixed

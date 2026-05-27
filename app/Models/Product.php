@@ -165,6 +165,16 @@ class Product extends Model
         ]);
     }
 
+    public function incrementStock(int $amount = 1): void
+    {
+        $newQuantity = max(0, $this->quantity + $amount);
+
+        $this->update([
+            'quantity' => $newQuantity,
+            'status' => $newQuantity > 0 ? self::STATUS_UNSOLD : self::STATUS_SOLD,
+        ]);
+    }
+
     public function getDiscountPercent(): ?float
     {
         if (!$this->sale_price || !$this->sell_price) {

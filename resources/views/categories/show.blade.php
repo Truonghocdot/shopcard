@@ -29,8 +29,8 @@
             <div class="relative overflow-hidden aspect-video">
                 <img alt="{{ $product->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" src="{{ url('storage/'.$product->images[0]) ?? 'https://via.placeholder.com/400x225' }}" loading="lazy" decoding="async">
                 @if($product->quantity <= 0)
-                <div class="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center">
-                    <span class="bg-pink-500 text-white text-xs md:text-sm font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-[0_0_12px_rgba(244,114,182,0.5)]">{{ __('sold_out') }}</span>
+                <div class="absolute top-2 left-2 bg-pink-500 text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-[0_0_12px_rgba(244,114,182,0.5)] z-10">
+                    {{ __('sold_out') }}
                 </div>
                 @endif
                 @if($product->getDiscountPercent())

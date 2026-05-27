@@ -155,6 +155,7 @@
     "vietqr_order_created": "VietQR order created. Transfer with the exact reference below so SePay can auto-confirm your payment.",
     "vietqr_auto_confirm_note": "SePay will automatically confirm this order after it detects a matching bank transfer.",
     "transfer_reference": "Transfer Reference",
+    "vietqr_time_remaining": "Time Remaining",
     "cod_payment_desc": "Place your order now and pay in cash when the shipment arrives. Your order will remain pending until it is reviewed and fulfilled.",
     "cod_confirm_order": "Confirm COD Order",
     "paypal_currently_unavailable": "PayPal is currently unavailable.",

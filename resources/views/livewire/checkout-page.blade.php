@@ -332,7 +332,27 @@
     </div>
 
     @if($paymentMethod === 'vietqr' && $vietQrOrderCreated && $vietQrPaymentReference && $showVietQrModal)
-    <div wire:poll.4s="checkVietQrPaymentStatus" class="fixed inset-0 z-[120] flex items-center justify-center p-4">
+    <div
+        wire:poll.4s="checkVietQrPaymentStatus"
+        wire:poll.10s="refreshVietQrCountdownState"
+        x-data="{
+            expiresAt: {{ $this->vietQrExpiresAtTimestamp ?? 'null' }},
+            remaining: '',
+            tick() {
+                if (!this.expiresAt) {
+                    this.remaining = '';
+                    return;
+                }
+
+                const seconds = Math.max(0, this.expiresAt - Math.floor(Date.now() / 1000));
+                const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const secs = String(seconds % 60).padStart(2, '0');
+                this.remaining = `${minutes}:${secs}`;
+            }
+        }"
+        x-init="tick(); setInterval(() => tick(), 1000)"
+        class="fixed inset-0 z-[120] flex items-center justify-center p-4"
+    >
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" wire:click="closeVietQrModal"></div>
         <div class="relative w-full max-w-md bg-neutral-950 border border-emerald-500/20 rounded-3xl p-6 shadow-2xl">
             <button
@@ -349,6 +369,11 @@
                     <h3 class="text-white text-sm font-black uppercase tracking-widest">VietQR</h3>
                     <p class="text-emerald-300 text-[10px] font-black uppercase tracking-widest">{{ __('vietqr_auto_confirm_note') }}</p>
                 </div>
+            </div>
+
+            <div class="mb-5 p-3 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <p class="text-neutral-500 text-[10px] font-black uppercase tracking-widest mb-1">{{ __('vietqr_time_remaining') }}</p>
+                <p class="text-primary text-2xl font-black tracking-widest" x-text="remaining"></p>
             </div>
 
             <div class="flex justify-center mb-5">
