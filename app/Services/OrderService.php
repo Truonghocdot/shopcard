@@ -14,7 +14,8 @@ class OrderService
     public function __construct(
         protected Order $order,
         protected CouponService $couponService,
-        protected WalletService $walletService
+        protected WalletService $walletService,
+        protected TransactionService $transactionService
     ) {}
 
     /**
@@ -296,6 +297,20 @@ class OrderService
                 $orders[] = $order;
             }
 
+            $transactionResult = $this->transactionService->createTransaction([
+                'user_id' => $userId,
+                'service_type' => 1,
+                'amount' => $orders ? array_sum(array_map(fn ($order) => (float) $order->final_amount, $orders)) : 0,
+                'status' => 1,
+                'request_id' => $paypalTransactionId,
+                'provider' => 'paypal',
+            ]);
+
+            if ($transactionResult->isError()) {
+                DB::rollBack();
+                return $transactionResult;
+            }
+
             // Record coupon usage once for the whole cart
             if ($couponId && $coupon) {
                 $this->couponService->recordCouponUsage($couponId, $userId, $totalDiscount);
@@ -395,6 +410,20 @@ class OrderService
                 $product->decrementStock();
 
                 $orders[] = $order;
+            }
+
+            $transactionResult = $this->transactionService->createTransaction([
+                'user_id' => $userId,
+                'service_type' => 1,
+                'amount' => $orders ? array_sum(array_map(fn ($order) => (float) $order->final_amount, $orders)) : 0,
+                'status' => 0,
+                'request_id' => $paymentReference,
+                'provider' => 'vietqr',
+            ]);
+
+            if ($transactionResult->isError()) {
+                DB::rollBack();
+                return $transactionResult;
             }
 
             if ($couponId && $coupon) {

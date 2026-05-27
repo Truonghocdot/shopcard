@@ -82,10 +82,17 @@ class WebhookService
                 'provider' => 'sepay',
             ]);
 
-            if ($transactionResult->isError()) {
+            if ($transactionResult->isError() && $transactionResult->getMessage() !== 'Không thể tạo giao dịch') {
                 DB::rollBack();
                 return $transactionResult;
             }
+
+            \App\Models\Transaction::where('request_id', $paymentReference)
+                ->where('provider', 'vietqr')
+                ->update([
+                    'status' => 1,
+                    'provider' => 'sepay',
+                ]);
 
             foreach ($orders as $order) {
                 $notes = json_decode($order->notes ?? '{}', true);
