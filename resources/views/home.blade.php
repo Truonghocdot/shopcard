@@ -202,16 +202,11 @@
                                 <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
                             @endif
                         </div>
-                        @if($product->quantity <= 0)
-                        <a href="{{ route('products.show', $product->slug) }}" class="flex items-center justify-center w-full py-2 rounded-xl transition-all">
-                            <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-20 md:w-24 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
-                        </a>
-                        @else
                         <a href="{{ route('products.show', $product->slug) }}"
-                            class="flex items-center justify-center gap-2 w-full btn-esport py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
-                            <span class="material-icons text-sm">visibility</span>{{ __('view_details') }}
+                            class="flex items-center justify-center gap-2 w-full {{ $product->quantity <= 0 ? 'bg-white/5 border border-white/10 text-neutral-400' : 'btn-esport' }} py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
+                            <span class="material-icons text-sm">{{ $product->quantity <= 0 ? 'shopping_cart' : 'visibility' }}</span>
+                            <span>{{ $product->quantity <= 0 ? __('sold_out') : __('view_details') }}</span>
                         </a>
-                        @endif
                     </div>
                 </div>
             @empty
@@ -273,16 +268,11 @@
                                 <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
                             @endif
                         </div>
-                        @if($product->quantity <= 0)
-                        <a href="{{ route('products.show', $product->slug) }}" class="flex items-center justify-center w-full py-2 rounded-xl transition-all">
-                            <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-20 md:w-24 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
-                        </a>
-                        @else
                         <a href="{{ route('products.show', $product->slug) }}"
-                            class="flex items-center justify-center gap-2 w-full btn-esport py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
-                            <span class="material-icons text-sm">shopping_cart</span>{{ __('add_to_cart') }}
+                            class="flex items-center justify-center gap-2 w-full {{ $product->quantity <= 0 ? 'bg-white/5 border border-white/10 text-neutral-400' : 'btn-esport' }} py-2.5 rounded-xl text-[10px] md:text-xs transition-all">
+                            <span class="material-icons text-sm">shopping_cart</span>
+                            <span>{{ $product->quantity <= 0 ? __('sold_out') : __('add_to_cart') }}</span>
                         </a>
-                        @endif
                     </div>
                 </div>
             @empty

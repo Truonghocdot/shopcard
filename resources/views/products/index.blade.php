@@ -180,16 +180,10 @@
                             @endif
                             <span class="text-xl font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }} <span class="text-sm">đ</span></span>
                         </div>
-                        @if($product->quantity <= 0)
-                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full py-2 rounded-xl text-center transition-all">
-                            <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-24 h-auto mx-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
+                        <a href="{{ route('products.show', $product->slug) }}" class="flex items-center justify-center gap-2 w-full {{ $product->quantity <= 0 ? 'bg-white/5 border border-white/10 text-neutral-400' : 'btn-esport' }} py-2.5 rounded-xl text-center text-xs md:text-sm font-black uppercase tracking-widest transition-all relative overflow-hidden">
+                            <span class="material-icons text-sm">shopping_cart</span>
+                            <span>{{ $product->quantity <= 0 ? __('sold_out') : __('read_more') }}</span>
                         </a>
-                        @else
-                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full btn-esport justify-center items-center py-2.5 rounded-xl text-center text-xs md:text-sm font-black uppercase tracking-widest transition-all relative overflow-hidden group-hover:gap-3">
-                            <span class="material-icons text-sm mr-1">shopping_cart</span>
-                            {{ __('read_more') }}
-                        </a>
-                        @endif
                     </div>
                 </div>
                 @endforeach

@@ -123,17 +123,6 @@
                             @endauth
                         </div>
                     </div>
-                    <div
-                        class="mt-8 flex flex-col md:flex-row items-center justify-between text-text-primary text-[10px] font-black uppercase tracking-widest gap-4">
-                        <div class="flex items-center gap-6">
-                            <span class="flex items-center gap-2 transition-colors hover:text-primary"><span
-                                    class="material-icons text-sm text-primary/60">visibility</span> {{ rand(100, 5000) }}
-                                {{ __('views') }}</span>
-                            <span class="flex items-center gap-2 transition-colors hover:text-primary"><span
-                                    class="material-icons text-sm text-primary/60">schedule</span> {{ __('posted') }}
-                                {{ $product->created_at->diffForHumans() }}</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
