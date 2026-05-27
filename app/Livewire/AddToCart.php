@@ -14,6 +14,7 @@ class AddToCart extends Component
 {
     public int $productId;
     public bool $inCart = false;
+    public bool $isSoldOut = false;
 
     protected CartService $cartService;
 
@@ -26,10 +27,17 @@ class AddToCart extends Component
     {
         $this->productId = $productId;
         $this->inCart    = $this->cartService->has($productId);
+        $product = \App\Models\Product::find($productId);
+        $this->isSoldOut = ! $product || $product->quantity <= 0;
     }
 
     public function add(): mixed
     {
+        if ($this->isSoldOut) {
+            session()->flash('cart_error', __('sold_out'));
+            return null;
+        }
+
         if (!Auth::check()) {
             return redirect()->route('login');
         }

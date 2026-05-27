@@ -233,7 +233,7 @@
                                 loading="lazy" decoding="async">
                         </a>
                         @if($product->quantity <= 0)
-                            <div class="absolute top-2 left-2 z-10">
+                            <div class="absolute top-2 left-2 z-10 pointer-events-none">
                                 <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-14 md:w-16 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
                             </div>
                         @endif
