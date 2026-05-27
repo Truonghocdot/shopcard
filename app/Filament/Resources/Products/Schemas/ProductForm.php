@@ -65,6 +65,11 @@ class ProductForm
                         ->numeric()
                         ->default(1)
                         ->minValue(0)
+                        ->live()
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            $quantity = (int) ($state ?? 0);
+                            $set('status', $quantity > 0 ? Product::STATUS_UNSOLD : Product::STATUS_SOLD);
+                        })
                         ->required(),
 
                     HandlesWebpUploads::processImageUpload(
@@ -137,6 +142,16 @@ class ProductForm
                             Product::STATUS_SOLD => __('filament.field_inactive'),
                         ])
                         ->default(Product::STATUS_UNSOLD)
+                        ->live()
+                        ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                            if ((int) $state === Product::STATUS_SOLD && (int) $get('quantity') > 0) {
+                                $set('quantity', 0);
+                            }
+
+                            if ((int) $state === Product::STATUS_UNSOLD && (int) $get('quantity') <= 0) {
+                                $set('quantity', 1);
+                            }
+                        })
                         ->required(),
                 ]),
 

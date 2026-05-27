@@ -201,6 +201,8 @@
     "secure_payments_desc": "Thanh toán bằng PayPal, thẻ ghi nợ/tín dụng với mã hóa tuyệt đối.",
     "price_match_title": "Cam kết giá tốt",
     "price_match_desc": "Chúng tôi cam kết mức giá bán lẻ tốt nhất cho thẻ graded chính hãng.",
+    "in_stock": "Còn hàng",
+    "sold_out": "Hết hàng",
     "hall_of_fame_title": "Bảng vàng collector",
     "hall_of_fame_subtitle": "Tôn vinh các collector hàng đầu và thành viên hoạt động tích cực",
     "dashboard": "Bảng điều khiển",

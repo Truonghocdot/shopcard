@@ -19,8 +19,7 @@ class ProductService
     public function getProducts(array $filters = []): ServiceResult
     {
         try {
-            $query = $this->product::where('status', Product::STATUS_UNSOLD)
-                ->where('quantity', '>', 0)
+            $query = $this->product::query()
                 ->with('category');
 
             // Filter by category (support parent-child hierarchy)
@@ -88,18 +87,22 @@ class ProductService
             $sort = $filters['sort'] ?? 'newest';
             switch ($sort) {
                 case 'price_low':
+                    $query->orderByRaw('CASE WHEN quantity > 0 THEN 0 ELSE 1 END');
                     $query->orderByRaw('COALESCE(sale_price, sell_price) ASC');
                     break;
                 case 'price_high':
+                    $query->orderByRaw('CASE WHEN quantity > 0 THEN 0 ELSE 1 END');
                     $query->orderByRaw('COALESCE(sale_price, sell_price) DESC');
                     break;
                 case 'discount':
-                    $query->whereNotNull('sale_price')
+                    $query->orderByRaw('CASE WHEN quantity > 0 THEN 0 ELSE 1 END')
+                        ->whereNotNull('sale_price')
                         ->where('sell_price', '>', 0)
                         ->orderByRaw('((sell_price - sale_price) / sell_price) DESC');
                     break;
                 default:
-                    $query->latest();
+                    $query->orderByRaw('CASE WHEN quantity > 0 THEN 0 ELSE 1 END')
+                        ->latest();
             }
 
             $perPage = $filters['per_page'] ?? 12;

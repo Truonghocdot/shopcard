@@ -42,9 +42,8 @@ class CategoryService
     {
         try {
             $products = Product::where('category_id', $categoryId)
-                ->where('status', Product::STATUS_UNSOLD)
-                ->where('quantity', '>', 0)
                 ->with('category')
+                ->orderByRaw('CASE WHEN quantity > 0 THEN 0 ELSE 1 END')
                 ->latest()
                 ->paginate($perPage);
 

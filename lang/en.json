@@ -201,6 +201,8 @@
     "secure_payments_desc": "Pay with PayPal, debit/credit cards with absolute encryption.",
     "price_match_title": "Price Match Promise",
     "price_match_desc": "We promise the best retail pricing on authentic graded cards.",
+    "in_stock": "In Stock",
+    "sold_out": "Sold Out",
     "hall_of_fame_title": "Collectors Hall of Fame",
     "hall_of_fame_subtitle": "Celebrating our top community collectors and active members",
     

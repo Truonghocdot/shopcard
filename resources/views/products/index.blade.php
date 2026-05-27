@@ -156,6 +156,11 @@
                 <div class="card-esport group transition-all hover:scale-[1.02] relative">
                     <div class="relative overflow-hidden aspect-video">
                         <img alt="{{ $product->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" src="{{ url('storage/'.$product->images[0]) ?? 'https://via.placeholder.com/400x225' }}" loading="lazy">
+                        @if($product->quantity <= 0)
+                        <div class="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center">
+                            <span class="bg-pink-500 text-white text-xs md:text-sm font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-[0_0_12px_rgba(244,114,182,0.5)]">{{ __('sold_out') }}</span>
+                        </div>
+                        @endif
                         @if($product->getDiscountPercent())
                         <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs md:text-sm font-black px-2 py-1 rounded-full shadow-[0_0_10px_rgba(244,114,182,0.5)]">
                              -{{ number_format($product->getDiscountPercent()) }}%
@@ -173,9 +178,9 @@
                             @endif
                             <span class="text-xl font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }} <span class="text-sm">đ</span></span>
                         </div>
-                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full btn-esport justify-center items-center py-2.5 rounded-xl text-center text-xs md:text-sm font-black uppercase tracking-widest transition-all relative overflow-hidden group-hover:gap-3">
+                        <a href="{{ route('products.show', $product->slug) }}" class="block w-full {{ $product->quantity <= 0 ? 'bg-white/5 border border-white/10 text-neutral-400 cursor-not-allowed' : 'btn-esport' }} justify-center items-center py-2.5 rounded-xl text-center text-xs md:text-sm font-black uppercase tracking-widest transition-all relative overflow-hidden group-hover:gap-3">
                             <span class="material-icons text-sm mr-1">shopping_cart</span>
-                            {{ __('read_more') }}
+                            {{ $product->quantity <= 0 ? __('sold_out') : __('read_more') }}
                         </a>
                     </div>
                 </div>
