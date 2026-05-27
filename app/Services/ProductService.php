@@ -178,16 +178,34 @@ class ProductService
             $cacheKey = 'products:flash_sale';
 
             $flashSaleProducts = Cache::remember($cacheKey, 600, function () use ($limit) {
-                return $this->product::where('status', Product::STATUS_UNSOLD)
-                    ->where('quantity', '>', 0)
-                    ->whereNotNull('sale_price')
-                    ->whereNotNull('sell_price')
-                    ->with('category')
+                return $this->product::with('category')
                     ->get()
-                    ->sortByDesc(function ($product) {
-                        return $product->getDiscountPercent();
+                    ->sort(function ($a, $b) {
+                        $aInStock = $a->quantity > 0 ? 1 : 0;
+                        $bInStock = $b->quantity > 0 ? 1 : 0;
+
+                        if ($aInStock !== $bInStock) {
+                            return $bInStock <=> $aInStock;
+                        }
+
+                        $aHasDiscount = $a->getDiscountPercent() ? 1 : 0;
+                        $bHasDiscount = $b->getDiscountPercent() ? 1 : 0;
+
+                        if ($aHasDiscount !== $bHasDiscount) {
+                            return $bHasDiscount <=> $aHasDiscount;
+                        }
+
+                        $aDiscount = $a->getDiscountPercent() ?? 0;
+                        $bDiscount = $b->getDiscountPercent() ?? 0;
+
+                        if ($aDiscount !== $bDiscount) {
+                            return $bDiscount <=> $aDiscount;
+                        }
+
+                        return $b->id <=> $a->id;
                     })
-                    ->take($limit);
+                    ->take($limit)
+                    ->values();
             });
 
             return ServiceResult::success($flashSaleProducts);

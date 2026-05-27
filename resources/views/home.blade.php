@@ -231,8 +231,8 @@
                             src="{{ isset($product->images[0]) ? url('storage/'.$product->images[0]) : 'https://via.placeholder.com/400' }}"
                             loading="lazy" decoding="async">
                         @if($product->quantity <= 0)
-                            <div class="absolute top-2 left-2 bg-pink-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-[0_0_12px_rgba(244,114,182,0.5)] z-10">
-                                {{ __('sold_out') }}
+                            <div class="absolute top-2 left-2 z-10">
+                                <img src="{{ asset('images/soldout-stamp.png') }}" alt="{{ __('sold_out') }}" class="w-14 md:w-16 h-auto drop-shadow-[0_0_10px_rgba(244,114,182,0.35)]" loading="lazy" decoding="async">
                             </div>
                         @endif
                         @if($product->getDiscountPercent())
@@ -250,7 +250,7 @@
                         </h4>
                         <div class="flex items-baseline gap-2">
                             <span class="text-base font-black text-primary drop-shadow-[0_0_8px_rgba(230,46,107,0.4)]">{{ number_format($product->getFinalPrice()) }}đ</span>
-                            @if($product->sell_price && $product->sell_price > $product->getFinalPrice())
+                            @if($product->getDiscountPercent() && $product->sell_price && $product->sell_price > $product->getFinalPrice())
                                 <span class="text-[10px] text-neutral-600 line-through font-bold">{{ number_format($product->sell_price) }}đ</span>
                             @endif
                         </div>
