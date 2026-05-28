@@ -76,21 +76,6 @@
                             placeholder="{{ __('confirm_password_placeholder') }}">
                     </div>
                 </div>
-
-                <!-- Referrer ID -->
-                <div>
-                    <label for="referrer_id" class="block text-[10px] font-black text-text-muted mb-2 ml-4 uppercase tracking-[0.2em]">{{ __('referral_code_label') }}</label>
-                    <div class="relative group/field">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-600 transition-colors group-hover/field:text-primary">
-                            <span class="material-icons text-sm">group_add</span>
-                        </span>
-                        <input id="referrer_id" name="referrer_id" type="text"
-                            class="appearance-none rounded-2xl relative block w-full pl-11 pr-4 py-4 bg-bg-dark/80 border border-border placeholder-text-muted text-text-primary focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary sm:text-sm font-bold tracking-tight transition-all shadow-inner"
-                            placeholder="{{ __('referral_code_placeholder') }}"
-                            value="{{ request('ref') ?? old('referrer_id') }}">
-                    </div>
-                    <p class="mt-2 ml-4 text-[9px] font-bold text-text-muted uppercase tracking-widest leading-relaxed">{{ __('referral_code_hint') }}</p>
-                </div>
             </div>
 
             <div class="pt-2">
